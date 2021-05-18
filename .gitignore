@@ -1,0 +1,9 @@
+env_wm.*
+*.txt
+*.pyc
+*.root
+./mac
+./job
+./root_files*
+./fred_root_files*
+./log_*

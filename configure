@@ -1,0 +1,16 @@
+#!/bin/bash
+# Configure script
+# Run once when you unpack source
+
+### Create environment files
+wmroot=`pwd`
+
+cat > env_wm.sh <<EOF
+#!/bin/sh
+WATCHENV=$wmroot
+PATH=\$WATCHENV:\$PATH
+PYTHONPATH=\$WATCHENV:\$PYTHONPATH
+export WATCHENV PATH PYTHONPATH
+function cobraa { python3 \$WATCHENV/cobraa.py \$*; }
+EOF
+
