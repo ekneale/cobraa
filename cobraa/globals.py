@@ -10,6 +10,7 @@ def drange(start, stop, step):
         yield rii
         rii+=step
 
+cluster = str(arguments['--cluster'])
 d,proc,rates = loadSimulationParameters()
 singlespersec = 0
 for _p in proc:

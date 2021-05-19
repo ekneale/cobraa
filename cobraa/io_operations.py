@@ -140,7 +140,7 @@ source {ratDir+'/../../env.sh'} && TMPNAME=$(date +%s%N)  && rat mac/detector_{d
             for _element in d[_p]:
                 _element = _element.replace(" ","")
                 if 'NA' in _p or 'STEEL' in _p or 'RADIOGENIC' in _p: 
-                    outfile_singlesscript.writelines(f" mac/phys_{_element}.mac mac/geo_{_loc}.mac mac/rates_{_element}_{_loc}_{_p}.mac") 
+                 outfile_singlesscript.writelines(f" mac/phys_{_element}.mac mac/geo_{_loc}.mac mac/rates_{_element}_{_loc}_{_p}.mac") 
                 elif 'pn_ibd' in _p or 'A_Z' in _p or 'FASTNEUTRONS' in _p:
                     script = f"{dir}/script{additionalString}_{_element}_{_loc}_{_p}.sh".replace(" ","")
                     outfile_script = open(script,"w+")
@@ -150,75 +150,16 @@ source {ratDir+'/../../env.sh'} && TMPNAME=$(date +%s%N)  && rat mac/detector_{d
                     os.chmod(script,S_IRWXU)
                     file = f"{dir}/job{additionalString}_{_element}_{_loc}_{_p}.sh".replace(" ","") 
                     outfile_jobs = open(file,"w+")
-                    if arguments["--lassen"]:
-                        outfile_jobs.writelines(f"""#!/bin/sh
-                    
-#BSUB -nnodes 1  
-#BSUB -J job_{_element}    #name of job
-#BSUB -W {timeJob}      #time in minute
-#BSUB -G ait         # sets bank account
-#BSUB -q pbatch         #pool
-#BSUB -o {file+outFile}
-#BSUB -e {file+errFile}
-#BSUB                     # no more psub commands
+                    jobheader = jobSubmissionCommands(_element,timeJob,file,outFile,errFile,script,arguments)
+                    outfile_jobs.writelines(jobheader)
 
-jsrun -p{nruns} {script}
-
-""")
-                    elif arguments["--sheff"]:
-                        outfile_jobs.writelines(f"""#!/bin/sh
-
-executable = {script}
-output     = {file+outFile}
-error      = {file+errFile}
-getenv     = True
-
-queue {nruns} {script}
-
-""")
-                    else: 
-                        outfile_jobs.writelines(f"""#!/bin/sh
-
-for i in `seq {nruns}`; do source {script}; done
-
-""")
-
-                        outfile_jobs.close
+                    outfile_jobs.close
                 elif _element in d['singles']:
                     for i in range(nsetSingles):
                         file = f"{dir}/job{additionalString}_{_element}_{_loc}_{_p}_{i}.sh".replace(" ","")
                         outfile_jobs = open(file,"w+")
-                        if arguments["--lassen"]:
-                            outfile_jobs.writelines(f"""#!/bin/sh
-#BSUB -nnodes 1  
-#BSUB -J job_{_element}    #name of job
-#BSUB -W {timeJob}      #time in minute
-#BSUB -G ait         # sets bank account
-#BSUB -q pbatch         #pool
-#BSUB -o {file+outFile}
-#BSUB -e {file+errFile}
-#BSUB                     # no more psub commands
-
-jsrun -p{nruns} {singlesscript}
-
-""")
-                        elif arguments["--sheff"]:
-                            outfile_jobs.writelines(f"""#!/bin/sh
-
-executable = {singlesscript}
-output     = {file+outFile}
-error      = {file+errFile}
-getenv     = True
-
-queue {nruns} {singlesscript}
-
-""")
-                        else: 
-                            outfile_jobs.writelines(f"""#!/bin/sh
-
-for i in `seq {nruns}`; do source {singlesscript}; done
-
-""")
+                        jobheader = jobSubmissionCommands(_element,timeJob,file,outFile,errFile,singlesscript,arguments)
+                        outfile_jobs.writelines(jobheader)
     
     outfile_singlesscript.writelines(f" mac/evts_singles.mac -o root_files{additionalString}/singles_SINGLES_singles/run$TMPNAME.root -l log{additionalString}/singles_SINGLES_singles/run$TMPNAME.log")
     outfile_singlesscript.close()
@@ -394,3 +335,57 @@ def macroGenerator(location,element,_dict,nruns):
         detectorvolume = ''
 
     return header,processors,generator,detectorvolume
+
+
+# Specify the header for the job submission script
+def jobSubmissionCommands(_element,timeJob,file,outFile,errFile,script,arguments):
+    jobheader=""
+    if arguments['--cluster']=='lassen':
+        jobheader = f"""#!/bin/sh
+#BSUB -nnodes 1  
+#BSUB -J job_{_element}    #name of job
+#BSUB -W {timeJob}      #time in minute
+#BSUB -G ait         # sets bank account
+#BSUB -q pbatch         #pool
+#BSUB -o {file+outFile}
+#BSUB -e {file+errFile}
+#BSUB                     # no more psub commands
+
+jsrun -p{nruns} {script}
+
+""" 
+
+    elif arguments['--cluster']=='sheffield':
+        jobheader = f"""#!/bin/sh
+
+executable = {script}
+output     = {file+outFile}
+error      = {file+errFile}
+getenv     = True
+
+queue {nruns} {script}
+
+"""
+
+    elif arguments['--cluster']=='glasgow':
+        jobheader = f"""#!/bin/sh
+
+for i in `seq {nruns}`; do source {script}; done
+
+    """ 
+
+    elif arguments['--cluster']=='--edinburgh':
+        jobheader = f"""#!/bin/sh
+
+for i in `seq {nruns}`; do source {script}; done
+
+    """ 
+
+    else:
+        jobheader = f"""#!/bin/sh
+
+for i in `seq {nruns}`; do source {script}; done
+
+    """ 
+
+    return jobheader
