@@ -177,7 +177,9 @@ Relevant flags for the analysis steps define the ranges over which to optimise:
 
 --minNXdelayed/--maxNXdelayed          define nx_d range
 
---dTmin/--dTmax                        define dT range
+--dTmin/--dTmax                        define dT range (by default, uses a fixed cut in dT of 100us)
+
+--dRmin/--dRmax                        define dR range (by default, uses a fixed cut in dR of 2m)
 
 --binwidthNX                           
 --binwidthFid                          set optimisation granularity
