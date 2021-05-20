@@ -39,7 +39,11 @@ def coincidenceMap():
                     _file = "fred_root_files%s/merged_%s_%s_%s.root"%(additionalString,_element,_loc,_p)
                     _file = _file.replace(" ","")
                     print(_tag," from ",_file)
-                    obtainCoincidences(_file,_tag,outfile)
+                    rate = rates[_tag][0]
+                    if 'singles' in _tag:
+                        obtainAccidentalCoincidences(_file,_tag,outfile,rate)
+                    elif 'pn_ibd' in _tag or 'A_Z' in _tag or 'FAST' in _tag:
+                        obtainCorrelatedCoincidences(_file,_tag,outfile,rate)
                     print('')
         else:
             for _loc in proc[_p]:
@@ -49,17 +53,18 @@ def coincidenceMap():
                     _file = "fred_root_files%s/merged_%s_%s_%s.root"%(additionalString,_element,_loc,_p)
                     _file = _file.replace(" ","")
                     print(_tag," from ",_file)
+                    rate = rates[_tag][0]
                     if 'singles' in _tag:
-                        obtainAccidentalCoincidences(_file,_tag,outfile)
+                        obtainAccidentalCoincidences(_file,_tag,outfile,rate)
                     elif 'pn_ibd' in _tag or 'A_Z' in _tag or 'FAST' in _tag:
-                        obtainCorrelatedCoincidences(_file,_tag,outfile)
+                        obtainCorrelatedCoincidences(_file,_tag,outfile,rate)
 
                     print('')
     print('Saving outfile:',_str)
     outfile.Close()
     return 0
 
-def obtainCorrelatedCoincidences(file,_tag,outfile):
+def obtainCorrelatedCoincidences(file,_tag,outfile,rate):
 
     # Performs the coincidence evaluation on the 
     # FRED root files
@@ -107,7 +112,7 @@ def obtainCorrelatedCoincidences(file,_tag,outfile):
     # and scale down to the day rate
     for delayed_nxcut,dTcut in product(drange(minNXdelayed,rangeNXdmax,binwidthNX),drange(dTmin,rangedTmax,binwidthdT),drange(dRmin,rangedRmax,binwidthdR)):
         tag = _tag+'_%sdelayed%d_%dus_%dmm'%(energyEstimator,delayed_nxcut,dTcut,dRcut*1000)
-        hist[tag] = TH2D('hist%s'%(tag),'Coincidences -  %s '%(tag),binFid,rangeFidmin,rangeFidmax,binNX,rangeNXpmin,rangeNXpmax)
+        hist[tag] = TH2D('hist_%s'%(tag),'Coincidences -  %s '%(tag),binFid,rangeFidmin,rangeFidmax,binNX,rangeNXpmin,rangeNXpmax)
         hist[tag].SetXTitle('distance from wall [m]')
         hist[tag].SetYTitle('prompt %s cut'%(energyEstimator))
         hist[tag].SetZTitle('coincidences per day')
@@ -162,13 +167,13 @@ def obtainCorrelatedCoincidences(file,_tag,outfile):
             hist[tag].Fill(fidcut,prompt_nxcut,coincidences)
             errorbin = hist[tag].FindBin(fidcut,prompt_nxcut)
             hist[tag].SetBinError(errorbin, coincidenceErr)
-            # scale to day rate
-            print("Applying rate per day %f"%(rates[_tag][0]*86400))
-            ndays = float(totalEvents/rates[_tag][0]/86400.)
-            hist[tag].Scale(1/ndays)
             # end loop over prompt nx cuts
             # end loop over fiducial cuts
         # end loop over delayed nx cuts and dT time between triggers
+        # scale to day rate
+        print("Applying rate per day %f"%(rate*86400))
+        ndays = float(totalEvents/rate/86400.)
+        hist[tag].Scale(1/ndays)
         outfile.cd()
         hist[tag].Write()
 
@@ -215,7 +220,7 @@ def obtainAccidentalCoincidences(file,_tag,outfile):
     for delayed_nxcut,dTcut,dRcut in product(drange(minNXdelayed,rangeNXdmax,binwidthNX),drange(dTmin,rangedTmax,binwidthdT),drange(dRmin,rangedRmax,binwidthdR)):
 
         tag = _tag+'_%sdelayed%d_%dus_%dmm'%(energyEstimator,delayed_nxcut,dTcut,dRcut*1000)
-        hist[tag] = TH2D('hist%s'%(tag),'Coincidences -  %s '%(tag),binFid,rangeFidmin,rangeFidmax,binNX,rangeNXpmin,rangeNXpmax)
+        hist[tag] = TH2D('hist_%s'%(tag),'Coincidences -  %s '%(tag),binFid,rangeFidmin,rangeFidmax,binNX,rangeNXpmin,rangeNXpmax)
         hist[tag].SetXTitle('distance from wall [m]')
         hist[tag].SetYTitle('prompt %s cut'%(energyEstimator))
         hist[tag].SetZTitle('efficiency')
@@ -259,7 +264,7 @@ def obtainAccidentalCoincidences(file,_tag,outfile):
             dR = sqrt(dR2)
             coincidences = np.count_nonzero((dt>0) & (dt<dTcut) & (dR<dRcut) & ("%s"%(energyEstimator)>delayed_nxcut))
 
-            # assign a penalty for low statistics if no coincidences are found
+            # TODO currently assigning a penalty for low statistics if no coincidences are found
             if coincidences==0:
                 coincidences = 1
 
@@ -269,12 +274,12 @@ def obtainAccidentalCoincidences(file,_tag,outfile):
             errorbin = hist[tag].FindBin(fidcut,prompt_nxcut)
             hist[tag].SetBinError(errorbin, coincidenceErr)
 
-            # scale to day rate
-            ndays = float(totalEvents/singlespersec/86400.)
-            hist[tag].Scale(1/ndays)
             # end loop over prompt nx cuts
             # end loop over fiducial cuts
         # end loop over delayed nx cuts and dT time & dR distance between triggers
+        # scale to day rate
+        ndays = float(totalEvents/singlespersec/86400.)
+        hist[tag].Scale(1/ndays)
 
         outfile.cd()
         hist[tag].Write()

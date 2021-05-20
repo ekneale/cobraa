@@ -377,8 +377,7 @@ for i in `seq {nruns}`; do source {script}; done
     elif arguments['--cluster']=='--edinburgh':
         jobheader = f"""#!/bin/sh
 
-for i in `seq {nruns}`; do source {script}; done
-
+qsub -t 40 -V -q ppe.7.day -N job_{_element} -j y -cwd {script}
     """ 
 
     else:

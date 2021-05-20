@@ -72,12 +72,12 @@ docstring = """
     -M                     Merge result files from trial ntuples. Step one.
     --mergeRATFiles        Merge raw ratds files (off by default)
     --coincidences         Map the efficiencies of events which pass the cuts (analysis step 1)
+    --evtype=<_ev>         Set process to evaluate for coincidences
     --sensitivity          Calculate the rates for final optimisation of signal significance (analysis step 2)
 
 
     ## Define the cuts/ranges over which to optimise
 
-    --evtype=<_ev>               Set process to evaluate for coincidences
     --minNXprompt=<_minNXp>      Minimum threshold number of direct hits [Default: 9.]
     --maxNXprompt=<_maxNXp>      Maximum threshold number of direct hits [Default: 30.]
     --minNXdelayed=<_minNXd>     Minimum threshold number of direct hits [Default: 9.]
