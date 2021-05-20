@@ -158,6 +158,8 @@ Outputs are:
 
 **Analysis**
 
+This is the post-reconstruction stage. To run the reconstruction, use fred (https://github.com/AIT-WATCHMAN/FRED).
+
 The analysis ultimately optimises reactor sensitivity in 4 dimensions:
 
 ```nx_p``` number of hits n in x ns detected from the prompt event in the pair
