@@ -74,7 +74,7 @@ docstring = """
     --coincidences         Map the efficiencies of events which pass the cuts (analysis step 1)
     --evtype=<_ev>         Set process to evaluate for coincidences
     --sensitivity          Calculate the rates for final optimisation of signal significance (analysis step 2)
-
+    --triggers             Get the number of triggers for singles processes
 
     ## Define the cuts/ranges over which to optimise
 
@@ -120,7 +120,7 @@ def loadSimulationParameters():
     d['ibd_p_hs'] = ['IBDPositronHeyshamSig']
     d['ibd_p_hb'] = ['IBDPositronHeyshamBkg']
     d['ibd_n'] = ['IBDNeutron']
-    d['pn_ibd']   = ['boulby_geo','big_hartlepool','small_hartlepool','boulby_world','heysham_signal','heysham_background']
+    d['pn_ibd']   = ['boulby_geo','core1_hartlepool','core2_hartlepool','boulby_world','heysham_signal','heysham_background']
 
     d['singles'] = ['singles']
 
@@ -143,10 +143,7 @@ def loadSimulationParameters():
 
     else:
         ## Define what components are associated with each physical process
-        process = { 'ibd_p':['LIQUID'],\
-        'ibd_p_hs':['LIQUID'],\
-        'ibd_p_hb':['LIQUID'],\
-        'ibd_n':['LIQUID'],\
+        process = { 
         'pn_ibd':['LIQUID'],
         '40K_NA':['LIQUID','PMT','PSUP', 'IBEAM','TANK','ROCK_2'],\
         'CHAIN_238U_NA':['PMT','PSUP','IBEAM','TANK','ROCK_2','GD','LIQUID'],\
@@ -154,7 +151,6 @@ def loadSimulationParameters():
         'CHAIN_235U_NA':['TANK','PSUP','GD'],\
         'STEEL_ACTIVITY':['TANK','PSUP'],\
         'A_Z':['LIQUID'],\
-        'mono':['LIQUID'],\
         'singles':['SINGLES'],\
         'RADIOGENIC':['ROCK_2','ROCK_1'],\
         'FASTNEUTRONS':['ROCK_2']}
@@ -192,8 +188,8 @@ def loadSimulationParameters():
 'IBDPositronHeyshamBkg_LIQUID_ibd_p_hb': [3.880e-06 *pmtVolCorr, 1], \
 'IBDNeutron_LIQUID_ibd_n': [ 2.968e-05*pmtVolCorr, 1], \
 'boulby_geo_LIQUID_pn_ibd': [1.02e-06*pmtVolCorr , 1],\
-'big_hartlepool_LIQUID_pn_ibd': [1.697e-05*pmtVolCorr , 1],\
-'small_hartlepool_LIQUID_pn_ibd': [1.271e-05 *pmtVolCorr, 1],\
+'core1_hartlepool_LIQUID_pn_ibd': [1.697e-05*pmtVolCorr , 1],\
+'core2_hartlepool_LIQUID_pn_ibd': [1.271e-05 *pmtVolCorr, 1],\
 'boulby_world_LIQUID_pn_ibd': [5.857e-06 *pmtVolCorr, 1],\
 'heysham_signal_LIQUID_pn_ibd': [1.977e-06 *pmtVolCorr, 1],\
 'heysham_background_LIQUID_pn_ibd': [3.880e-06 *pmtVolCorr, 1],\
@@ -314,8 +310,8 @@ def loadSimulationParameters():
     else:
         #print('Using rates for 16m cylinder with 6.7m inner PMT radius')
         jobRate = {\
-'big_hartlepool_LIQUID_pn_ibd': [4.845e-05*pmtVolCorr , 1],\
-'small_hartlepool_LIQUID_pn_ibd': [3.360e-05*pmtVolCorr , 1],\
+'core1_hartlepool_LIQUID_pn_ibd': [4.845e-05*pmtVolCorr , 1],\
+'core2_hartlepool_LIQUID_pn_ibd': [3.360e-05*pmtVolCorr , 1],\
 'boulby_geo_LIQUID_pn_ibd': [3.565e-07*pmtVolCorr , 1],\
 'boulby_world_LIQUID_pn_ibd': [2.227e-06*pmtVolCorr , 1],\
 'heysham_signal_LIQUID_pn_ibd': [4.585e-06*pmtVolCorr , 1],\

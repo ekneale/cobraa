@@ -29,7 +29,10 @@ if __name__ == '__main__':
         coincidenceMap()
 
     if arguments['--sensitivity']:
-        calculateSenstivity()
+        calculateSensitivity()
+
+    if arguments['--triggers']:
+        triggers()
 
     print('''All done.
 

@@ -1,6 +1,7 @@
 from ROOT import gDirectory
 from ROOT import TFile,TH2D, TH3D,Double,RDataFrame
 import numpy as np
+import pandas as pd
 import time
 from itertools import product
 from numpy import multiply
@@ -29,26 +30,27 @@ def coincidenceMap():
     _str = "fred_root_files%s/coincidence_results.root"%(additionalString)
     outfile = TFile(_str,"UPDATE")
 
-    for _p in proc:
-        print(_p)
-        if arguments['--evtype'] and _p == evtype:
+    if arguments['--evtype']:
+        for _p in proc:
+            if _p==arguments['--evtype']:
+                for _loc in proc[_p]:
+                    for _element in d[_p]:
+                        _tag = "%s_%s_%s"%(_element,_loc,_p)
+                        _tag = _tag.replace(" ","")
+                        _file = "fred_root_files%s/merged_%s_%s_%s.root"%(additionalString,_element,_loc,_p)
+                        _file = _file.replace(" ","")
+                        print(_tag," from ",_file)
+                        rate = rates[_tag][0]
+                        if 'singles' in _tag:
+                            obtainAccidentalCoincidences(_file,_tag,outfile,rate)
+                        elif 'pn_ibd' in _tag or 'A_Z' in _tag or 'FAST' in _tag:
+                            obtainCorrelatedCoincidences(_file,_tag,outfile,rate)
+                        print('')
+    else:
+        for _p in proc:
             for _loc in proc[_p]:
                 for _element in d[_p]:
-                    _tag = "%s_%s_%s"%(_loc,_element,_p)
-                    _tag = _tag.replace(" ","")
-                    _file = "fred_root_files%s/merged_%s_%s_%s.root"%(additionalString,_element,_loc,_p)
-                    _file = _file.replace(" ","")
-                    print(_tag," from ",_file)
-                    rate = rates[_tag][0]
-                    if 'singles' in _tag:
-                        obtainAccidentalCoincidences(_file,_tag,outfile,rate)
-                    elif 'pn_ibd' in _tag or 'A_Z' in _tag or 'FAST' in _tag:
-                        obtainCorrelatedCoincidences(_file,_tag,outfile,rate)
-                    print('')
-        else:
-            for _loc in proc[_p]:
-                for _element in d[_p]:
-                    _tag = "%s_%s_%s"%(_loc,_element,_p)
+                    _tag = "%s_%s_%s"%(_element,_loc,_p)
                     _tag = _tag.replace(" ","")
                     _file = "fred_root_files%s/merged_%s_%s_%s.root"%(additionalString,_element,_loc,_p)
                     _file = _file.replace(" ","")
@@ -110,7 +112,7 @@ def obtainCorrelatedCoincidences(file,_tag,outfile,rate):
 
     # now we can evaluate the event coincidence
     # and scale down to the day rate
-    for delayed_nxcut,dTcut in product(drange(minNXdelayed,rangeNXdmax,binwidthNX),drange(dTmin,rangedTmax,binwidthdT),drange(dRmin,rangedRmax,binwidthdR)):
+    for delayed_nxcut,dTcut,dRcut in product(drange(minNXdelayed,rangeNXdmax,binwidthNX),drange(dTmin,rangedTmax,binwidthdT),drange(dRmin,rangedRmax,binwidthdR)):
         tag = _tag+'_%sdelayed%d_%dus_%dmm'%(energyEstimator,delayed_nxcut,dTcut,dRcut*1000)
         hist[tag] = TH2D('hist_%s'%(tag),'Coincidences -  %s '%(tag),binFid,rangeFidmin,rangeFidmax,binNX,rangeNXpmin,rangeNXpmax)
         hist[tag].SetXTitle('distance from wall [m]')
@@ -125,7 +127,8 @@ def obtainCorrelatedCoincidences(file,_tag,outfile,rate):
         hist[tag].GetZaxis().SetTitleColor(1);
         hist[tag].GetZaxis().CenterTitle();
 
-        for fidcut,prompt_nxcut in product(driange(minFid,rangeFidmax,binwidthFid),drange(minNXprompt,rangeNXpmax,binwidthNX)):
+        for fidcut,prompt_nxcut in product(drange(minFid,rangeFidmax,binwidthFid),drange(minNXprompt,rangeNXpmax,binwidthNX)):
+
             # find the coincidence efficiency
 
             coincidences=0
@@ -144,23 +147,20 @@ def obtainCorrelatedCoincidences(file,_tag,outfile,rate):
 
             # find all coincidences
             coincidences_tmp = data.Draw("timestamp:dt_prev_us",coincidencetrigger,"goff")
-            t = data.GetV1()
-            t = np.ndarray((coincidences_tmp),'d',t)
-            dt_prev_us = data.GetV2()
-            idt_prev_us = np.ndarray((coincidences_tmp),'d',dt_prev_us)
+            t_delayed = data.GetV1()
+            t_delayed = np.ndarray((coincidences_tmp),'d',t_delayed)
+            dt_prev_us = data.GetV2() # time since previous event
+            dt_prev_us = np.ndarray((coincidences_tmp),'d',dt_prev_us)
+            t_prompt = t_delayed  - dt_prev_us 
 
             # do the multiplicity cut (for fast neutron multiplicity)
             # time between coincidence and next event
-            dt = np.diff(t[1:])
-            t = t  - dt_prev_us 
+            dtnext = t_prompt[2:]-t_delayed[1:-1]
             # time between coincidence and previous event
-            dtprev = np.diff(t[:-1])
+            dtlast = t_prompt[1:-1]-t_delayed[:-2]
             # find all coincidences with no other event
             # immediately before and after pair
-            coincidences = np.count_nonzero((dt>dTcut) & (dtprev>dTcut))
-            # assign a penalty for low statistics if no coincidences are found
-            if coincidences==0:
-                coincidences = 1
+            coincidences = np.count_nonzero((dtlast>dTcut) & (dtnext>dTcut))
             
             # calculate statistical error and fill histogram
             coincidenceErr = 1/totalEvents*sqrt(coincidences*(1-coincidences/totalEvents))
@@ -171,7 +171,6 @@ def obtainCorrelatedCoincidences(file,_tag,outfile,rate):
             # end loop over fiducial cuts
         # end loop over delayed nx cuts and dT time between triggers
         # scale to day rate
-        print("Applying rate per day %f"%(rate*86400))
         ndays = float(totalEvents/rate/86400.)
         hist[tag].Scale(1/ndays)
         outfile.cd()
@@ -183,16 +182,16 @@ def obtainCorrelatedCoincidences(file,_tag,outfile,rate):
     return coincidences
    
 
-def obtainAccidentalCoincidences(file,_tag,outfile):
+def obtainAccidentalCoincidences(file,_tag,outfile,rate):
 
     start_time = time.time()
-    bonsaifile = TFile(file)
+    fredfile = TFile(file)
     print('Reading', file)
     hist = {}
 
     # check the root file is valid
     try:
-        runSummary = bonsaifile.Get('runSummary')
+        runSummary = fredfile.Get('runSummary')
         Entries = runSummary.GetEntries()
         runSummary.GetEntry(Entries-1)
         events = 0
@@ -202,7 +201,7 @@ def obtainAccidentalCoincidences(file,_tag,outfile):
         return -1
 
     totalEvents  = Entries*eventsPerRun
-    data         = bonsaifile.Get('data')
+    data         = fredfile.Get('data')
     dataEntries  = data.GetEntries()
     data.SetBranchStatus('*',0)
     data.SetBranchStatus('%s'%(energyEstimator),1)
@@ -257,16 +256,12 @@ def obtainAccidentalCoincidences(file,_tag,outfile):
             y = np.ndarray((evts),'d',y)
             z = np.ndarray((evts),'d',z)
             # Find the distance between consecutive events
-            dx = x[:,None]-t
-            dy = y[:,None]-t
-            dz = z[:,None]-t
+            dx = x[:,None]-x
+            dy = y[:,None]-y
+            dz = z[:,None]-z
             dR2 = sum([multiply(dx,dx),multiply(dy,dy),multiply(dz,dz)])
             dR = sqrt(dR2)
-            coincidences = np.count_nonzero((dt>0) & (dt<dTcut) & (dR<dRcut) & ("%s"%(energyEstimator)>delayed_nxcut))
-
-            # TODO currently assigning a penalty for low statistics if no coincidences are found
-            if coincidences==0:
-                coincidences = 1
+            coincidences = np.count_nonzero((dt>0) & (dt<dTcut) & (dR<dRcut) & (nx>delayed_nxcut))
 
             # calculate statistical error and fill histogram
             coincidenceErr = 1/totalEvents*sqrt(coincidences*(1-coincidences/totalEvents))
@@ -283,4 +278,74 @@ def obtainAccidentalCoincidences(file,_tag,outfile):
 
         outfile.cd()
         hist[tag].Write()
+
+
+def triggers():
+
+    # Outputs details of the number of events/time simulated, plus
+    # trigger and minimal-cut (reconstruction) efficiencies for 
+    # all event types.
+    # This is useful for checking that you have produced sufficient
+    # statistics.
+    pd.options.display.float_format = '{:.10f}'.format
+    triggerdata = open("triggerdata.txt","w+") 
+    simsrequired = open("simsrequired.txt","w+")
+    loclist=[]
+    decaylist=[]
+    isolist=[]
+    timelist=[]
+    eventlist=[]
+    triggerlist=[]
+    singleslist =[]
+    for _p in proc:
+        for _loc in proc[_p]:
+            for _element in d[_p]:
+                _tag = "%s_%s_%s"%(_element,_loc,_p)
+                _tag = _tag.replace(" ","")
+                _file = "fred_root_files%s/new_merged_Watchman_%s_%s_%s.root"%(additionalString,_element,_loc,_p)
+                _file = _file.replace(" ","")
+                print(_tag," from ",_file)
+                if 'singles' in _tag or 'pn_ibd' in _tag or 'A_Z' in _tag or 'FAST' in _tag:
+                    fredfile = TFile(_file)
+                    # check the root file is valid
+                    try:
+                        runSummary = fredfile.Get('runSummary')
+                        Entries = runSummary.GetEntries()
+                        runSummary.GetEntry(Entries-1)
+                        eventsPerRun = runSummary.nEvents
+                        totalEvents = eventsPerRun*Entries
+                        data = fredfile.Get('data')
+                        triggers = data.GetEntries()
+                        singles = data.Draw("","n9>9 && closestPMT>0.5")
+                        triggerrate = triggers/totalEvents*rates[_tag][0]
+                        singlesrate = singles/totalEvents*rates[_tag][0]
+                        rate = rates[_tag][0]
+                        simtime = totalEvents/rates[_tag][0]/60./60.
+                        loclist.append(_loc)
+                        decaylist.append(_p)
+                        isolist.append(_element)
+                        eventlist.append(totalEvents)
+                        timelist.append(simtime)
+                        triggerlist.append(triggerrate)
+                        singleslist.append(singlesrate)
+                    except:
+                        simsrequired.writelines(f"{_tag}\n")
+
+    df = pd.DataFrame({"Component":loclist, "Origin":decaylist,"Isotope":isolist,"Events":eventlist,"Time (hr)":timelist,"Trigger rate (Hz)":triggerlist,"Singles rate (Hz)":singleslist})
+    df = df.replace("CHAIN_","",regex=True)
+    df = df.replace("_NA","",regex=True)
+    df = df.replace("LIQUID","GD-WATER")
+    df = df.replace("STEEL_ACTIVITY","Co/Cs")
+    df = df.replace("ROCK_1","ROCK (outer)")
+    df = df.replace("ROCK_2","ROCK (inner)")
+    df = df.replace("rock_neutrons","Neutrons")
+    df = df.replace("FASTNEUTRONS","COSMOGENIC")
+    df = df.replace("fast_neutrons","Fast neutrons")
+    df = df.replace("pn_ibd","IBD")
+    df = df.replace("A_Z","COSMOGENIC")
+    df = df.replace("singles","Mixed singles")
+    df = df.replace("SINGLES","All components")
+    df = df.sort_values(by=["Component","Origin","Isotope"])
+    triggerdata.writelines(df.to_latex(index=False,escape=False).replace('\\toprule', '\\hline').replace('\\midrule', '\\hline').replace('\\bottomrule','\\hline'))
+    return 0
 

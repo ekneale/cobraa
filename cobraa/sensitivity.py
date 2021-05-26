@@ -32,11 +32,11 @@ def calculateSensitivity():
     print('Reading in root tree')
     ''' Following loop has two purposes. Read in the histogram from results file and scale them with appropriate rates'''
     # get the results of previous steps      
-    resultsstr = "core_root_files%s/coincidence_results.root"%(additionalString)
+    resultsstr = "fred_root_files%s/coincidence_results.root"%(additionalString)
     resultsFile = TFile(resultsstr,"READ")
     print('reading in coincidence maps from %s'%(resultsstr))
 
-    for delayed_nxcut,dTcut in product(drange(minNXdelayed,rangeNXdmax,binwidthNX),drange(dTmin,rangedTmax,binwidthdT)):
+    for delayed_nxcut,dTcut,dRcut in product(drange(minNXdelayed,rangeNXdmax,binwidthNX),drange(dTmin,rangedTmax,binwidthdT),drange(dRmin,rangedRmax,binwidthdR)):
 
         hacc["hAcc%d%d"%(delayed_nxcut,dTcut)] = TH2D("hAcc%d%d"%(delayed_nxcut,dTcut),'Accidental coincidence Rate',binFid,rangeFidmin,rangeFidmax,binNX,rangeNXpmin,rangeNXpmax)
         hacc["hAcc%d%d"%(delayed_nxcut,dTcut)].SetXTitle('distance from wall [m]')
@@ -66,23 +66,21 @@ def calculateSensitivity():
         for _p in proc:
             for _loc in proc[_p]:
                 for _element in d[_p]:
-                    _tag = 'hist_%s_%s_%s_%sdelayed%d_%dus'%(_loc,_element,_p,energyEstimator,delayed_nxcut,dTcut)
+                    _tag = 'hist_%s_%s_%s_%sdelayed%d_%dus_%dmm'%(_element,_loc,_p,energyEstimator,delayed_nxcut,dTcut,dRcut*1000)
                     _tag = _tag.replace(" ","")
                     _str = "%s_%s_%s"%(_element,_loc,_p)
                     _str = _str.replace(" ","")
-                    print('Extracting coincidences from file ',_tag,'and scaling to daily coincidence rate\n')
                     if 'pn_ibd' in _tag or 'A_Z' in _tag or 'FASTNEUTRONS' in _tag:
-                        print('correlated event, getting %s from %s'%(_tag,pairstr))
-                        hist[_tag] = pairEffFile.Get(_tag)
+                        print('correlated event, getting %s from %s\n'%(_tag,resultsstr))
+                        hist[_tag] = resultsFile.Get(_tag)
                     elif 'SINGLES' in _tag:
-                        print('uncorrelated event, getting %s from %s'%(_tag,pairstr))
-                        hist[_tag] = pairEffFile.Get(_tag)
+                        print('uncorrelated event, getting %s from %s\n'%(_tag,resultsstr))
+                        hist[_tag] = resultsFile.Get(_tag)
                     else:
                         continue
 
                     try:
                         print(' entries:',hist[_tag].GetEntries(),' ... ', end = '')
-                        hist[_tag].Scale(_scale)
                         print(_tag)
                         if 'SINGLES' in _tag: 
                             print('identified as accidentals')
@@ -260,7 +258,7 @@ def calculateSensitivity():
     with open(resultsfile,'a') as file:
         file.write(result+'\n')
     # write the signal, background and s/sqrt(s+b) histograms to the analysis_results_coincidence* file
-    analysisfile = "core_root_files%s/sensitivity_results.root"%(additionalString)
+    analysisfile = "fred_root_files%s/sensitivity_results.root"%(additionalString)
     print('\n\nWriting histograms to file',analysisfile)
     f_root = TFile(analysisfile,"recreate")
     for delayed_nxcut in drange(minNXdelayed,maxNXdelayed+binwidthNX,binwidthNX):

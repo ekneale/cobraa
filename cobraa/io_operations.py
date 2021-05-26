@@ -1,6 +1,6 @@
 from .load import *
 from .globals import *
-from ROOT import TChain, gROOT, TFile
+from ROOT import gROOT, TFile
 
 
 # The purpose of this class is to handle the input/ouput operations of
