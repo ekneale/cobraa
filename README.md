@@ -154,7 +154,33 @@ Outputs are:
    Runs the script 40 times
    
    For singles events, a number of jobs equivalent to ```nsetSingles``` (currently fixed in globals.py) are created. This is to make it possible to run enough statistics at the same time as keeping run times within cluster limits. 
+
+
+
+***Reconstruction***
+
+RAT-PAC output must be passed to the FRED reconstruction prior to the next stages in the process.
    
+
+
+***Statistics evaluation***
+
+This is an additional function which is useful to use after the reconstruction stage for ensuring that you have sufficient statistics.
+
+To run: ```cobraa --triggers [detector options]```
+
+Reads in the fred output for all event types available and finds:
+
+ 1. Number of events simulated
+
+ 2. Length of time simulated
+
+ 3. Trigger efficiency (trigger = interaction with PMT hits > 6 in 800 microseconds)
+
+ 4. Reconstruction efficiency (event passes minimal post-reconstruction cuts: inner PMT hits > 10, n9 (unscattered light) hits > 9, reconstructed vertex > 0.5m from inner PMT radius)
+
+The information is saved to a triggerdata.txt in latex formatting (if using in LaTex, please use ```\usepackage{siunitx}``` in the preamble). Where a root file does not exist, the details are written in simsrequired.txt.
+
 
 **Analysis**
 
@@ -225,5 +251,4 @@ Reads in the coincidence maps from Step 1, also adding together radionuclides an
 Performs optimisation of the signal significance in terms of s/sqrt(b) in all of the 4 dimensions in parallel.
 
 Saves histograms of rates per day and significance for each combination of values in the nx_d and dT ranges to ```core_root_files*/sensitivity_results.root```.
-
 

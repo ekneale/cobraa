@@ -305,33 +305,35 @@ def triggers():
                 _file = "fred_root_files%s/new_merged_Watchman_%s_%s_%s.root"%(additionalString,_element,_loc,_p)
                 _file = _file.replace(" ","")
                 print(_tag," from ",_file)
-                if 'singles' in _tag or 'pn_ibd' in _tag or 'A_Z' in _tag or 'FAST' in _tag:
-                    fredfile = TFile(_file)
-                    # check the root file is valid
-                    try:
-                        runSummary = fredfile.Get('runSummary')
-                        Entries = runSummary.GetEntries()
-                        runSummary.GetEntry(Entries-1)
-                        eventsPerRun = runSummary.nEvents
-                        totalEvents = eventsPerRun*Entries
-                        data = fredfile.Get('data')
-                        triggers = data.GetEntries()
-                        singles = data.Draw("","n9>9 && closestPMT>0.5")
-                        triggerrate = triggers/totalEvents*rates[_tag][0]
-                        singlesrate = singles/totalEvents*rates[_tag][0]
-                        rate = rates[_tag][0]
-                        simtime = totalEvents/rates[_tag][0]/60./60.
-                        loclist.append(_loc)
-                        decaylist.append(_p)
-                        isolist.append(_element)
-                        eventlist.append(totalEvents)
-                        timelist.append(simtime)
-                        triggerlist.append(triggerrate)
-                        singleslist.append(singlesrate)
-                    except:
-                        simsrequired.writelines(f"{_tag}\n")
+                fredfile = TFile(_file)
+                # check the root file is valid
+                try:
+                    runSummary = fredfile.Get('runSummary')
+                    Entries = runSummary.GetEntries()
+                    totalEvents = 0
+                    for i in range(Entries):
+                        runSummary.GetEntry(i)
+                        totalEvents += runSummary.nEvents
+                    data = fredfile.Get('data')
+                    triggers = data.GetEntries()
+                    singles = data.Draw("","n9>9 && closestPMT>0.5")
+                    triggerrate = triggers/totalEvents*rates[_tag][0]
+                    singlesrate = singles/totalEvents*rates[_tag][0]
+                    rate = rates[_tag][0]
+                    simtime = totalEvents/rates[_tag][0]/60./60.
+                    loclist.append(_loc)
+                    decaylist.append(_p)
+                    isolist.append(_element)
+                    eventlist.append(totalEvents)
+                    timelist.append(simtime)
+                    triggerlist.append(triggerrate)
+                    singleslist.append(singlesrate)
+                except:
+                    simsrequired.writelines(f"{_tag}\n")
 
+    # create a pandas dataframe with all the information
     df = pd.DataFrame({"Component":loclist, "Origin":decaylist,"Isotope":isolist,"Events":eventlist,"Time (hr)":timelist,"Trigger rate (Hz)":triggerlist,"Singles rate (Hz)":singleslist})
+    # format the names to make them more presentation-friendly
     df = df.replace("CHAIN_","",regex=True)
     df = df.replace("_NA","",regex=True)
     df = df.replace("LIQUID","GD-WATER")
@@ -343,9 +345,10 @@ def triggers():
     df = df.replace("fast_neutrons","Fast neutrons")
     df = df.replace("pn_ibd","IBD")
     df = df.replace("A_Z","COSMOGENIC")
-    df = df.replace("singles","Mixed singles")
-    df = df.replace("SINGLES","All components")
+    df = df.replace("singles","Radioactivity")
+    df = df.replace("SINGLES","All")
     df = df.sort_values(by=["Component","Origin","Isotope"])
-    triggerdata.writelines(df.to_latex(index=False,escape=False).replace('\\toprule', '\\hline').replace('\\midrule', '\\hline').replace('\\bottomrule','\\hline'))
+    # convert to LaTex and do some formatting to work with siunitx
+    triggerdata.writelines(df.to_latex(index=False,escape=False).replace('\\toprule', '\\hline').replace('\\midrule', '\\hline').replace('\\bottomrule','\\hline').replace('lllrrrr','|l|l|l|S|S|S|S|').replace("Component","{Component}").replace("Origin","{Origin}").replace("Isotope","{Isotope}").replace("Events","{Events}").replace("Time (hr)","{Time (hr)}").replace("Trigger rate (Hz)","{Trigger rate (Hz)}").replace("Singles rate (Hz)","{Singles rate (Hz)}"))
     return 0
 
