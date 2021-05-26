@@ -320,7 +320,7 @@ def triggers():
                     triggerrate = triggers/totalEvents*rates[_tag][0]
                     singlesrate = singles/totalEvents*rates[_tag][0]
                     rate = rates[_tag][0]
-                    simtime = totalEvents/rates[_tag][0]/60./60.
+                    simtime = totalEvents/rates[_tag][0]/60./60./24.
                     loclist.append(_loc)
                     decaylist.append(_p)
                     isolist.append(_element)
@@ -332,7 +332,7 @@ def triggers():
                     simsrequired.writelines(f"{_tag}\n")
 
     # create a pandas dataframe with all the information
-    df = pd.DataFrame({"Component":loclist, "Origin":decaylist,"Isotope":isolist,"Events":eventlist,"Time (hr)":timelist,"Trigger rate (Hz)":triggerlist,"Singles rate (Hz)":singleslist})
+    df = pd.DataFrame({"Component":loclist, "Origin":decaylist,"Isotope":isolist,"Events":eventlist,"Time (days)":timelist,"Trigger rate (Hz)":triggerlist,"Singles rate (Hz)":singleslist})
     # format the names to make them more presentation-friendly
     df = df.replace("CHAIN_","",regex=True)
     df = df.replace("_NA","",regex=True)
@@ -347,8 +347,9 @@ def triggers():
     df = df.replace("A_Z","COSMOGENIC")
     df = df.replace("singles","Radioactivity")
     df = df.replace("SINGLES","All")
+    df = df.replace("_hartlepool","",regex=True)
     df = df.sort_values(by=["Component","Origin","Isotope"])
     # convert to LaTex and do some formatting to work with siunitx
-    triggerdata.writelines(df.to_latex(index=False,escape=False).replace('\\toprule', '\\hline').replace('\\midrule', '\\hline').replace('\\bottomrule','\\hline').replace('lllrrrr','|l|l|l|S|S|S|S|').replace("Component","{Component}").replace("Origin","{Origin}").replace("Isotope","{Isotope}").replace("Events","{Events}").replace("Time (hr)","{Time (hr)}").replace("Trigger rate (Hz)","{Trigger rate (Hz)}").replace("Singles rate (Hz)","{Singles rate (Hz)}"))
+    triggerdata.writelines(df.to_latex(index=False,escape=False).replace('\\toprule', '\\hline').replace('\\midrule', '\\hline').replace('\\bottomrule','\\hline').replace('lllrrrr','|l|l|l|S|S|S|S|').replace("Component","{Component}").replace("Origin","{Origin}").replace("Isotope","{Isotope}").replace("Events","{Events}").replace("Time (days)","{Time (days)}").replace("Trigger rate (Hz)","{Trigger rate (Hz)}").replace("Singles rate (Hz)","{Singles rate (Hz)}"))
     return 0
 
