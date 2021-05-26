@@ -103,7 +103,7 @@ RAT-PAC macros are generated for the following elements of the rat simulation:
 
 5. Rates: rates&ask;.mac sets the rate of the given physics process for the number of days being simulated. Relevant flags:
 ```
-   --e                       Sets the number of events to be simulated per macro (default is 25000 for full simulation)
+   -e                       Sets the number of events to be simulated per macro (default is 25000 for full simulation)
   ```
    The number of events simulated per macro run for each event type is then:
 
@@ -157,6 +157,8 @@ Outputs are:
    
 
 **Analysis**
+
+This is the post-reconstruction stage. To run the reconstruction, use fred (https://github.com/AIT-WATCHMAN/FRED).
 
 The analysis ultimately optimises reactor sensitivity in 4 dimensions:
 
