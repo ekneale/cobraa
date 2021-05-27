@@ -1,14 +1,16 @@
 from decimal import *
 from numpy import max
 
-from ROOT import kOrange as kO,kBlue as kB,kGreen as kG
-from ROOT import kMagenta as kM,kAzure as kA,kRed as kR
-from ROOT import TCanvas,TH2D, gStyle,TFile,gROOT
+from ROOT import TH2D,TFile
 
 from .load import *
 from .coincidence import *
 from .globals import *
 
+
+# This performs the final sensitivity calculations for the reactor analysis. 
+# Author Liz Kneale (2021)
+# Adapted from Watchmakers/sensitivity.py (Marc Bergevin)
 
 
 setcontext(ExtendedContext)

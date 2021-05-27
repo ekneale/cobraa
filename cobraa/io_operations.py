@@ -2,10 +2,11 @@ from .load import *
 from .globals import *
 from ROOT import gROOT, TFile
 
-
 # The purpose of this class is to handle the input/ouput operations of
-# Watchcore (WC). This includes creating directories and files for the different
-# operations of WC, such as creating macros, jobs and so forth.
+# Cobraa. This includes creating directories and files for the different
+# operations of Cobraa, such as creating macros, jobs and so forth.
+# Author Marc Bergevin
+# Adapted by Liz Kneale (May 2021)
 
 def testCreateDirectory(directory):
     if not os.path.exists(directory):

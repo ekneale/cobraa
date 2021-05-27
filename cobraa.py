@@ -5,6 +5,7 @@ from cobraa.io_operations import *
 from cobraa.coincidence import *
 from cobraa.sensitivity import *
 from cobraa.globals import *
+from cobraa.extras import *
 
 ######################## Start of main function ###########################
 

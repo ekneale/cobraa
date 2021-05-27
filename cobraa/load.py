@@ -23,6 +23,11 @@ try:
 except:
     print("Historical package rootpy is not loaded. This package is not needed for the core watchmakers tasks.")
 
+# This reads in flags and arguments from the command line and loads rates for the specified detector design.
+# Author Marc Bergevin
+# Adapted by Liz Kneale (2021)
+
+
 docstring = """
     Usage: watchmakers.py [options]
 
@@ -106,13 +111,28 @@ except ImportError:
 if (arguments['--Heysham']):
         print("Using Heysham spectrum (all 4 cores) and assuming Hartlepool is off")
 
+def loadSimulationParametersCoincidence():
+    
+    location = {
+        'LIQUID':['pn_ibd','40K_NA','CHAIN_238U_NA','CHAIN_232Th_NA','CHAIN_235U_NA','A_Z'],\
+        'PMT':['40K_NA','CHAIN_238U_NA','CHAIN_232Th_NA'],\
+        'ROCK_1':[],\
+        'ROCK_2':['40K_NA','CHAIN_238U_NA','CHAIN_232Th_NA','RADIOGENIC','FASTNEUTRONS'],\
+        'TANK':[],\
+        'PSUP':[],\
+        'IBEAM':[],\
+        'ALL':[],\
+    }
+
+    
+
 def loadSimulationParameters():
     #Chain and subsequent isotopes
     d = {}
 
     d['CHAIN_238U_NA'] =['234Pa','214Pb','214Bi','210Bi','210Tl']
-    d['CHAIN_232Th_NA'] = ['228Ac','212Pb','212Bi','208Tl']
-    d['CHAIN_235U_NA'] = ['231Th','223Fr','211Pb','211Bi','207Tl']
+    d['CHAIN_232Th_NA'] = ['228Ac','212Pb','212Bi','208Tl']#['228Ac','212Bi','208Tl']
+    d['CHAIN_235U_NA'] = ['231Th','223Fr','211Pb','211Bi','207Tl']#['231Th','223Fr','207Tl']
     d['40K_NA']         = ['40K']
     d['STEEL_ACTIVITY'] = ['60Co','137Cs']
 
@@ -146,10 +166,10 @@ def loadSimulationParameters():
         process = { 
         'pn_ibd':['LIQUID'],
         '40K_NA':['LIQUID','PMT','PSUP', 'IBEAM','TANK','ROCK_2'],\
-        'CHAIN_238U_NA':['PMT','PSUP','IBEAM','TANK','ROCK_2','GD','LIQUID'],\
-        'CHAIN_232Th_NA':['PMT','PSUP','IBEAM','TANK','ROCK_2','GD','LIQUID'],\
-        'CHAIN_235U_NA':['TANK','PSUP','GD'],\
-        'STEEL_ACTIVITY':['TANK','PSUP'],\
+        'CHAIN_238U_NA':['PMT','PSUP','IBEAM','TANK','ROCK_2','LIQUID'],\
+        'CHAIN_232Th_NA':['PMT','PSUP','IBEAM','TANK','ROCK_2','LIQUID'],\
+        'CHAIN_235U_NA':['TANK','PSUP','LIQUID','IBEAM'],\
+        'STEEL_ACTIVITY':['TANK','PSUP','IBEAM'],\
         'A_Z':['LIQUID'],\
         'singles':['SINGLES'],\
         'RADIOGENIC':['ROCK_2','ROCK_1'],\
@@ -282,11 +302,11 @@ def loadSimulationParameters():
 '211Pb_TANK_CHAIN_235U_NA': [1.82E+03, 50], \
 '211Bi_TANK_CHAIN_235U_NA': [1.82E+03*0.00270, 50], \
 '207Tl_TANK_CHAIN_235U_NA': [1.82E+03, 50], \
-'231Th_GD_CHAIN_235U_NA': [4.70E-03*pmtVolCorr , 1], \
-'223Fr_GD_CHAIN_235U_NA': [4.70E-03*0.0138*pmtVolCorr, 1], \
-'211Pb_GD_CHAIN_235U_NA': [4.70E-03*pmtVolCorr , 1], \
-'211Bi_GD_CHAIN_235U_NA': [4.70E-03*0.00270*pmtVolCorr , 1], \
-'207Tl_GD_CHAIN_235U_NA': [4.70E-03*pmtVolCorr , 1], \
+'231Th_LIQUID_CHAIN_235U_NA': [4.70E-03*pmtVolCorr , 1], \
+'223Fr_LIQUID_CHAIN_235U_NA': [4.70E-03*0.0138*pmtVolCorr, 1], \
+'211Pb_LIQUID_CHAIN_235U_NA': [4.70E-03*pmtVolCorr , 1], \
+'211Bi_LIQUID_CHAIN_235U_NA': [4.70E-03*0.00270*pmtVolCorr , 1], \
+'207Tl_LIQUID_CHAIN_235U_NA': [4.70E-03*pmtVolCorr , 1], \
 '234Pa_LIQUID_CHAIN_238U_NA': [1.35E+00*pmtVolCorr , 1], \
 '214Pb_LIQUID_CHAIN_238U_NA': [1.35E+00*pmtVolCorr , 1], \
 '214Bi_LIQUID_CHAIN_238U_NA': [1.35E+00*pmtVolCorr , 1], \
@@ -410,11 +430,11 @@ def loadSimulationParameters():
 '211Pb_TANK_CHAIN_235U_NA': [3.22E+03, 50], \
 '211Bi_TANK_CHAIN_235U_NA': [3.22E+03*0.00270, 50], \
 '207Tl_TANK_CHAIN_235U_NA': [3.22E+03, 50], \
-'231Th_GD_CHAIN_235U_NA': [1.48E-02*pmtVolCorr , 1], \
-'223Fr_GD_CHAIN_235U_NA': [1.48E-02*0.0138*pmtVolCorr, 1], \
-'211Pb_GD_CHAIN_235U_NA': [1.48E-02*pmtVolCorr , 1], \
-'211Bi_GD_CHAIN_235U_NA': [1.48E-02*0.00270*pmtVolCorr , 1], \
-'207Tl_GD_CHAIN_235U_NA': [1.48E-02*pmtVolCorr , 1], \
+'231Th_LIQUID_CHAIN_235U_NA': [1.48E-02*pmtVolCorr , 1], \
+'223Fr_LIQUID_CHAIN_235U_NA': [1.48E-02*0.0138*pmtVolCorr, 1], \
+'211Pb_LIQUID_CHAIN_235U_NA': [1.48E-02*pmtVolCorr , 1], \
+'211Bi_LIQUID_CHAIN_235U_NA': [1.48E-02*0.00270*pmtVolCorr , 1], \
+'207Tl_LIQUID_CHAIN_235U_NA': [1.48E-02*pmtVolCorr , 1], \
 '60Co_IBEAM_STEEL_ACTIVITY': [2.40e+04, 50], \
 '137Cs_IBEAM_STEEL_ACTIVITY': [2.53e+04, 50], \
 '60Co_TANK_STEEL_ACTIVITY': [3.61E+04, 50], \
