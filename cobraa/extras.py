@@ -1,14 +1,12 @@
-'''
-This is a place for additional tools which can be useful in the 
-simulation-reconstruction-analysis process for verification 
-and other purposes.
 
-Author: Liz Kneale (May 2021)
-'''
-
-from ROOT import TFile
+from ROOT import TFile,TH1D,TCanvas,THStack,TLegend,gPad,TColor
 import pandas as pd
 from .globals import *
+
+# This is a place for additional tools which can be useful in the 
+# simulation-reconstruction-analysis process for verification 
+# and other purposes.
+# Author: Liz Kneale (May 2021)
 
 
 def triggers():
@@ -47,7 +45,7 @@ def triggers():
                         totalEvents += runSummary.nEvents
                     data = fredfile.Get('data')
                     triggers = data.GetEntries()
-                    singles = data.Draw("","n9>9 && closestPMT>0.5")
+                    singles = data.Draw("","n9>10 && closestPMT>0.5")
                     triggerrate = triggers/totalEvents*rates[_tag][0]
                     singlesrate = singles/totalEvents*rates[_tag][0]
                     rate = rates[_tag][0]
@@ -84,3 +82,101 @@ def triggers():
     triggerdata.writelines(df.to_latex(index=False,escape=False).replace('\\toprule', '\\hline').replace('\\midrule', '\\hline').replace('\\bottomrule','\\hline').replace('lllrrrr','|l|l|l|S|S|S|S|').replace("Component","{Component}").replace("Origin","{Origin}").replace("Isotope","{Isotope}").replace("Events","{Events}").replace("Time (days)","{Time (days)}").replace("Trigger rate (Hz)","{Trigger rate (Hz)}").replace("Singles rate (Hz)","{Singles rate (Hz)}"))
     return 0
 
+
+def backgrounds():
+
+    hPMT = TH1D('hPMT','hPMT',binFid,rangeFidmin,rangeFidmax)
+    hPSUP = TH1D('hPSUP','hPSUP',binFid,rangeFidmin,rangeFidmax)
+    hTANK = TH1D('hTANK','hTANK',binFid,rangeFidmin,rangeFidmax)
+    hLIQUID = TH1D('hLIQUID','hLIQUID',binFid,rangeFidmin,rangeFidmax)
+    hFN = TH1D('hFN','hFN',binFid,rangeFidmin,rangeFidmax)
+    hIBEAM = TH1D('hIBEAM','hIBEAM',binFid,rangeFidmin,rangeFidmax)
+    hROCK = TH1D('hROCK','hROCK',binFid,rangeFidmin,rangeFidmax)
+    hRN = TH1D('hRN','hRN',binFid,rangeFidmin,rangeFidmax)
+    hIBD = TH1D('hIBD','hIBD',binFid,rangeFidmin,rangeFidmax)
+
+    for _p in proc:
+        for _loc in proc[_p]:
+            for _element in d[_p]:
+                _tag = "%s_%s_%s"%(_element,_loc,_p)
+                _tag = _tag.replace(" ","")
+                _file = "fred_root_files%s/new_merged_Watchman_%s_%s_%s.root"%(additionalString,_element,_loc,_p)
+                _file = _file.replace(" ","")
+                if 'hartlepool' in _tag or 'heysham' in _tag or 'mono' in _tag or 'boulby' in _tag:
+                    continue
+                fredfile = TFile(_file)
+                # check the root file is valid
+                totalEvents = 0
+                try:
+                    runSummary = fredfile.Get('runSummary')
+                    Entries = runSummary.GetEntries()
+                    for i in range(Entries):
+                        runSummary.GetEntry(i)
+                        totalEvents += runSummary.nEvents
+                    data = fredfile.Get('data')
+
+                except:
+                    print("cannot open ",_tag,"from ",_file)
+                    continue
+                print("opening ",_tag,"from ",_file)
+
+                for fidcut in drange(minFid,rangeFidmax,binwidthFid):
+                    nevts = data.Draw("","n9>9 && closestPMT/1000.>%f && veto_hit<4 && inner_hit>10"%(fidcut),"goff")
+                    rate = nevts/totalEvents*rates[_tag][0]
+                    if 'PMT' in _tag:
+                        hPMT.Fill(fidcut,rate)
+                    elif 'PSUP' in _tag:
+                        hPSUP.Fill(fidcut,rate)
+                    elif 'TANK' in _tag:
+                        hTANK.Fill(fidcut,rate)
+                    elif 'LIQUID' in _tag and 'NA' in _tag:
+                        hLIQUID.Fill(fidcut,rate)
+#                    elif 'FASTNEUTRONS' in _tag:
+#                        hFN.Fill(fidcut,rate)
+                    elif 'IBEAM' in _tag:
+                        hIBEAM.Fill(fidcut,rate)
+                    elif 'ROCK'in _tag and 'NA' in _tag:
+                        hROCK.Fill(fidcut,rate)
+                    elif 'RADIOGENICS' in _tag:
+                        hROCK.Fill(fidcut,rate)
+#                    elif 'A_Z' in _tag:
+#                        hRN.Fill(fidcut,rate)
+#                    elif 'pn_ibd' in _tag:
+#                        hIBD.Fill(fidcut,rate)
+    
+
+    hPMT.SetLineColor(TColor.GetColor(Tol_bright[0]))
+    hPSUP.SetLineColor(TColor.GetColor(Tol_bright[1]))
+    hTANK.SetLineColor(TColor.GetColor(Tol_bright[2]))
+    hLIQUID.SetLineColor(TColor.GetColor(Tol_bright[3]))
+#    hFN.SetLineColor(TColor.GetColor(Tol_bright[4]))
+    hIBEAM.SetLineColor(TColor.GetColor(Tol_bright[5]))
+    hROCK.SetLineColor(TColor.GetColor(Tol_bright[6]))
+#    hRN.SetLineColor(TColor.GetColor(Tol_bright[7]))
+#    hIBD.SetLineColor(1)
+
+    c1 = TCanvas()
+    hs = THStack("hs","")
+    hs.Add(hPMT,"hist")
+    hs.Add(hPSUP,"hist")
+    hs.Add(hTANK,"hist")
+    hs.Add(hLIQUID,"hist")
+    hs.Add(hIBEAM,"hist")
+    hs.Add(hROCK,"hist")
+    hs.Draw("nostack")
+    hs.GetXaxis().SetTitle("Distance from inner PMT radius")
+    hs.GetYaxis().SetTitle("Singles rate (Hz)")
+    gPad.SetLogy()
+
+    leg = TLegend(0.7,0.7,0.95,0.95)
+    leg.AddEntry(hPMT,"Inner PMT","l")
+    leg.AddEntry(hPSUP,"PSUP","l")
+    leg.AddEntry(hTANK,"Tank","l")
+    leg.AddEntry(hLIQUID,"Detector medium","l")
+    leg.AddEntry(hIBEAM,"I beam","l")
+    leg.AddEntry(hROCK,"Rock","l")
+    leg.Draw()
+    c1.SaveAs("backgrounds.png")
+    c1.SaveAs("backgrounds.C")
+
+    return hs

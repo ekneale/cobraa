@@ -35,6 +35,9 @@ if __name__ == '__main__':
     if arguments['--triggers']:
         triggers()
 
+    if arguments['--backgrounds']:
+        backgrounds()
+
     print('''All done.
 
 You can submit multiple jobs with a single command line 'for i in `ls job/job*.sh`; do bsub $i; done')

@@ -80,6 +80,7 @@ docstring = """
     --evtype=<_ev>         Set process to evaluate for coincidences
     --sensitivity          Calculate the rates for final optimisation of signal significance (analysis step 2)
     --triggers             Get the number of triggers for singles processes
+    --backgrounds          Plot backgrounds as a function of distance from rPMT
 
     ## Define the cuts/ranges over which to optimise
 
@@ -87,6 +88,8 @@ docstring = """
     --maxNXprompt=<_maxNXp>      Maximum threshold number of direct hits [Default: 30.]
     --minNXdelayed=<_minNXd>     Minimum threshold number of direct hits [Default: 9.]
     --maxNXdelayed=<_maxNXd>     Maximum threshold number of direct hits [Default: 30.]
+    --minFid =<_minFid>          Minimum fiducial cut (distance from PMT radius) [Default: 0.5]
+    --maxFid =<_maxFid>          Maximum fiducial cut (distance from PMT radius) [Default: 2.0]
     --binwidthNX=<_binNX>        Bin width for scan over nX cut range [Default: 1]
     --binwidthFid=<_binFid>      Bin width for scan over closest PMT cut range [Default: 0.1]
     --binwidthdT=<binT>          Bin width for scan over dT cut [Default: 10]

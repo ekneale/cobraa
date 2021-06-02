@@ -1,8 +1,14 @@
 from .load import *
+from .style import setStyle
 
 # Define global variables and settings
 
 warnings.simplefilter("ignore")
+
+#Define style settings
+
+Tol_bright = ['#4477AA','#66CCEE','#228833','#CCBB44','#EE6677','#AA3377','#BBBBBB','k']
+setStyle()
 
 def drange(start, stop, step):
     rii= start
@@ -24,7 +30,6 @@ detectorStr = f"Watchman_rightcylinder_{arguments['--cylinderSize']}m_{arguments
 
 
 # detector dimensions
-
 
 if arguments["--cylinderSize"]=='12':
     detectorRadius = 6000.
@@ -68,8 +73,8 @@ rangedRmin,rangedRmax = dRmin-binwidthdR/2.,dRmax+binwidthdR/2.
 
 # fiducial volume
 binwidthFid = float(arguments["--binwidthFid"])
-minFid = 0.5 # add flag to vary these
-maxFid = 2.0# add flag to vary these
+minFid = float(arguments["--minFid"])
+maxFid = float(arguments["--maxFid"])
 rangeFidmin,rangeFidmax = minFid-binwidthFid/2.,maxFid+binwidthFid/2.
 binFid = int(round((rangeFidmax-rangeFidmin)/binwidthFid))
 

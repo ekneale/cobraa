@@ -123,14 +123,6 @@ def obtainCorrelatedCoincidences(file,_tag,outfile,rate):
         hist[tag].SetXTitle('distance from wall [m]')
         hist[tag].SetYTitle('prompt %s cut'%(energyEstimator))
         hist[tag].SetZTitle('coincidences per day')
-        hist[tag].GetXaxis().SetTitleSize(0.05)
-        hist[tag].GetYaxis().SetTitleSize(0.05)
-        hist[tag].GetZaxis().SetTitleSize(0.05)
-        hist[tag].GetZaxis().SetTitleOffset(0.8)
-        hist[tag].GetZaxis().SetTitleOffset(0.8)
-        hist[tag].GetZaxis().SetTitleOffset(-.55);
-        hist[tag].GetZaxis().SetTitleColor(1);
-        hist[tag].GetZaxis().CenterTitle();
 
         for fidcut,prompt_nxcut in product(drange(minFid,rangeFidmax,binwidthFid),drange(minNXprompt,rangeNXpmax,binwidthNX)):
 
@@ -228,14 +220,6 @@ def obtainAccidentalCoincidences(file,_tag,outfile,rate):
         hist[tag].SetXTitle('distance from wall [m]')
         hist[tag].SetYTitle('prompt %s cut'%(energyEstimator))
         hist[tag].SetZTitle('efficiency')
-        hist[tag].GetXaxis().SetTitleSize(0.05)
-        hist[tag].GetYaxis().SetTitleSize(0.05)
-        hist[tag].GetZaxis().SetTitleSize(0.05)
-        hist[tag].GetZaxis().SetTitleOffset(0.8)
-        hist[tag].GetZaxis().SetTitleOffset(0.8)
-        hist[tag].GetZaxis().SetTitleOffset(-.55)
-        hist[tag].GetZaxis().SetTitleColor(1)
-        hist[tag].GetZaxis().CenterTitle()
 
         for fidcut,prompt_nxcut in product(drange(minFid,rangeFidmax,binwidthFid),drange(minNXprompt,rangeNXpmax,binwidthNX)):
             coincidences=0
