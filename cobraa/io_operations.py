@@ -90,7 +90,7 @@ def generateJobs():
     for _p in proc:
         for _loc in proc[_p]:
             for _element in d[_p][_loc]:
-                if 'pn_ibd' in _p or 'A_Z' in _p or 'fast' in _p or 'singles' in _p:
+                if 'pn_ibd' in _p or 'A_Z' in _p or 'FAST' in _p or 'singles' in _p:
                 
                     dir = "root_files%s/%s_%s_%s"%(additionalString,_element,_loc,_p)
                     dir = dir.replace(" ","")
@@ -142,7 +142,13 @@ source {ratDir+'/../../env.sh'} && TMPNAME=$(date +%s%N)  && rat mac/detector_{d
                 _element = _element.replace(" ","")
                 if 'NA' in _p or 'RADIOGENIC' in _p: 
                  outfile_singlesscript.writelines(f" mac/phys_{_element}.mac mac/geo_{_loc}.mac mac/rates_{_element}_{_loc}_{_p}.mac") 
-                elif 'pn_ibd' in _p or 'A_Z' in _p or 'FASTNEUTRONS' in _p:
+                elif 'singles' in _p:
+                    for i in range(nsetSingles):
+                        file = f"{dir}/job{additionalString}_{_element}_{_loc}_{_p}_{i}.sh".replace(" ","")
+                        outfile_jobs = open(file,"w+")
+                        jobheader = jobSubmissionCommands(_element,timeJob,file,outFile,errFile,singlesscript,arguments)
+                        outfile_jobs.writelines(jobheader)
+                else:
                     script = f"{dir}/script{additionalString}_{_element}_{_loc}_{_p}.sh".replace(" ","")
                     outfile_script = open(script,"w+")
                     outfile_script.writelines(f"""#!/bin/sh
@@ -155,14 +161,8 @@ source {ratDir+'/../../env.sh'} && TMPNAME=$(date +%s%N)  && rat mac/detector_{d
                     outfile_jobs.writelines(jobheader)
 
                     outfile_jobs.close
-                elif _element in d['singles']:
-                    for i in range(nsetSingles):
-                        file = f"{dir}/job{additionalString}_{_element}_{_loc}_{_p}_{i}.sh".replace(" ","")
-                        outfile_jobs = open(file,"w+")
-                        jobheader = jobSubmissionCommands(_element,timeJob,file,outFile,errFile,singlesscript,arguments)
-                        outfile_jobs.writelines(jobheader)
     
-    outfile_singlesscript.writelines(f" mac/evts_singles.mac -o root_files{additionalString}/singles_SINGLES_singles/run$TMPNAME.root -l log{additionalString}/singles_SINGLES_singles/run$TMPNAME.log")
+    outfile_singlesscript.writelines(f" mac/evts_singles.mac -o root_files{additionalString}/singles_ALL_singles/run$TMPNAME.root -l log{additionalString}/singles_ALL_singles/run$TMPNAME.log")
     outfile_singlesscript.close()
     os.chmod(singlesscript,S_IRWXU)
 

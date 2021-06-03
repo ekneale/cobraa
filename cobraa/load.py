@@ -155,7 +155,7 @@ def loadSimulationParameters():
     d['ibd_p_hs'] = {'LIQUID':['IBDPositronHeyshamSig']}
     d['ibd_p_hb'] = {'LIQUID':['IBDPositronHeyshamBkg']}
     d['ibd_n'] = {'LIQUID':['IBDNeutron']}
-    d['pn_ibd'] = {'LIQUID':['boulby_geo','core1_hartlepool','core2_hartlepool','boulby_world','heysham_signal','heysham_background']}
+    d['pn_ibd'] = {'LIQUID':['boulby_geo','big_hartlepool','small_hartlepool','boulby_world','heysham_signal','heysham_background']}
 
     d['singles'] = {'ALL':['singles']}
     d['A_Z'] = {'LIQUID':['li 9','n 17']}
@@ -204,7 +204,7 @@ def loadSimulationParameters():
         d['RADIOGENIC'] = {'ROCK_2':['rock_neutrons']}
 
 
-        d['pn_ibd'] = {'LIQUID':['boulby_geo','core1_hartlepool','core2_hartlepool','boulby_world','heysham_signal','heysham_background']}
+        d['pn_ibd'] = {'LIQUID':['boulby_geo','big_hartlepool','small_hartlepool','boulby_world','heysham_signal','heysham_background']}
 
         d['singles'] = {'ALL':['singles']}
         d['A_Z'] = {'LIQUID':['li 9','n 17']}
@@ -301,8 +301,8 @@ def loadSimulationParameters():
 'IBDPositronHeyshamBkg_LIQUID_ibd_p_hb': [3.880e-06 *pmtVolCorr, 1], \
 'IBDNeutron_LIQUID_ibd_n': [ 2.968e-05*pmtVolCorr, 1], \
 'boulby_geo_LIQUID_pn_ibd': [1.02e-06*pmtVolCorr , 1],\
-'core1_hartlepool_LIQUID_pn_ibd': [1.697e-05*pmtVolCorr , 1],\
-'core2_hartlepool_LIQUID_pn_ibd': [1.271e-05 *pmtVolCorr, 1],\
+'big_hartlepool_LIQUID_pn_ibd': [1.697e-05*pmtVolCorr , 1],\
+'small_hartlepool_LIQUID_pn_ibd': [1.271e-05 *pmtVolCorr, 1],\
 'boulby_world_LIQUID_pn_ibd': [5.857e-06 *pmtVolCorr, 1],\
 'heysham_signal_LIQUID_pn_ibd': [1.977e-06 *pmtVolCorr, 1],\
 'heysham_background_LIQUID_pn_ibd': [3.880e-06 *pmtVolCorr, 1],\
@@ -423,8 +423,8 @@ def loadSimulationParameters():
     elif arguments['--cylinderSize']==16 and arguments['--rPMT']==6700:
         #print('Using rates for 16m cylinder with 6.7m inner PMT radius')
         jobRate = {\
-'core1_hartlepool_LIQUID_pn_ibd': [4.845e-05*pmtVolCorr , 1],\
-'core2_hartlepool_LIQUID_pn_ibd': [3.360e-05*pmtVolCorr , 1],\
+'big_hartlepool_LIQUID_pn_ibd': [4.845e-05*pmtVolCorr , 1],\
+'small_hartlepool_LIQUID_pn_ibd': [3.360e-05*pmtVolCorr , 1],\
 'boulby_geo_LIQUID_pn_ibd': [3.565e-07*pmtVolCorr , 1],\
 'boulby_world_LIQUID_pn_ibd': [2.227e-06*pmtVolCorr , 1],\
 'heysham_signal_LIQUID_pn_ibd': [4.585e-06*pmtVolCorr , 1],\
@@ -547,8 +547,8 @@ def loadSimulationParameters():
     else:
         print('Using rates for 16m tank with 5.7m inner PMT radius')
         jobRate = {\
-'core1_hartlepool_LIQUID_pn_ibd': [4.845e-05*pmtVolCorr , 1],\
-'core2_hartlepool_LIQUID_pn_ibd': [3.360e-05*pmtVolCorr , 1],\
+'big_hartlepool_LIQUID_pn_ibd': [4.845e-05*pmtVolCorr , 1],\
+'small_hartlepool_LIQUID_pn_ibd': [3.360e-05*pmtVolCorr , 1],\
 'boulby_geo_LIQUID_pn_ibd': [3.565e-07*pmtVolCorr , 1],\
 'boulby_world_LIQUID_pn_ibd': [2.227e-06*pmtVolCorr , 1],\
 'heysham_signal_LIQUID_pn_ibd': [4.585e-06*pmtVolCorr , 1],\
