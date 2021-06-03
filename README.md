@@ -131,7 +131,9 @@ Accidental background (singles)
 
 Relevant flags are:
 ```
-    --lightSim                Runs only the singles which are the main contributors to accidentals
+    --lightSim                Runs the singles only in the components which are the main contributors to accidentals (can be combined with --reduced)
+    
+    --reduced                 Runs only the processes and decays which tend to trigger/reconstruct in the fiducial (can be combined with --lightSim)
 
     --cluster                 Used to specify the job submission script header options (default is to run locally)
                               Options: lassen, sheffield, edinburgh, glasgow, etc (only lassen and sheffield so far).
@@ -181,6 +183,11 @@ Reads in the fred output for all event types available and finds:
 
 The information is saved to a triggerdata.txt in latex formatting (if using in LaTex, please use ```\usepackage{siunitx}``` in the preamble). Where a root file does not exist, the details are written in simsrequired.txt.
 
+***Backgrounds plot***
+
+This is another additional function which is useful for comparing the relative contributions of the components to the radioactive backgrounds. Plots the singles rates as a function of fiducial cut.
+
+To run: ```cobraa --backgrounds [detector options] [fiducial cut options]```
 
 **Analysis**
 
@@ -208,6 +215,8 @@ Relevant flags for the analysis steps define the ranges over which to optimise:
 --dTmin/--dTmax                        define dT range (by default, uses a fixed cut in dT of 100us)
 
 --dRmin/--dRmax                        define dR range (by default, uses a fixed cut in dR of 2m)
+
+--minFid/--maxFid                      define fiducial cut range (defined as distance from rPMT)
 
 --binwidthNX                           
 --binwidthFid                          set optimisation granularity
