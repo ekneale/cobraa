@@ -215,7 +215,7 @@ def mergeRootFiles():
                     os.system(f'hadd -f -k -v 0 core_{outfile} core_{files}')
 
 
-def macroGenerator(location,element,_dict,nruns):
+def macroGenerator(location,element,process,nruns):
 
     # Generates the text to go inside the rat macros
     # and is called by generateMacros()
@@ -260,7 +260,8 @@ def macroGenerator(location,element,_dict,nruns):
     # Then the generator (phys) and location (geo) macros;
     # these set the generator, generator conditions and location for a given event type
 
-    if element in d['CHAIN_238U_NA'] or element in d['CHAIN_232Th_NA'] or element in d['40K_NA'] or element in d['60Co_NA'] or element in d['CHAIN_235U_NA']:
+    if '_NA' in process:
+#    if element in d['CHAIN_238U_NA'][location] or element in d['CHAIN_232Th_NA'][location] or element in d['40K_NA'][location] or element in d['60Co_NA'][location] or element in d['CHAIN_235U_NA'][location]:
         if location == 'PMT':
             generator = f'''
 /generator/add decaychain {element}:regexfill:poisson
@@ -288,7 +289,7 @@ def macroGenerator(location,element,_dict,nruns):
 /generator/pos/set {locat}+
 '''
 
-    elif element in d['pn_ibd']:
+    elif 'pn_ibd' in process:
         generator = f'''
 /generator/add combo ibd:regexfill:poisson
 /generator/ibd/spectrum {element}
@@ -298,7 +299,7 @@ def macroGenerator(location,element,_dict,nruns):
 /generator/pos/set detector+
 '''
 
-    elif element in d['A_Z']:
+    elif 'A_Z' in process:
         #A =  int(int(element)/1000)
         #Z = int(element) - A*1000
         generator = f'''
@@ -308,7 +309,7 @@ def macroGenerator(location,element,_dict,nruns):
         detectorvolume = f'''/generator/pos/set detector+
 '''
 
-    elif element in d['RADIOGENIC']:
+    elif 'RADIOGENIC' in process:
         locat = location.lower()
         generator =f'''
 /generator/add combo spectrum:regexfill:poisson
@@ -317,7 +318,7 @@ def macroGenerator(location,element,_dict,nruns):
         detectorvolume = f'''/generator/pos/set {locat}
 '''
 
-    elif element in d['FASTNEUTRONS']:
+    elif 'FASTNEUTRONS' in process:
         locat = location.lower()
         generator =f'''
 /generator/add combo fastneutron:regexfill:poisson
