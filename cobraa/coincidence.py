@@ -39,7 +39,7 @@ def coincidenceMap():
         for _p in proc:
             if _p==arguments['--evtype']:
                 for _loc in proc[_p]:
-                    for _element in d[_p]:
+                    for _element in d[_p][_loc]:
                         _tag = "%s_%s_%s"%(_element,_loc,_p)
                         _tag = _tag.replace(" ","")
                         _file = "fred_root_files%s/merged_%s_%s_%s.root"%(additionalString,_element,_loc,_p)
@@ -54,7 +54,7 @@ def coincidenceMap():
     else:
         for _p in proc:
             for _loc in proc[_p]:
-                for _element in d[_p]:
+                for _element in d[_p][_loc]:
                     _tag = "%s_%s_%s"%(_element,_loc,_p)
                     _tag = _tag.replace(" ","")
                     _file = "fred_root_files%s/merged_%s_%s_%s.root"%(additionalString,_element,_loc,_p)

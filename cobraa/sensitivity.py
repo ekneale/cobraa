@@ -67,7 +67,7 @@ def calculateSensitivity():
       
         for _p in proc:
             for _loc in proc[_p]:
-                for _element in d[_p]:
+                for _element in d[_p][_loc]:
                     _tag = 'hist_%s_%s_%s_%sdelayed%d_%dus_%dmm'%(_element,_loc,_p,energyEstimator,delayed_nxcut,dTcut,dRcut*1000)
                     _tag = _tag.replace(" ","")
                     _str = "%s_%s_%s"%(_element,_loc,_p)
