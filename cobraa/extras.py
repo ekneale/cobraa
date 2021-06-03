@@ -164,11 +164,11 @@ def backgrounds():
     hs.Add(hIBEAM,"hist")
     hs.Add(hROCK,"hist")
     hs.Draw("nostack")
-    hs.GetXaxis().SetTitle("Distance from inner PMT radius")
+    hs.GetXaxis().SetTitle("Fiducial cut - distance from inner PMT radius (m)")
     hs.GetYaxis().SetTitle("Singles rate (Hz)")
     gPad.SetLogy()
 
-    leg = TLegend(0.7,0.7,0.95,0.95)
+    leg = TLegend(0.68,0.68,0.98,0.98)
     leg.AddEntry(hPMT,"Inner PMT","l")
     leg.AddEntry(hPSUP,"PSUP","l")
     leg.AddEntry(hTANK,"Tank","l")
