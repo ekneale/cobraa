@@ -185,7 +185,7 @@ The information is saved to a triggerdata.txt in latex formatting (if using in L
 
 ***Backgrounds plot***
 
-This is another additional function which is useful for comparing the relative contributions of the components to the radioactive backgrounds. Plots the singles rates as a function of fiducial cut.
+This is another additional function which is useful for comparing the relative contributions of the components to the radioactive backgrounds. Plots the singles rates as a function of fiducial cut. NB this option only works where the backgrounds have been simulated individually.
 
 To run: ```cobraa --backgrounds [detector options] [fiducial cut options]```
 
