@@ -48,6 +48,7 @@ docstring = """
     --jobTime=<_jt>        Length of job in minutes for LASSEN [Default: 200]
     --energyEst=<_EE>      Default energy estimator (n9,n100,n400,nX) [Default: n9]
     -N=<_N>                Number of runs to simulate [Default: 40]
+    --reduced              Simulate a reduced number of processes/decays
 
     ## Define detector geometry and other features
 
@@ -114,70 +115,152 @@ except ImportError:
 if (arguments['--Heysham']):
         print("Using Heysham spectrum (all 4 cores) and assuming Hartlepool is off")
 
-def loadSimulationParametersCoincidence():
-    
-    location = {
-        'LIQUID':['pn_ibd','40K_NA','CHAIN_238U_NA','CHAIN_232Th_NA','CHAIN_235U_NA','A_Z'],\
-        'PMT':['40K_NA','CHAIN_238U_NA','CHAIN_232Th_NA'],\
-        'ROCK_1':[],\
-        'ROCK_2':['40K_NA','CHAIN_238U_NA','CHAIN_232Th_NA','RADIOGENIC','FASTNEUTRONS'],\
-        'TANK':[],\
-        'PSUP':[],\
-        'IBEAM':[],\
-        'ALL':[],\
-    }
-
-    
 
 def loadSimulationParameters():
     #Chain and subsequent isotopes
     d = {}
+    d['CHAIN_238U_NA'] = {'LIQUID':['234Pa','214Pb','214Bi','210Bi','210Tl'],\
+                         'PMT':['234Pa','214Pb','214Bi','210Bi','210Tl'],\
+                         'TANK':['234Pa','214Pb','214Bi','210Bi','210Tl'],\
+                         'ROCK_2':['234Pa','214Pb','214Bi','210Bi','210Tl'],\
+                         'IBEAM':['234Pa','214Pb','214Bi','210Bi','210Tl'],\
+                         'PSUP':['234Pa','214Pb','214Bi','210Bi','210Tl']}
+    d['CHAIN_232Th_NA'] = {'LIQUID':['228Ac','212Pb','212Bi','208Tl'],\
+            'PMT':['228Ac','212Pb','212Bi','208Tl'],\
+            'TANK':['228Ac','212Pb','212Bi','208Tl'],\
+            'ROCK_2':['228Ac','212Pb','212Bi','208Tl'],\
+            'IBEAM':['228Ac','212Pb','212Bi','208Tl'],\
+            'PSUP':['228Ac','212Pb','212Bi','208Tl']}
+    d['CHAIN_235U_NA'] = {'LIQUID':['231Th','223Fr','211Pb','211Bi','207Tl'],\
+            'TANK':['231Th','223Fr','211Pb','211Bi','207Tl'],\
+            'IBEAM':['231Th','223Fr','211Pb','211Bi','207Tl'],\
+            'PSUP':['231Th','223Fr','211Pb','211Bi','207Tl']}
 
-    d['CHAIN_238U_NA'] =['234Pa','214Pb','214Bi','210Bi','210Tl']
-    d['CHAIN_232Th_NA'] = ['228Ac','212Pb','212Bi','208Tl']#['228Ac','212Bi','208Tl']
-    d['CHAIN_235U_NA'] = ['231Th','223Fr','211Pb','211Bi','207Tl']#['231Th','223Fr','207Tl']
-    d['40K_NA']         = ['40K']
-    d['STEEL_ACTIVITY'] = ['60Co','137Cs']
+    d['40K_NA'] = {'LIQUID':['40K'],\
+            'TANK':['40K'],\
+            'IBEAM':['40K'],\
+            'PSUP':['40K'],\
+            'PMT':['40K'],\
+            'ROCK_2':['40K']}
+    d['60Co_NA'] = {'PSUP':['60Co'],\
+            'TANK':['60Co'],\
+            'IBEAM':['60Co']}
+    d['137Cs_NA'] = {'PSUP':['137Cs'],\
+            'TANK':['137Cs'],\
+            'IBEAM':['137Cs']}
+    d['RADIOGENIC'] = {'ROCK_2':['rock_neutrons']}
+    d['RADIOGENIC'] = {'ROCK_1':['rock_neutrons']}
 
-    d['ibd_p'] = ['IBDPositron']
-    d['ibd_p_hs'] = ['IBDPositronHeyshamSig']
-    d['ibd_p_hb'] = ['IBDPositronHeyshamBkg']
-    d['ibd_n'] = ['IBDNeutron']
-    d['pn_ibd']   = ['boulby_geo','core1_hartlepool','core2_hartlepool','boulby_world','heysham_signal','heysham_background']
+    d['ibd_p'] = {'LIQUID':['IBDPositron']}
+    d['ibd_p_hs'] = {'LIQUID':['IBDPositronHeyshamSig']}
+    d['ibd_p_hb'] = {'LIQUID':['IBDPositronHeyshamBkg']}
+    d['ibd_n'] = {'LIQUID':['IBDNeutron']}
+    d['pn_ibd'] = {'LIQUID':['boulby_geo','core1_hartlepool','core2_hartlepool','boulby_world','heysham_signal','heysham_background']}
 
-    d['singles'] = ['singles']
+    d['singles'] = {'ALL':['singles']}
+    d['A_Z'] = {'LIQUID':['li 9','n 17']}
+    d['FASTNEUTRONS'] = {'ROCK_2':['fast_neutrons']}
 
-    d['A_Z'] =  ['li 9','n 17']
-    d['RADIOGENIC'] = ['rock_neutrons']
-    d['FASTNEUTRONS'] = ['fast_neutrons']
+   
+    if arguments['--reduced']:
+        # Define which components are associated with each physical process
+        # Removing negligible processes
+        # (particularly useful for full coincidence evaluation)
+        '''
+        PMT             232Th: 208Tl, 212Bi,228Ac;      238U: 210Bi, 210Tl, 214Bi, 234Pa;           40K 
+        PSUP            232Th: 208Tl, 212Bi,228Ac;      238U: 210Tl, 214Bi, 234Pa;                  40K;    60Co: TODO (U235/Cs: none)
+        IBEAM           232Th: 208Tl;                   238U: 210Tl, 214Bi;                         40K; (U235/Co/Cs: none)
+        TANK            232Th: 208Tl, 212Bi;            238U: 210Tl, 214Bi;                         40K;    60Co;
+        GD-WATER        232Th: 208Tl, 212Bi,228Ac;      238U: 210Bi, 210Tl, 214Bi, 214Pb, 234Pa;    40K;       U235: TODO
+        ROCK (inner)    232Th: 208Tl;                   238U: 210Tl,214Bi;                          Radiogenic neutrons
+        ROCK (outer)                                                                                Radiogenic neutrons
+        '''
 
-    if arguments['--lightSim']:
-        ## Define what components are associated with each physical process
+        d.clear()
+        d['CHAIN_238U_NA'] = {'LIQUID':['210Bi', '210Tl', '214Bi', '214Pb', '234Pa'],\
+                'PMT':['210Bi', '210Tl', '214Bi', '234Pa'],\
+                'TANK':['210Tl', '214Bi'],\
+                'ROCK_2':['210Tl', '214Bi'],\
+                'IBEAM':['210Tl', '214Bi'],\
+                'PSUP':['210Tl', '214Bi', '234Pa']}
+
+        d['CHAIN_232Th_NA'] = {'LIQUID':['208Tl', '212Bi','228Ac'],\
+                'PSUP':['208Tl', '212Bi','228Ac'],\
+                'PMT':['208Tl', '212Bi','228Ac'],\
+                'TANK':['208Tl', '212Bi'],\
+                'IBEAM':['208Tl'],\
+                'ROCK_2':['208Tl']}
+
+        d['CHAIN_235U_NA'] = {'LIQUID':['207Tl','211Pb','223Fr','231Th']}
+
+        d['40K_NA'] = {'LIQUID':['40K'],\
+                'PMT':['40K'],\
+                'TANK':['40K'],\
+                'IBEAM':['40K'],\
+                'PSUP':['40K']}
+
+        d['60Co_NA'] = {'PSUP':['60Co'],\
+                'TANK':['60Co']}
+        d['RADIOGENIC'] = {'ROCK_2':['rock_neutrons']}
+
+
+        d['pn_ibd'] = {'LIQUID':['boulby_geo','core1_hartlepool','core2_hartlepool','boulby_world','heysham_signal','heysham_background']}
+
+        d['singles'] = {'ALL':['singles']}
+        d['A_Z'] = {'LIQUID':['li 9','n 17']}
+        d['FASTNEUTRONS'] = {'ROCK_2':['fast_neutrons']}
+
+    if arguments['--reduced'] and arguments['--lightSim']==0:
+        # Define what components are associated with each physical process
+        # Reduced number of processes for a full simulation
+        # (useful for full coincidence evaluation) 
         process = {
-        'pn_ibd':['LIQUID'],\
+        'CHAIN_238U_NA': ['PMT','PSUP','LIQUID','TANK','IBEAM','ROCK_2'],\
+        'CHAIN_232Th_NA':['PMT','PSUP','LIQUID','TANK','IBEAM','ROCK_2'],\
+        'CHAIN_235U_NA':['LIQUID'],\
+        '40K_NA':        ['PMT','PSUP','LIQUID','TANK','IBEAM'],\
+        '60Co_NA':       ['TANK','PSUP'],\
+        'RADIOGENIC':    ['ROCK_2'],\
+        'pn_ibd':        ['LIQUID'],\
+        'A_Z':           ['LIQUID'],\
+        'singles':       ['ALL'],\
+        'FASTNEUTRONS':  ['ROCK_2']
+        }
+
+    elif arguments['--lightSim']:
+        # Define what components are associated with each physical process
+        # Reduced number of processes for a test simulation 
+        # (not for full simulation purposes) 
+        process = {
+        'CHAIN_238U_NA':['PMT','LIQUID'],\
+        'CHAIN_232Th_NA':['PMT','LIQUID'],\
+        'CHAIN_235U_NA':['LIQUID'],\
         '40K_NA':['LIQUID','PMT'],\
-        'CHAIN_238U_NA':['PMT','GD','LIQUID'],\
-        'CHAIN_232Th_NA':['PMT','GD','LIQUID'],\
-        'CHAIN_235U_NA':['GD'],\
-        'A_Z':['LIQUID'],\
-        'singles':['SINGLES'],\
         'RADIOGENIC':['ROCK_2'],\
+        'pn_ibd':['LIQUID'],\
+        'A_Z':['LIQUID'],\
+        'singles':['ALL'],\
         'FASTNEUTRONS':['ROCK_2']}
 
+                
     else:
-        ## Define what components are associated with each physical process
+        # Define what components are associated with each physical process
+        # (all processes included, some may not trigger a detector response)
         process = { 
-        'pn_ibd':['LIQUID'],
-        '40K_NA':['LIQUID','PMT','PSUP', 'IBEAM','TANK','ROCK_2'],\
         'CHAIN_238U_NA':['PMT','PSUP','IBEAM','TANK','ROCK_2','LIQUID'],\
         'CHAIN_232Th_NA':['PMT','PSUP','IBEAM','TANK','ROCK_2','LIQUID'],\
         'CHAIN_235U_NA':['TANK','PSUP','LIQUID','IBEAM'],\
-        'STEEL_ACTIVITY':['TANK','PSUP','IBEAM'],\
-        'A_Z':['LIQUID'],\
-        'singles':['SINGLES'],\
+        '40K_NA':['LIQUID','PMT','PSUP', 'IBEAM','TANK','ROCK_2'],\
+        '60Co_NA':['TANK','PSUP','IBEAM'],\
+        '137Cs_NA':['TANK','PSUP','IBEAM'],\
         'RADIOGENIC':['ROCK_2','ROCK_1'],\
+        'pn_ibd':['LIQUID'],
+        'A_Z':['LIQUID'],\
+        'singles':['ALL'],\
         'FASTNEUTRONS':['ROCK_2']}
-
+        # replaced 'STEEL_ACTIVITY':['TANK','PSUP','IBEAM'],\ with '60Co'
+    print(d,"\n\n\n\n")
+    print(process)
     ## First column is the production rate per second of the process, second column is the fractional changes to the event generation.
 
     uip   = float(arguments["--rU238_IP"])
@@ -305,22 +388,22 @@ def loadSimulationParameters():
 '211Pb_TANK_CHAIN_235U_NA': [1.82E+03, 50], \
 '211Bi_TANK_CHAIN_235U_NA': [1.82E+03*0.00270, 50], \
 '207Tl_TANK_CHAIN_235U_NA': [1.82E+03, 50], \
-'231Th_LIQUID_CHAIN_235U_NA': [4.70E-03*pmtVolCorr , 1], \
-'223Fr_LIQUID_CHAIN_235U_NA': [4.70E-03*0.0138*pmtVolCorr, 1], \
-'211Pb_LIQUID_CHAIN_235U_NA': [4.70E-03*pmtVolCorr , 1], \
-'211Bi_LIQUID_CHAIN_235U_NA': [4.70E-03*0.00270*pmtVolCorr , 1], \
-'207Tl_LIQUID_CHAIN_235U_NA': [4.70E-03*pmtVolCorr , 1], \
+'231Th_GD_CHAIN_235U_NA': [4.70E-03*pmtVolCorr , 1], \
+'223Fr_GD_CHAIN_235U_NA': [4.70E-03*0.0138*pmtVolCorr, 1], \
+'211Pb_GD_CHAIN_235U_NA': [4.70E-03*pmtVolCorr , 1], \
+'211Bi_GD_CHAIN_235U_NA': [4.70E-03*0.00270*pmtVolCorr , 1], \
+'207Tl_GD_CHAIN_235U_NA': [4.70E-03*pmtVolCorr , 1], \
 '234Pa_LIQUID_CHAIN_238U_NA': [1.35E+00*pmtVolCorr , 1], \
 '214Pb_LIQUID_CHAIN_238U_NA': [1.35E+00*pmtVolCorr , 1], \
 '214Bi_LIQUID_CHAIN_238U_NA': [1.35E+00*pmtVolCorr , 1], \
 '210Bi_LIQUID_CHAIN_238U_NA': [1.35E+00 *pmtVolCorr, 1], \
 '210Tl_LIQUID_CHAIN_238U_NA': [1.35E+00*0.0002*pmtVolCorr , 1], \
-'60Co_IBEAM_STEEL_ACTIVITY': [1.45e+04, 50], \
-'137Cs_IBEAM_STEEL_ACTIVITY': [1.52e+04, 50], \
-'60Co_TANK_STEEL_ACTIVITY': [2.03E+04, 50], \
-'137Cs_TANK_STEEL_ACTIVITY': [2.14E+04, 50], \
-'60Co_PSUP_STEEL_ACTIVITY': [2.30E+03, 50], \
-'137Cs_PSUP_STEEL_ACTIVITY': [2.43E+03, 50], \
+'60Co_IBEAM_60Co_NA': [1.45e+04, 50], \
+'137Cs_IBEAM_137Cs_NA': [1.52e+04, 50], \
+'60Co_TANK_60Co_NA': [2.03E+04, 50], \
+'137Cs_TANK_137Cs_NA': [2.14E+04, 50], \
+'60Co_PSUP_60Co_NA': [2.30E+03, 50], \
+'137Cs_PSUP_137Cs_NA': [2.43E+03, 50], \
 'li9_LIQUID_A_Z': [1.705E-06 *pmtVolCorr, 1], \
 'n17_LIQUID_A_Z': [1.713E-06 *pmtVolCorr, 1],\
 'singles_SINGLES_singles': [1,40],\
@@ -438,12 +521,12 @@ def loadSimulationParameters():
 '211Pb_LIQUID_CHAIN_235U_NA': [1.48E-02*pmtVolCorr , 1], \
 '211Bi_LIQUID_CHAIN_235U_NA': [1.48E-02*0.00270*pmtVolCorr , 1], \
 '207Tl_LIQUID_CHAIN_235U_NA': [1.48E-02*pmtVolCorr , 1], \
-'60Co_IBEAM_STEEL_ACTIVITY': [2.40e+04, 50], \
-'137Cs_IBEAM_STEEL_ACTIVITY': [2.53e+04, 50], \
-'60Co_TANK_STEEL_ACTIVITY': [3.61E+04, 50], \
-'137Cs_TANK_STEEL_ACTIVITY': [3.80E+04, 50], \
-'60Co_PSUP_STEEL_ACTIVITY': [3.38E+03, 50], \
-'137Cs_PSUP_STEEL_ACTIVITY': [3.56E+03, 50], \
+'60Co_IBEAM_60Co_NA': [2.40e+04, 50], \
+'137Cs_IBEAM_137Cs_NA': [2.53e+04, 50], \
+'60Co_TANK_60Co_NA': [3.61E+04, 50], \
+'137Cs_TANK_137Cs_NA': [3.80E+04, 50], \
+'60Co_PSUP_60Co_NA': [3.38E+03, 50], \
+'137Cs_PSUP_137Cs_NA': [3.56E+03, 50], \
 'li9_LIQUID_A_Z': [4.051E-06*pmtVolCorr , 1], \
 'n17_LIQUID_A_Z': [4.072E-06*pmtVolCorr , 1],\
 'singles_SINGLES_singles': [1,40],\

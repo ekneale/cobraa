@@ -41,7 +41,7 @@ def generateMacros():
     # and its location in the detector
     for _p in proc:
         for _loc in proc[_p]:
-            for _element in d[_p]:
+            for _element in d[_p][_loc]:
                 if 'singles' not in _p:
                     header,processors,generator,detectorvolume = macroGenerator(_loc,_element,_p,nruns)
                     outfile = open("mac/phys_%s.mac"%(_element).replace(" ",""),"w+")
@@ -89,7 +89,7 @@ def generateJobs():
     # Create the directory trees
     for _p in proc:
         for _loc in proc[_p]:
-            for _element in d[_p]:
+            for _element in d[_p][_loc]:
                 if 'pn_ibd' in _p or 'A_Z' in _p or 'fast' in _p or 'singles' in _p:
                 
                     dir = "root_files%s/%s_%s_%s"%(additionalString,_element,_loc,_p)
@@ -138,9 +138,9 @@ def generateJobs():
 source {ratDir+'/../../env.sh'} && TMPNAME=$(date +%s%N)  && rat mac/detector_{detectorStr}.mac mac/process.mac """)
     for _p in proc:
         for _loc in proc[_p]:
-            for _element in d[_p]:
+            for _element in d[_p][_loc]:
                 _element = _element.replace(" ","")
-                if 'NA' in _p or 'STEEL' in _p or 'RADIOGENIC' in _p: 
+                if 'NA' in _p or 'RADIOGENIC' in _p: 
                  outfile_singlesscript.writelines(f" mac/phys_{_element}.mac mac/geo_{_loc}.mac mac/rates_{_element}_{_loc}_{_p}.mac") 
                 elif 'pn_ibd' in _p or 'A_Z' in _p or 'FASTNEUTRONS' in _p:
                     script = f"{dir}/script{additionalString}_{_element}_{_loc}_{_p}.sh".replace(" ","")
@@ -200,7 +200,7 @@ def mergeRootFiles():
 
     for _p in proc:
         for _loc in proc[_p]:
-            for _element in d[_p]:
+            for _element in d[_p][_loc]:
                 _p = _p.replace(" ","")
                 print("Generating jobs:",_p,_loc,_element)
                 outfile = "root_files%s/merged_%s_%s_%s_%s.root"%(additionalString,_element,_loc,_p)
@@ -260,7 +260,7 @@ def macroGenerator(location,element,_dict,nruns):
     # Then the generator (phys) and location (geo) macros;
     # these set the generator, generator conditions and location for a given event type
 
-    if element in d['CHAIN_238U_NA'] or element in d['CHAIN_232Th_NA'] or element in d['40K_NA'] or element in d['STEEL_ACTIVITY'] or element in d['CHAIN_235U_NA']:
+    if element in d['CHAIN_238U_NA'] or element in d['CHAIN_232Th_NA'] or element in d['40K_NA'] or element in d['60Co_NA'] or element in d['CHAIN_235U_NA']:
         if location == 'PMT':
             generator = f'''
 /generator/add decaychain {element}:regexfill:poisson

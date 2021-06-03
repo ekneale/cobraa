@@ -20,8 +20,8 @@ d,proc,rates = loadSimulationParameters()
 singlespersec = 0
 for _p in proc:
     for _loc in proc[_p]:
-        for _element in d[_p]:
-            if 'NA' in _p or 'RADIOGENIC' in _p or 'STEEL' in _p:
+        for _element in d[_p][_loc]:
+            if 'NA' in _p or 'RADIOGENIC' in _p:
                 singlespersec+=rates['%s_%s_%s'%(_element,_loc,_p)][0]
 
 nruns = int(arguments['-N'])
