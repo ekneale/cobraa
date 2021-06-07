@@ -72,7 +72,8 @@ docstring = """
 
     --lightSim             Option to run a light simulation for testing purposes
     -e=<runBeamEntry>      Number of events to be simulated per macro [Default: 25000]
-    
+    --watchmakers          Option to run the simulation/analysis of individual event types
+
     ## Perform efficiency and sensitivity evaluation (after simulation and reconstruction).
 
     -M                     Merge result files from trial ntuples. Step one.
@@ -229,6 +230,21 @@ def loadSimulationParameters():
         'FASTNEUTRONS':  ['ROCK_2']
         }
 
+    if arguments['--reduced'] and arguments['--lightSim']==1:
+        # Define what components are associated with each physical process
+        # Reduced number of processes for a full simulation
+        # (useful for full coincidence evaluation) 
+        process = {
+        'CHAIN_238U_NA':['PMT','LIQUID'],\
+        'CHAIN_232Th_NA':['PMT','LIQUID'],\
+        'CHAIN_235U_NA':['LIQUID'],\
+        '40K_NA':['LIQUID','PMT'],\
+        'RADIOGENIC':['ROCK_2'],\
+        'pn_ibd':['LIQUID'],\
+        'A_Z':['LIQUID'],\
+        'singles':['ALL'],\
+        'FASTNEUTRONS':['ROCK_2']}
+
     elif arguments['--lightSim']:
         # Define what components are associated with each physical process
         # Reduced number of processes for a test simulation 
@@ -240,6 +256,10 @@ def loadSimulationParameters():
         '40K_NA':['LIQUID','PMT'],\
         'RADIOGENIC':['ROCK_2'],\
         'pn_ibd':['LIQUID'],\
+        'ibd_p':['LIQUID'],\
+        'ibd_p_hs':['LIQUID'],\
+        'ibd_p_hb':['LIQUID'],\
+        'ibd_n':['LIQUID'],\
         'A_Z':['LIQUID'],\
         'singles':['ALL'],\
         'FASTNEUTRONS':['ROCK_2']}
@@ -256,6 +276,10 @@ def loadSimulationParameters():
         '60Co_NA':['TANK','PSUP','IBEAM'],\
         '137Cs_NA':['TANK','PSUP','IBEAM'],\
         'pn_ibd':['LIQUID'],\
+        'ibd_p':['LIQUID'],\
+        'ibd_p_hs':['LIQUID'],\
+        'ibd_p_hb':['LIQUID'],\
+        'ibd_n':['LIQUID'],\
         'A_Z':['LIQUID'],\
         'singles':['ALL'],\
         'mono':['LIQUID'],\
@@ -419,7 +443,10 @@ def loadSimulationParameters():
 'singles_ALL_singles': [1,1000],\
 'rock_neutrons_ROCK_2_RADIOGENIC': [8.30E+00, 1],\
 'rock_neutrons_ROCK_1_RADIOGENIC': [2.04E+02, 1],\
-'fast_neutrons_ROCK_2_FASTNEUTRONS': [1.18E-02, 0.5]}
+'fast_neutrons_ROCK_2_FASTNEUTRONS': [1.18E-02, 0.5],\
+'mono_LIQUID_e-':[1,1],\
+'mono_LIQUID_e+':[1,1],\
+'mono_LIQUID_gamma':[1,1]}
 # singles rate for lightSim option with rock neutrons
 # NB veto rates are incorrect
 
@@ -540,6 +567,9 @@ def loadSimulationParameters():
 'li9_LIQUID_A_Z': [4.051E-06*pmtVolCorr , 1], \
 'n17_LIQUID_A_Z': [4.072E-06*pmtVolCorr , 1],\
 'singles_ALL_singles': [1,1000],\
+'mono_LIQUID_e-':[1,1],\
+'mono_LIQUID_e+':[1,1],\
+'mono_LIQUID_gamma':[1,1],\
 'rock_neutrons_ROCK_2_RADIOGENIC': [1.34e01,1],\
 'rock_neutrons_ROCK_1_RADIOGENIC': [3.11e02, 1],\
 'fast_neutrons_ROCK_2_FASTNEUTRONS': [1.85e-2, 0.5]}
@@ -664,6 +694,9 @@ def loadSimulationParameters():
 'li9_LIQUID_A_Z': [4.051E-06*pmtVolCorr , 1], \
 'n17_LIQUID_A_Z': [4.072E-06*pmtVolCorr , 1],\
 'singles_ALL_singles': [1,1000],\
+'mono_LIQUID_e-':[1,1],\
+'mono_LIQUID_e+':[1,1],\
+'mono_LIQUID_gamma':[1,1],\
 'rock_neutrons_ROCK_2_RADIOGENIC': [1.34e01,1],\
 'rock_neutrons_ROCK_1_RADIOGENIC': [3.11e02, 1],\
 'fast_neutrons_ROCK_2_FASTNEUTRONS': [1.85e-2, 0.5]}

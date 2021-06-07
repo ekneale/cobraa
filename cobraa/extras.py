@@ -12,8 +12,9 @@ from .globals import *
 def triggers():
 
     # Outputs details of the number of events/time simulated, plus
-    # trigger and minimal-cut (reconstruction) efficiencies for 
-    # all event types.
+    # daq-trigger and minimal-cut (energy and fiducial) efficiencies 
+    # for all event types. Gives 90% upper-confidence limit on 
+    # singles rate.
     # This is useful for checking that you have produced sufficient
     # statistics.
     pd.options.display.float_format = '{:.10f}'.format
@@ -26,9 +27,10 @@ def triggers():
     eventlist=[]
     triggerlist=[]
     singleslist =[]
+    uclist = []
     for _p in proc:
         for _loc in proc[_p]:
-            for _element in d[_p]:
+            for _element in d[_p][_loc]:
                 _tag = "%s_%s_%s"%(_element,_loc,_p)
                 _tag = _tag.replace(" ","")
                 _file = "fred_root_files%s/new_merged_Watchman_%s_%s_%s.root"%(additionalString,_element,_loc,_p)
@@ -57,11 +59,16 @@ def triggers():
                     timelist.append(simtime)
                     triggerlist.append(triggerrate)
                     singleslist.append(singlesrate)
+                    # calculate 90% upper-confidence limit on singles count
+                    uc = singles+1.645*sqrt(singles/sqrt(totalEvents))
+                    # convert upper-confidence limit to singles rate
+                    uc *= 1/totalEvents*rates[_tag][0]
+                    uclist.append(uc)
                 except:
                     simsrequired.writelines(f"{_tag}\n")
 
     # create a pandas dataframe with all the information
-    df = pd.DataFrame({"Component":loclist, "Origin":decaylist,"Isotope":isolist,"Events":eventlist,"Time (days)":timelist,"Trigger rate (Hz)":triggerlist,"Singles rate (Hz)":singleslist})
+    df = pd.DataFrame({"{Component}":loclist, "{Origin}":decaylist,"{Isotope}":isolist,"{Events}":eventlist,"{Time (days)}":timelist,"{Trigger rate (Hz)}":triggerlist,"{Singles rate (Hz)}":singleslist,"{90% UCL}":uclist})
     # format the names to make them more presentation-friendly
     df = df.replace("CHAIN_","",regex=True)
     df = df.replace("_NA","",regex=True)
@@ -77,9 +84,9 @@ def triggers():
     df = df.replace("singles","Radioactivity")
     df = df.replace("SINGLES","All")
     df = df.replace("_hartlepool","",regex=True)
-    df = df.sort_values(by=["Component","Origin","Isotope"])
+    df = df.sort_values(by=["{Component}","{Origin}","{Isotope}"])
     # convert to LaTex and do some formatting to work with siunitx
-    triggerdata.writelines(df.to_latex(index=False,escape=False).replace('\\toprule', '\\hline').replace('\\midrule', '\\hline').replace('\\bottomrule','\\hline').replace('lllrrrr','|l|l|l|S|S|S|S|').replace("Component","{Component}").replace("Origin","{Origin}").replace("Isotope","{Isotope}").replace("Events","{Events}").replace("Time (days)","{Time (days)}").replace("Trigger rate (Hz)","{Trigger rate (Hz)}").replace("Singles rate (Hz)","{Singles rate (Hz)}"))
+    triggerdata.writelines(df.to_latex(index=False,escape=False).replace('\\toprule', '\\hline').replace('\\midrule', '\\hline').replace('\\bottomrule','\\hline').replace('lllrrrrr','|l|l|l|S|S|S|S|S|'))
     return 0
 
 

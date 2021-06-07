@@ -65,11 +65,7 @@ def generateMacros():
     # expected total event rates in the detector (before detector effects)
     for _k in rates:
         _events = int(float(arguments['-e'])*rates[_k][1])
-        if 'singles' in _k:
-            print("\n\n\n Warning - only %f days of singles events will be simulated!!!!!\n\n\n"%(_events*nsetSingles*nruns/float(singlespersec*86400)))
-            outfile = open(f"mac/evts_singles.mac","w+")
-            outfile.writelines(f"/run/beamOn {_events}")
-        elif 'pn_ibd' in _k or 'A_Z' in _k or 'fast' in _k:
+        if arguments['--watchmakers']:
             outfile = open(f"mac/rates_{_k}.mac","w+")
             outfile.writelines(f"/generator/rate/set {rates[_k][0]}")
             outfile.close
@@ -77,9 +73,21 @@ def generateMacros():
             outfile.writelines(f"/run/beamOn {int(_events)}")
             outfile.close
         else:
-            outfile = open(f"mac/rates_{_k}.mac","w+")
-            outfile.writelines(f"/generator/rate/set {rates[_k][0]}")
-            outfile.close
+            if 'singles' in _k:
+                print("\n\n\n Warning - only %f days of singles events will be simulated!!!!!\n\n\n"%(_events*nsetSingles*nruns/float(singlespersec*86400)))
+                outfile = open(f"mac/evts_singles.mac","w+")
+                outfile.writelines(f"/run/beamOn {_events}")
+            elif 'pn_ibd' in _k or 'A_Z' in _k or 'fast' in _k:
+                outfile = open(f"mac/rates_{_k}.mac","w+")
+                outfile.writelines(f"/generator/rate/set {rates[_k][0]}")
+                outfile.close
+                outfile = open(f"mac/evts_{_k}.mac","w+")
+                outfile.writelines(f"/run/beamOn {int(_events)}")
+                outfile.close
+            else:
+                outfile = open(f"mac/rates_{_k}.mac","w+")
+                outfile.writelines(f"/generator/rate/set {rates[_k][0]}")
+                outfile.close
 
 
 
@@ -90,8 +98,7 @@ def generateJobs():
     for _p in proc:
         for _loc in proc[_p]:
             for _element in d[_p][_loc]:
-                if 'pn_ibd' in _p or 'A_Z' in _p or 'FAST' in _p or 'singles' in _p:
-                
+                if arguments['--watchmakers']:
                     dir = "root_files%s/%s_%s_%s"%(additionalString,_element,_loc,_p)
                     dir = dir.replace(" ","")
                     if arguments['--force']:
@@ -113,6 +120,31 @@ def generateJobs():
                         testCreateDirectory(dir)
                     else:
                         testCreateDirectoryIfNotExist(dir)
+
+                else:
+                    if 'pn_ibd' in _p or 'A_Z' in _p or 'FAST' in _p or 'singles' in _p or 'mono' in _p:
+                
+                        dir = "root_files%s/%s_%s_%s"%(additionalString,_element,_loc,_p)
+                        dir = dir.replace(" ","")
+                        if arguments['--force']:
+                            print('Using force to recreate dir:',dir)
+                            testCreateDirectory(dir)
+                        else:
+                            testCreateDirectoryIfNotExist(dir)
+                        dir = "fred_root_files%s/%s_%s_%s"%(additionalString,_element,_loc,_p)
+                        dir = dir.replace(" ","")
+                        if arguments['--force']:
+                            print('Using force to recreate dir:',dir)
+                            testCreateDirectory(dir)
+                        else:
+                           testCreateDirectoryIfNotExist(dir)
+                        dir = "log%s/%s_%s_%s"%(additionalString,_element,_loc,_p)
+                        dir = dir.replace(" ","")
+                        if arguments['--force']:
+                            print('Using force to recreate dir:',dir)
+                            testCreateDirectory(dir)
+                        else:
+                            testCreateDirectoryIfNotExist(dir)
 
     ratDir      = os.environ['RATROOT']
     nameJob     = "nameJob"
@@ -140,27 +172,43 @@ source {ratDir+'/../../env.sh'} && TMPNAME=$(date +%s%N)  && rat mac/detector_{d
         for _loc in proc[_p]:
             for _element in d[_p][_loc]:
                 _element = _element.replace(" ","")
-                if 'NA' in _p or 'RADIOGENIC' in _p: 
-                 outfile_singlesscript.writelines(f" mac/phys_{_element}.mac mac/geo_{_loc}.mac mac/rates_{_element}_{_loc}_{_p}.mac") 
-                elif 'singles' in _p:
-                    for i in range(nsetSingles):
-                        file = f"{dir}/job{additionalString}_{_element}_{_loc}_{_p}_{i}.sh".replace(" ","")
-                        outfile_jobs = open(file,"w+")
-                        jobheader = jobSubmissionCommands(_element,timeJob,file,outFile,errFile,singlesscript,arguments)
-                        outfile_jobs.writelines(jobheader)
-                else:
+                if arguments['--watchmakers']:
                     script = f"{dir}/script{additionalString}_{_element}_{_loc}_{_p}.sh".replace(" ","")
                     outfile_script = open(script,"w+")
                     outfile_script.writelines(f"""#!/bin/sh
 source {ratDir+'/../../env.sh'} && TMPNAME=$(date +%s%N)  && rat mac/detector_{detectorStr}.mac mac/process.mac mac/phys_{_element}.mac mac/geo_{_loc}.mac mac/rates_{_element}_{_loc}_{_p}.mac mac/evts_{_element}_{_loc}_{_p}.mac -o root_files{additionalString}/{_element}_{_loc}_{_p}/run$TMPNAME.root -l log{additionalString}/{_element}_{_loc}_{_p}/run$TMPNAME.log""")
                     outfile_script.close
                     os.chmod(script,S_IRWXU)
-                    file = f"{dir}/job{additionalString}_{_element}_{_loc}_{_p}.sh".replace(" ","") 
+                    file = f"{dir}/job{additionalString}_{_element}_{_loc}_{_p}.sh".replace(" ","")
                     outfile_jobs = open(file,"w+")
                     jobheader = jobSubmissionCommands(_element,timeJob,file,outFile,errFile,script,arguments)
                     outfile_jobs.writelines(jobheader)
 
                     outfile_jobs.close
+
+                else:
+
+                    if 'NA' in _p or 'RADIOGENIC' in _p: 
+                     outfile_singlesscript.writelines(f" mac/phys_{_element}.mac mac/geo_{_loc}.mac mac/rates_{_element}_{_loc}_{_p}.mac") 
+                    elif 'singles' in _p:
+                        for i in range(nsetSingles):
+                            file = f"{dir}/job{additionalString}_{_element}_{_loc}_{_p}_{i}.sh".replace(" ","")
+                            outfile_jobs = open(file,"w+")
+                            jobheader = jobSubmissionCommands(_element,timeJob,file,outFile,errFile,singlesscript,arguments)
+                            outfile_jobs.writelines(jobheader)
+                    else:
+                        script = f"{dir}/script{additionalString}_{_element}_{_loc}_{_p}.sh".replace(" ","")
+                        outfile_script = open(script,"w+")
+                        outfile_script.writelines(f"""#!/bin/sh
+    source {ratDir+'/../../env.sh'} && TMPNAME=$(date +%s%N)  && rat mac/detector_{detectorStr}.mac mac/process.mac mac/phys_{_element}.mac mac/geo_{_loc}.mac mac/rates_{_element}_{_loc}_{_p}.mac mac/evts_{_element}_{_loc}_{_p}.mac -o root_files{additionalString}/{_element}_{_loc}_{_p}/run$TMPNAME.root -l log{additionalString}/{_element}_{_loc}_{_p}/run$TMPNAME.log""")
+                        outfile_script.close
+                        os.chmod(script,S_IRWXU)
+                        file = f"{dir}/job{additionalString}_{_element}_{_loc}_{_p}.sh".replace(" ","") 
+                        outfile_jobs = open(file,"w+")
+                        jobheader = jobSubmissionCommands(_element,timeJob,file,outFile,errFile,script,arguments)
+                        outfile_jobs.writelines(jobheader)
+
+                        outfile_jobs.close
     
     outfile_singlesscript.writelines(f" mac/evts_singles.mac -o root_files{additionalString}/singles_ALL_singles/run$TMPNAME.root -l log{additionalString}/singles_ALL_singles/run$TMPNAME.log")
     outfile_singlesscript.close()
@@ -328,6 +376,15 @@ def macroGenerator(location,element,process,nruns):
 /generator/fastneutron/sidewalls 1.0 
 '''
         detectorvolume = f'''/generator/pos/set {locat}
+'''
+
+    elif 'mono' in process:
+        generator = f'''
+/generator/add combo gun2:regexfill:poisson
+/generator/vtx/set {element}  0 0 0 0 5.0 5.0
+'''
+        detectorvolume = f'''
+/generator/pos/set detector+
 '''
 
 
