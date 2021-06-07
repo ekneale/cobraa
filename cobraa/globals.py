@@ -93,6 +93,9 @@ def testEnabledCondition(arguments):
     if (arguments['--lightSim']):
         additionalString += "_lightSim"
 
+    if (arguments['--rPMT']):
+        additionalString += "_rPMT_%smm"%(arguments['--rPMT'])
+
     # additional macro commands
     if (arguments['--detectMedia']):
         additionalMacOpt +="/rat/db/set GEO[detector_veto1] material \"%s\"\n"%(arguments['--detectMedia'])

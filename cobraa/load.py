@@ -65,7 +65,7 @@ docstring = """
     --pmtCtrPoint          Point inner PMTs of Watchman geometry to detector center
 
     # Options to allow scaling of PMT numbers/activity
-    --rPMT=<_rpmt>         Inner PMT radius in mm [Default: 6700]
+    --rPMT=<_rpmt>         Inner PMT radius in mm [Default: 5700]
     --rU238_IP=<_ruip>     Relative U238 Inner PMTs level [Default: 1.0]
     --rT232_IP=<_rtip>     Relative Th232 Inner PMTs level [Default: 1.0]
     --rK40_IP=<_rkip>      Relative K40 Inner PMTs level [Default: 1.0]
@@ -148,9 +148,6 @@ def loadSimulationParameters():
     d['137Cs_NA'] = {'PSUP':['137Cs'],\
             'TANK':['137Cs'],\
             'IBEAM':['137Cs']}
-    d['RADIOGENIC'] = {'ROCK_2':['rock_neutrons']}
-    d['RADIOGENIC'] = {'ROCK_1':['rock_neutrons']}
-
     d['ibd_p'] = {'LIQUID':['IBDPositron']}
     d['ibd_p_hs'] = {'LIQUID':['IBDPositronHeyshamSig']}
     d['ibd_p_hb'] = {'LIQUID':['IBDPositronHeyshamBkg']}
@@ -159,7 +156,12 @@ def loadSimulationParameters():
 
     d['singles'] = {'ALL':['singles']}
     d['A_Z'] = {'LIQUID':['li 9','n 17']}
+
     d['FASTNEUTRONS'] = {'ROCK_2':['fast_neutrons']}
+ 
+    d['RADIOGENIC'] = {'ROCK_1':['rock_neutrons']}
+    d['RADIOGENIC'] = {'ROCK_2':['rock_neutrons']}
+    d['mono'] = {'LIQUID':['e+','e-','gamma']}
 
    
     if arguments['--reduced']:
@@ -253,12 +255,13 @@ def loadSimulationParameters():
         '40K_NA':['LIQUID','PMT','PSUP', 'IBEAM','TANK','ROCK_2'],\
         '60Co_NA':['TANK','PSUP','IBEAM'],\
         '137Cs_NA':['TANK','PSUP','IBEAM'],\
-        'RADIOGENIC':['ROCK_2','ROCK_1'],\
-        'pn_ibd':['LIQUID'],
+        'pn_ibd':['LIQUID'],\
         'A_Z':['LIQUID'],\
         'singles':['ALL'],\
+        'mono':['LIQUID'],\
+        'RADIOGENIC':['ROCK_2'],\
         'FASTNEUTRONS':['ROCK_2']}
-        # replaced 'STEEL_ACTIVITY':['TANK','PSUP','IBEAM'],\ with '60Co'
+        # removed ROCK_1 radiogenic due to strange key error
     print(d,"\n\n\n\n")
     print(process)
     ## First column is the production rate per second of the process, second column is the fractional changes to the event generation.
