@@ -263,6 +263,7 @@ def mergeRootFiles():
                 else:
                     filedir = "fred_root_files%s/%s_%s_%s/"%(additionalString,_element,_loc,_p)
                     if os.path.exists(filedir):
+                        # do not attempt the hadd if there are no fred files
                         if len(os.listdir(filedir))>0:
                            os.system(f'hadd -f -k -v 0 fred_{outfile} fred_{files}')
 
