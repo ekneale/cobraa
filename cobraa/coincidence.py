@@ -1,4 +1,3 @@
-from ROOT import gDirectory
 from ROOT import TFile,TH2D 
 import numpy as np
 import time

@@ -4,7 +4,6 @@ from numpy import max
 from ROOT import TH2D,TFile
 
 from .load import *
-from .coincidence import *
 from .globals import *
 
 

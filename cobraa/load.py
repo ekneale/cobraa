@@ -5,23 +5,10 @@ from shutil import rmtree
 import warnings
 
 import numpy as np
-from numpy import sqrt
-from numpy import array as npa
 from numpy import power,absolute,logical_and,column_stack,zeros,empty,append,\
 sqrt,absolute,recarray
-
-
 from math import pow,exp,log10,pi
 
-try:
-    from rootpy.plotting import Canvas,Hist,Hist2D,Graph
-    from rootpy.plotting.style import set_style
-    from rootpy.io import root_open
-
-
-    warnings.simplefilter("ignore")
-except:
-    print("Historical package rootpy is not loaded. This package is not needed for the core watchmakers tasks.")
 
 # This reads in flags and arguments from the command line and loads rates for the specified detector design.
 # Author Marc Bergevin
@@ -39,7 +26,7 @@ docstring = """
 
     --force                Forcing the recreation of the root_file,bonsai_root_file and log folders
     -v                     Verbose. Allow print out of additional information.
-    --cluster=<_clus>      Specify cluster to use [Default: local]
+    --cluster=<_clus>      Specify cluster to use (lassen/sheffield/edinburgh/glasgow,etc) [Default: local]
 
     ## Create macros and job scripts for a user defined detector configuration
 
@@ -80,6 +67,7 @@ docstring = """
     --mergeRATFiles        Merge raw ratds files (off by default)
     --coincidences         Map the efficiencies of events which pass the cuts (analysis step 1)
     --evtype=<_ev>         Set process to evaluate for coincidences
+
     --sensitivity          Calculate the rates for final optimisation of signal significance (analysis step 2)
     --triggers             Get the number of triggers for singles processes
     --backgrounds          Plot backgrounds as a function of distance from rPMT
@@ -104,6 +92,25 @@ docstring = """
     -G=<Goodness>                Bonsai direction goodness parameter [Default: 0.1]
     --se=<_se>                   Default signal efficiency [Default: 1.00]
     --Heysham                    Uses Heysham reactor spectrum in place of Hartlepool
+
+    ## Original Watchmakers flags to be incorporated
+
+    --histograms        Apply nx-position cuts and create efficiency histograms. Step two.
+    --procType=<_pt>    Allows to single out a single process (ibd_p,ibd_n,CHAIN_238U_NA,CHAIN_232Th_NA,CHAIN_235U_NA,...)
+    --procEle=<_pi>     Allows to single out a single element ()
+    --procLoc=<_pl>     Allows to single out a single location for single process (LIQUID, PMT, ...)
+    --procNew           Create a new sensitivity result file
+    --PMTAccHists       Apply nx/good_pos/good_dir cuts and Look at Acceptance for events in liquid within PMT volume. Optional.
+    --evalRate          Evaluate the rates and combine to efficiency histrograms Step three.
+     --fnSys=<_fns>        Fast neutron systematics [Default: 0.27]
+     --fnScale=<_fnsc>     Fast neutron scaling [Default: 1.0]
+     --QFIT=<_QF>          Switch from bonsai to qfit [Default: 0]
+     --positiveScan        Only vary the delayed cut as positive offset of the prompt cut
+     --negativeScan        Only vary the delayed cut as negative offset of the prompt cut
+     --scanMaxValue=<_sm>  Maximal offset value (etiher negative or positive) to scan over [Default: 20]
+     --offBin=<_ob>        Binning in offset values [Default: 1]
+
+
     """
 
 try:

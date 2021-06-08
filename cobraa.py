@@ -6,6 +6,8 @@ from cobraa.coincidence import *
 from cobraa.sensitivity import *
 from cobraa.globals import *
 from cobraa.extras import *
+from cobraa.singles import *
+from cobraa.watchsense import *
 
 ######################## Start of main function ###########################
 
@@ -37,6 +39,16 @@ if __name__ == '__main__':
 
     if arguments['--backgrounds']:
         backgrounds()
+
+    # original watchmakers flags to be incorporated
+    if arguments['--histograms']:
+        efficiencyMapLassen()
+
+    if arguments['--evalRate']:
+        readEfficiencyHistogramLassen()
+
+    if arguments['--PMTAccHists']:
+        EfficiencyMapInPMTVol()
 
     print('''All done.
 
