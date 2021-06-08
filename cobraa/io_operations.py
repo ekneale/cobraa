@@ -1,6 +1,7 @@
 from .load import *
 from .globals import *
 from ROOT import gROOT, TFile
+import os
 
 # The purpose of this class is to handle the input/ouput operations of
 # Cobraa. This includes creating directories and files for the different
@@ -203,16 +204,19 @@ def mergeRootFiles():
             for _element in d[_p][_loc]:
                 _p = _p.replace(" ","")
                 print("Generating jobs:",_p,_loc,_element)
-                outfile = "root_files%s/merged_%s_%s_%s_%s.root"%(additionalString,_element,_loc,_p)
+                outfile = "root_files%s/merged_%s_%s_%s.root"%(additionalString,_element,_loc,_p)
                 outfile = outfile.replace(" ","")
-                files = "root_files%s/%s_%s_%s_%s/run*.root"%(additionalString,_element,_loc,_p)
+                files = "root_files%s/%s_%s_%s/run*.root"%(additionalString,_element,_loc,_p)
                 files = files.replace(" ","")
                 # merge the raw root files if required
                 if arguments['--mergeRATFiles']:
                     os.system(f'hadd -f -k -v 0 {outfile} {files}')
                 #otherwise merge the bonsai root files
                 else:
-                    os.system(f'hadd -f -k -v 0 core_{outfile} core_{files}')
+                    filedir = "fred_root_files%s/%s_%s_%s/"%(additionalString,_element,_loc,_p)
+                    if os.path.exists(filedir):
+                        if len(os.listdir(filedir))>0:
+                           os.system(f'hadd -f -k -v 0 fred_{outfile} fred_{files}')
 
 
 def macroGenerator(location,element,process,nruns):
@@ -329,7 +333,6 @@ def macroGenerator(location,element,process,nruns):
 '''
         detectorvolume = f'''/generator/pos/set {locat}
 '''
-
 
     else:
         print('Could not find ',element,location.lower())
