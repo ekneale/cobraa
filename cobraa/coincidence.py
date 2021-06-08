@@ -214,7 +214,7 @@ def obtainAccidentalCoincidences(file,_tag,outfile,rate):
 
     # now we can get the efficiencies of coincident singles events
     for delayed_nxcut,dTcut,dRcut in product(drange(minNXdelayed,rangeNXdmax,binwidthNX),drange(dTmin,rangedTmax,binwidthdT),drange(dRmin,rangedRmax,binwidthdR)):
-
+        
         tag = _tag+'_%sdelayed%d_%dus_%dmm'%(energyEstimator,delayed_nxcut,dTcut,dRcut*1000)
         hist[tag] = TH2D('hist_%s'%(tag),'Coincidences -  %s '%(tag),binFid,rangeFidmin,rangeFidmax,binNX,rangeNXpmin,rangeNXpmax)
         hist[tag].SetXTitle('distance from wall [m]')
@@ -222,22 +222,27 @@ def obtainAccidentalCoincidences(file,_tag,outfile,rate):
         hist[tag].SetZTitle('efficiency')
 
         for fidcut,prompt_nxcut in product(drange(minFid,rangeFidmax,binwidthFid),drange(minNXprompt,rangeNXpmax,binwidthNX)):
+            # find which is the smaller out of the prompt and delayed cuts
+            # (important for the negative scan)
+            min_nxcut = min(prompt_nxcut,delayed_nxcut)
+            max_nxcut = max(prompt_nxcut,delayed_nxcut)
+            # now find the events which pass the minimal cuts plus
+            # fiducial and smallest of the prompt and delayed nx cuts
             coincidences=0
-            prompttrigger  = "closestPMT/1000.>%f"%(fidcut)
-            prompttrigger  += "&& good_pos>%f " %(posGood)
-            prompttrigger  += "&& inner_hit > 4 &&  veto_hit < 4"
-            prompttrigger += "&& %s > %f" %(energyEstimator,prompt_nxcut) 
+            mintrigger  = "closestPMT/1000.>%f"%(fidcut)
+            mintrigger  += "&& good_pos>%f " %(posGood)
+            mintrigger  += "&& inner_hit > 4 &&  veto_hit < 4"
+            mintrigger += "&& %s > %f" %(energyEstimator,min_nxcut) 
 
-            # Save time and nx of all of the events which pass the prompt trigger
-            # TODO reverse this for negative scan
-            evts = data.Draw("timestamp:%s"%(energyEstimator),prompttrigger,"goff")
+            # Save time and nx of all of the events which pass the min trigger
+            evts = data.Draw("timestamp:%s"%(energyEstimator),mintrigger,"goff")
             t = data.GetV1()
             t = np.ndarray((evts),'d',t)
-            dt = t[:,None]-t
+            dt = np.diff(t)
             nx = data.GetV2()
             nx = np.ndarray((evts),'d',nx)
             # Now save x, y and z of all of the events which pass the prompt trigger
-            evts = data.Draw("x/1000.:y/1000.:z/1000.",prompttrigger,"goff")
+            evts = data.Draw("x/1000.:y/1000.:z/1000.",mintrigger,"goff")
             x = data.GetV1()
             y = data.GetV2()
             z = data.GetV3()
@@ -245,12 +250,23 @@ def obtainAccidentalCoincidences(file,_tag,outfile,rate):
             y = np.ndarray((evts),'d',y)
             z = np.ndarray((evts),'d',z)
             # Find the distance between consecutive events
-            dx = x[:,None]-x
-            dy = y[:,None]-y
-            dz = z[:,None]-z
+            dx = np.diff(x)
+            dy = np.diff(y)
+            dz = np.diff(z)
             dR2 = sum([multiply(dx,dx),multiply(dy,dy),multiply(dz,dz)])
             dR = sqrt(dR2)
-            coincidences = np.count_nonzero((dt>0) & (dt<dTcut) & (dR<dRcut) & (nx>delayed_nxcut))
+            # find all of the subevents which pass the higher of the two nx cuts
+            # and have a preceding event within dT and dR (for positiveScan)
+            # OR 
+            # find all of the sub events which pass the lower of the two nx cuts
+            # and have a preciding event within dT and dR and passes the higher
+            # of the two nxcuts (for negative scan)
+            if min_nxcut==prompt_nxcut:
+                # move the nx values of the delayed event left
+                # to correspond with the dt and dR values
+                nx = nx.pop(0)
+            coincidences = np.count_nonzero((dt>0) & (dt<dTcut) & (dR<dRcut) & (nx>max_nxcut))
+            
 
             # calculate statistical error and fill histogram
             coincidenceErr = 1/totalEvents*sqrt(coincidences*(1-coincidences/totalEvents))
