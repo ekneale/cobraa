@@ -64,7 +64,7 @@ To install:
 
 RAT-PAC macros are generated for the following elements of the rat simulation:
 
-1. Detector: detector&ast;.mac sets the detector geometry. Relevant flags are:
+1. Detector: detector*.mac sets the detector geometry. Relevant flags are:
 
 ```
     --muMetal 1               Turn on the mu metal shields (default is off)
@@ -77,17 +77,17 @@ RAT-PAC macros are generated for the following elements of the rat simulation:
 
     --cylinderPct 15          Set the photocoverage to 15% (default is 20%)
 
-    --detectMedia *index*     Set the detector medium (default is doped_water)
+    --detectMedia [index]     Set the detector medium (default is doped_water)
 ```
    *specify index as per rat-pac/data/Watchman/OPTICS_Watchman.ratdb*
 ```
     --collectionEff           Set the PMT collection efficiency to a different value (default is 0.9)
 
-    --pmtModel *index*        Set the PMT model (default is r7081_lqe)
+    --pmtModel [index]        Set the PMT model (default is r7081_lqe)
 ```
    *specify index as per rat-pac/data/PMT.ratdb*
 ```
-    --vetoModel *index*       Set the veto PMT model (default is r7081_lqe)
+    --vetoModel [index]       Set the veto PMT model (default is r7081_lqe)
 
     --photocath               Set the photocathode surface (default is R7081HQE)
 ```
@@ -97,11 +97,11 @@ RAT-PAC macros are generated for the following elements of the rat simulation:
 ```
 2. Processors: process.mac sets the daq and features for the log output
 
-3. Physics: phys&ask;.mac sets the rat-pac generator for a given physics process
+3. Physics: phys*.mac sets the rat-pac generator for a given physics process
 
-4. Geo: geo&ask;.mac sets the location in the detector where a given physics process takes place
+4. Geo: geo*.mac sets the location in the detector where a given physics process takes place
 
-5. Rates: rates&ask;.mac sets the rate of the given physics process for the number of days being simulated. Relevant flags:
+5. Rates: rates*.mac sets the rate of the given physics process for the number of days being simulated. Relevant flags:
 ```
    -e                       Sets the number of events to be simulated per macro (default is 25000 for full simulation)
   ```
@@ -144,12 +144,12 @@ Relevant flags are:
 ```
 Outputs are:
 
-1. Scripts: script&ask;.sh scripts to run the rat simulation for each type of event.
+1. Scripts: script*.sh scripts to run the rat simulation for each type of event.
 
    Sources environment variables; runs rat with detector + process + geo + phys + rates macros.
 
 
-2. Jobs: job&ask;.sh jobs to either run the scripts locally (default) or on Lassen/Sheff clusters
+2. Jobs: job*.sh jobs to either run the scripts locally (default) or on Lassen/Sheff clusters
    
    Defines cluster-dependent settings if required
   
