@@ -76,6 +76,8 @@ RAT-PAC macros are generated for the following elements of the rat simulation:
     --cylinderPct 10          Set the photocoverage to 10% (default is 20%)
 
     --cylinderPct 15          Set the photocoverage to 15% (default is 20%)
+    
+    --rPMT 6700               Set the inner PMT radius to 6.7m (default is 5.7m)
 
     --detectMedia [index]     Set the detector medium (default is doped_water)
 ```
