@@ -59,16 +59,12 @@ rangeNXdmin,rangeNXdmax = minNXdelayed-binwidthNX/2.,maxNXdelayed+binwidthNX/2.
 binNX = int((rangeNXpmax-rangeNXpmin)/binwidthNX)
 
 # coincidence
-#rScan = 2.
-#tScan = 2.
 binwidthdT = float(arguments["--binwidthdT"])
 binwidthdR = float(arguments["--binwidthdR"])
 dTmin,dTmax = float(arguments["--dTmin"]),float(arguments["--dTmax"])
 dRmin,dRmax = float(arguments["--dRmin"]),float(arguments["--dRmax"])
 rangedTmin,rangedTmax = dTmin-binwidthdT/2.,dTmax+binwidthdT/2.
 rangedRmin,rangedRmax = dRmin-binwidthdR/2.,dRmax+binwidthdR/2.
-#dTcut = 100
-#dRcut = 2.
 
 
 # fiducial volume

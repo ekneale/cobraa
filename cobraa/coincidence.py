@@ -44,13 +44,15 @@ def coincidenceMap():
                         _tag = _tag.replace(" ","")
                         _file = "fred_root_files%s/merged_%s_%s_%s.root"%(additionalString,_element,_loc,_p)
                         _file = _file.replace(" ","")
-                        print(_tag," from ",_file)
                         rate = rates[_tag][0]
                         if 'singles' in _tag:
+                            print(_tag," from ",_file)
                             obtainAccidentalCoincidences(_file,_tag,outfile,rate)
+                            print('')
                         elif 'pn_ibd' in _tag or 'A_Z' in _tag or 'FAST' in _tag:
+                            print(_tag," from ",_file)
                             obtainCorrelatedCoincidences(_file,_tag,outfile,rate)
-                        print('')
+                            print('')
     else:
         for _p in proc:
             for _loc in proc[_p]:
@@ -59,14 +61,16 @@ def coincidenceMap():
                     _tag = _tag.replace(" ","")
                     _file = "fred_root_files%s/merged_%s_%s_%s.root"%(additionalString,_element,_loc,_p)
                     _file = _file.replace(" ","")
-                    print(_tag," from ",_file)
                     rate = rates[_tag][0]
                     if 'singles' in _tag:
+                        print(_tag," from ",_file)
                         obtainAccidentalCoincidences(_file,_tag,outfile,rate)
+                        print('')
                     elif 'pn_ibd' in _tag or 'A_Z' in _tag or 'FAST' in _tag:
+                        print(_tag," from ",_file)
                         obtainCorrelatedCoincidences(_file,_tag,outfile,rate)
+                        print('')
 
-                    print('')
     print('Saving outfile:',_str)
     outfile.Close()
     return 0
