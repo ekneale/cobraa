@@ -453,6 +453,10 @@ def loadSimulationParameters():
     elif arguments['--cylinderSize']==16 and arguments['--rPMT']==6700:
         #print('Using rates for 16m cylinder with 6.7m inner PMT radius')
         jobRate = {\
+'IBDPositron_LIQUID_ibd_p': [ 4.845e-05*pmtVolCorr , 1], \
+'IBDPositronHeyshamSig_LIQUID_ibd_p_hs': [4.585e-06*pmtVolCorr , 1], \
+'IBDPositronHeyshamBkg_LIQUID_ibd_p_hb': [1.263e-05 *pmtVolCorr, 1], \
+'IBDNeutron_LIQUID_ibd_n': [ 4.845e-05*pmtVolCorr, 1], \
 'big_hartlepool_LIQUID_pn_ibd': [4.845e-05*pmtVolCorr , 1],\
 'small_hartlepool_LIQUID_pn_ibd': [3.360e-05*pmtVolCorr , 1],\
 'boulby_geo_LIQUID_pn_ibd': [3.565e-07*pmtVolCorr , 1],\
@@ -580,6 +584,10 @@ def loadSimulationParameters():
     else:
         print('Using rates for 16m tank with 5.7m inner PMT radius')
         jobRate = {\
+'IBDPositron_LIQUID_ibd_p': [ 4.845e-05*pmtVolCorr , 1], \
+'IBDPositronHeyshamSig_LIQUID_ibd_p_hs': [4.585e-06*pmtVolCorr , 1], \
+'IBDPositronHeyshamBkg_LIQUID_ibd_p_hb': [1.263e-05 *pmtVolCorr, 1], \
+'IBDNeutron_LIQUID_ibd_n': [ 4.845e-05*pmtVolCorr, 1], \
 'big_hartlepool_LIQUID_pn_ibd': [4.845e-05*pmtVolCorr , 1],\
 'small_hartlepool_LIQUID_pn_ibd': [3.360e-05*pmtVolCorr , 1],\
 'boulby_geo_LIQUID_pn_ibd': [3.565e-07*pmtVolCorr , 1],\
