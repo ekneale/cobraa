@@ -105,17 +105,19 @@ RAT-PAC macros are generated for the following elements of the rat simulation:
 ```
    -e                       Sets the number of events to be simulated per macro (default is 25000 for full simulation)
   ```
+   For testing purposes, it is recommended to run with a smaller number of events e.g. -e 2500
+   
    The number of events simulated per macro run for each event type is then:
 
    e * rate factor
 
-   where rate factor is a reduction applied where we can justify simulating fewer than the number of events in that time period (e.g. where there are many events or very high trigger efficiency).
+   where rate factor is a reduction/increase applied where we can justify simulating fewer/more than the number of events in that time period (e.g. where there are many events or very high trigger efficiency).
 
 Macros are found in the watch-core/mac directory.
 
 **Job generation**
 
-Watch-CoRe produces jobs/scripts for the following types of events by default:
+Cobraa produces jobs/scripts for the following types of events by default:
 
 Hartlepool cores (called 'big' and 'small', which relates to the currently reported power output)
 
@@ -131,9 +133,12 @@ Accidental background (singles)
 
 Relevant flags are:
 ```
-    --lightSim                Runs the singles only in the components which are the main contributors to accidentals (can be combined with --reduced)
+
+    --reduced                 Runs only the processes and decays which tend to trigger/reconstruct in the fiducial. (Recommended for the coincidence                                     analysis and can be combined with --lightSim)
     
-    --reduced                 Runs only the processes and decays which tend to trigger/reconstruct in the fiducial (can be combined with --lightSim)
+    --watchmakers             Generates jobs/scripts for individual singles simulations (all radioactive decays, IBD positron, IBD neutron)
+    
+    --lightSim                Runs the singles only in the components which are the main contributors to accidentals (can be combined with --reduced)
 
     --cluster                 Used to specify the job submission script header options (default is to run locally)
                               Options: lassen, sheffield, edinburgh, glasgow, etc (only lassen and sheffield so far).
