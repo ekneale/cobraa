@@ -8,7 +8,6 @@ from decimal import *
 setcontext(ExtendedContext)
 
 from numpy import max
-t = arguments['--timeScale']
 
 
 
