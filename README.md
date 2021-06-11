@@ -76,6 +76,8 @@ RAT-PAC macros are generated for the following elements of the rat simulation:
     --cylinderPct 10          Set the photocoverage to 10% (default is 20%)
 
     --cylinderPct 15          Set the photocoverage to 15% (default is 20%)
+    
+    --rPMT 6700               Set the inner PMT radius to 6.7m (default is 5.7m)
 
     --detectMedia [index]     Set the detector medium (default is doped_water)
 ```
@@ -105,17 +107,19 @@ RAT-PAC macros are generated for the following elements of the rat simulation:
 ```
    -e                       Sets the number of events to be simulated per macro (default is 25000 for full simulation)
   ```
+   For testing purposes, it is recommended to run with a smaller number of events e.g. -e 2500
+   
    The number of events simulated per macro run for each event type is then:
 
    e * rate factor
 
-   where rate factor is a reduction applied where we can justify simulating fewer than the number of events in that time period (e.g. where there are many events or very high trigger efficiency).
+   where rate factor is a reduction/increase applied where we can justify simulating fewer/more than the number of events in that time period (e.g. where there are many events or very high trigger efficiency).
 
 Macros are found in the watch-core/mac directory.
 
 **Job generation**
 
-Watch-CoRe produces jobs/scripts for the following types of events by default:
+Cobraa produces jobs/scripts for the following types of events by default:
 
 Hartlepool cores (called 'big' and 'small', which relates to the currently reported power output)
 
@@ -132,7 +136,9 @@ Accidental background (singles)
 Relevant flags are:
 ```
     --lightSimWater           Runs simulations for only the decays which contribute significantly to accidentals in water
-
+    
+    --watchmakers             Generates jobs/scripts for individual singles simulations (all radioactive decays, IBD positron, IBD neutron)
+    
     --lightSimWbLS            Runs simulations for only the decays which contribute significantly to accidentals in WbLS (TODO)
     
     --cluster                 Used to specify the job submission script header options (default is to run locally)
