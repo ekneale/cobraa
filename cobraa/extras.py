@@ -11,14 +11,18 @@ from .globals import *
 
 def triggers():
 
-    # Outputs details of the number of events/time simulated, plus
-    # daq-trigger and minimal-cut (energy and fiducial) efficiencies 
-    # for all event types. Gives 90% upper-confidence limit on 
+    # Outputs to 'triggerdata.txt' details of the number of events/time
+    # simulated, plus daq-trigger and minimal-cut (energy and fiducial)
+    # rates for all event types. Gives 90% upper-confidence limit on 
     # singles rate.
     # This is useful for checking that you have produced sufficient
     # statistics.
+    # Outputs to 'simsmissing.txt' any root files not present.
+    # Outputs to 'simsrequired.txt' any decay with rate > 1e-4Hz
+    # (should agree with relevant lightSim option where complete)
     pd.options.display.float_format = '{:.10f}'.format
     triggerdata = open("triggerdata.txt","w+")
+    simsmissing = open("simsmissing.txt","w+")
     simsrequired = open("simsrequired.txt","w+")
     loclist=[]
     decaylist=[]
@@ -33,7 +37,7 @@ def triggers():
             for _element in d[_p][_loc]:
                 _tag = "%s_%s_%s"%(_element,_loc,_p)
                 _tag = _tag.replace(" ","")
-                _file = "fred_root_files%s/new_merged_Watchman_%s_%s_%s.root"%(additionalString,_element,_loc,_p)
+                _file = "fred_root_files%s/merged_Watchman_%s_%s_%s.root"%(additionalString,_element,_loc,_p)
                 _file = _file.replace(" ","")
                 print(_tag," from ",_file)
                 fredfile = TFile(_file)
@@ -59,12 +63,16 @@ def triggers():
                     timelist.append(simtime)
                     triggerlist.append(triggerrate)
                     singleslist.append(singlesrate)
-                    # calculate 90% upper-confidence limit on singles count
-                    uc = singles+1.645*sqrt(singles/sqrt(totalEvents))
+                    # calculate 90% upper-confidence limit on singles count (normal)
+                    uc = singles+1.645*sqrt(singles/totalEvents)
+                    # calculate 90% upper-confidence limit on singles count (binomial)
+                    #uc = singles+1.645/totalEvents*(singles*(1-singles/totalEvents))
                     # convert upper-confidence limit to singles rate
                     uc *= 1/totalEvents*rates[_tag][0]
                     uclist.append(uc)
                 except:
+                    simsmissing.writelines(f"{_tag}\n")
+                if singlesrate>1e-3 or '210Tl' in _tag:
                     simsrequired.writelines(f"{_tag}\n")
 
     # create a pandas dataframe with all the information

@@ -131,10 +131,10 @@ Accidental background (singles)
 
 Relevant flags are:
 ```
-    --lightSim                Runs the singles only in the components which are the main contributors to accidentals (can be combined with --reduced)
-    
-    --reduced                 Runs only the processes and decays which tend to trigger/reconstruct in the fiducial (can be combined with --lightSim)
+    --lightSimWater           Runs simulations for only the decays which contribute significantly to accidentals in water
 
+    --lightSimWbLS            Runs simulations for only the decays which contribute significantly to accidentals in WbLS (TODO)
+    
     --cluster                 Used to specify the job submission script header options (default is to run locally)
                               Options: lassen, sheffield, edinburgh, glasgow, etc (only lassen and sheffield so far).
 
@@ -181,7 +181,7 @@ Reads in the fred output for all event types available and finds:
 
  4. Reconstruction efficiency (event passes minimal post-reconstruction cuts: inner PMT hits > 10, n9 (unscattered light) hits > 9, reconstructed vertex > 0.5m from inner PMT radius)
 
-The information is saved to a triggerdata.txt in latex formatting (if using in LaTex, please use ```\usepackage{siunitx}``` in the preamble). Where a root file does not exist, the details are written in simsrequired.txt.
+The information is saved to a triggerdata.txt in latex formatting (if using in LaTex, please use ```\usepackage{siunitx}``` in the preamble). Where a root file does not exist, the details are written in simsmissing.txt. Where an event is found to contribute significantly to singles rates, the details are writting in simsrequired.txt.
 
 ***Backgrounds plot***
 
