@@ -35,7 +35,6 @@ docstring = """
     --jobTime=<_jt>        Length of job in minutes for LASSEN [Default: 200]
     --energyEst=<_EE>      Default energy estimator (n9,n100,n400,nX) [Default: n9]
     -N=<_N>                Number of runs to simulate [Default: 40]
-    --reduced              Simulate a reduced number of processes/decays
 
     ## Define detector geometry and other features
 
@@ -57,7 +56,8 @@ docstring = """
     --rT232_IP=<_rtip>     Relative Th232 Inner PMTs level [Default: 1.0]
     --rK40_IP=<_rkip>      Relative K40 Inner PMTs level [Default: 1.0]
 
-    --lightSim             Option to run a light simulation for testing purposes
+    --lightSimWater        Option to run only decays for which singles rate >10-4 Hz (fiducial = rPMT-0.5;n9>9)
+    --lightSimWbLS         Option to run only decays for which singles rate >10-4 Hz (fiducial = rPMT-0.5;n100>??)
     -e=<runBeamEntry>      Number of events to be simulated per macro [Default: 25000]
     --watchmakers          Option to run the simulation/analysis of individual event types
 
@@ -71,6 +71,8 @@ docstring = """
     --sensitivity          Calculate the rates for final optimisation of signal significance (analysis step 2)
     --triggers             Get the number of triggers for singles processes
     --backgrounds          Plot backgrounds as a function of distance from rPMT
+    --positiveScan         Only look at nx delayed above nx prompt
+    --negativeScan         only look at nx delayed below nx prompt
 
     ## Define the cuts/ranges over which to optimise
 
@@ -127,90 +129,40 @@ if (arguments['--Heysham']):
 def loadSimulationParameters():
     #Chain and subsequent isotopes
     d = {}
-    d['CHAIN_238U_NA'] = {'LIQUID':['234Pa','214Pb','214Bi','210Bi','210Tl'],\
-                         'PMT':['234Pa','214Pb','214Bi','210Bi','210Tl'],\
-                         'TANK':['234Pa','214Pb','214Bi','210Bi','210Tl'],\
-                         'ROCK_2':['234Pa','214Pb','214Bi','210Bi','210Tl'],\
-                         'IBEAM':['234Pa','214Pb','214Bi','210Bi','210Tl'],\
-                         'PSUP':['234Pa','214Pb','214Bi','210Bi','210Tl']}
-    d['CHAIN_232Th_NA'] = {'LIQUID':['228Ac','212Pb','212Bi','208Tl'],\
-            'PMT':['228Ac','212Pb','212Bi','208Tl'],\
-            'TANK':['228Ac','212Pb','212Bi','208Tl'],\
-            'ROCK_2':['228Ac','212Pb','212Bi','208Tl'],\
-            'IBEAM':['228Ac','212Pb','212Bi','208Tl'],\
-            'PSUP':['228Ac','212Pb','212Bi','208Tl']}
-    d['CHAIN_235U_NA'] = {'LIQUID':['231Th','223Fr','211Pb','211Bi','207Tl'],\
-            'TANK':['231Th','223Fr','211Pb','211Bi','207Tl'],\
-            'IBEAM':['231Th','223Fr','211Pb','211Bi','207Tl'],\
-            'PSUP':['231Th','223Fr','211Pb','211Bi','207Tl']}
-
-    d['40K_NA'] = {'LIQUID':['40K'],\
-            'TANK':['40K'],\
-            'IBEAM':['40K'],\
-            'PSUP':['40K'],\
-            'PMT':['40K'],\
-            'ROCK_2':['40K']}
-    d['60Co_NA'] = {'PSUP':['60Co'],\
-            'TANK':['60Co'],\
-            'IBEAM':['60Co']}
-    d['137Cs_NA'] = {'PSUP':['137Cs'],\
-            'TANK':['137Cs'],\
-            'IBEAM':['137Cs']}
-    d['ibd_p'] = {'LIQUID':['IBDPositron']}
-    d['ibd_p_hs'] = {'LIQUID':['IBDPositronHeyshamSig']}
-    d['ibd_p_hb'] = {'LIQUID':['IBDPositronHeyshamBkg']}
-    d['ibd_n'] = {'LIQUID':['IBDNeutron']}
-    d['pn_ibd'] = {'LIQUID':['boulby_geo','big_hartlepool','small_hartlepool','boulby_world','heysham_signal','heysham_background']}
-
-    d['singles'] = {'ALL':['singles']}
-    d['A_Z'] = {'LIQUID':['li 9','n 17']}
-
-    d['FASTNEUTRONS'] = {'ROCK_2':['fast_neutrons']}
- 
-    d['RADIOGENIC'] = {'ROCK_1':['rock_neutrons']}
-    d['RADIOGENIC'] = {'ROCK_2':['rock_neutrons']}
-    d['mono'] = {'LIQUID':['e+','e-','gamma']}
-
+    process = {}
    
-    if arguments['--reduced']:
-        # Define which components are associated with each physical process
-        # Removing negligible processes
-        # (particularly useful for full coincidence evaluation)
+    if arguments['--lightSimWater']:
+        # Define which component and event type is associated with each process.
+        # Removing negligible radioactive decays for Gd-water.
+        # Only decays with rates > 10-4 Hz with fiducial rPMT-0.5m and n9>9 included.
         '''
-        PMT             232Th: 208Tl, 212Bi,228Ac;      238U: 210Bi, 210Tl, 214Bi, 234Pa;           40K 
-        PSUP            232Th: 208Tl, 212Bi,228Ac;      238U: 210Tl, 214Bi, 234Pa;                  40K;    60Co: TODO (U235/Cs: none)
-        IBEAM           232Th: 208Tl;                   238U: 210Tl, 214Bi;                         40K; (U235/Co/Cs: none)
-        TANK            232Th: 208Tl, 212Bi;            238U: 210Tl, 214Bi;                         40K;    60Co;
-        GD-WATER        232Th: 208Tl, 212Bi,228Ac;      238U: 210Bi, 210Tl, 214Bi, 214Pb, 234Pa;    40K;       U235: TODO
-        ROCK (inner)    232Th: 208Tl;                   238U: 210Tl,214Bi;                          Radiogenic neutrons
-        ROCK (outer)                                                                                Radiogenic neutrons
+        PMT             232Th: 208Tl, 212Bi,228Ac;      238U: 210Tl, 214Bi, 234Pa;       40K 
+        PSUP            232Th: 208Tl;                   238U: 210Tl, 214Bi;              40K;    60Co
+        IBEAM           232Th: 208Tl;                   238U: 210Tl, 214Bi; 
+        TANK            232Th: 20i8Tl;                   238U: 210Tl, 214Bi;
+        GD-WATER        232Th: 208Tl, 212Bi;            238U: 210Tl, 214Bi, 234Pa;
+        ROCK (inner)    232Th: 208Tl;                   238U: 210Tl;                     Radiogenic neutrons
         '''
+        print('Running the lightSim option for water - only decays with singles rates > 10-4 are included')
 
-        d.clear()
-        d['CHAIN_238U_NA'] = {'LIQUID':['210Bi', '210Tl', '214Bi', '214Pb', '234Pa'],\
-                'PMT':['210Bi', '210Tl', '214Bi', '234Pa'],\
+        d['CHAIN_238U_NA'] = {'LIQUID':['210Tl', '214Bi', '234Pa'],\
+                'PMT':[ '210Tl', '214Bi', '234Pa'],\
                 'TANK':['210Tl', '214Bi'],\
                 'ROCK_2':['210Tl', '214Bi'],\
                 'IBEAM':['210Tl', '214Bi'],\
-                'PSUP':['210Tl', '214Bi', '234Pa']}
+                'PSUP':['210Tl', '214Bi']}
 
-        d['CHAIN_232Th_NA'] = {'LIQUID':['208Tl', '212Bi','228Ac'],\
-                'PSUP':['208Tl', '212Bi','228Ac'],\
+        d['CHAIN_232Th_NA'] = {'LIQUID':['208Tl', '212Bi'],\
+                'PSUP':['208Tl'],\
                 'PMT':['208Tl', '212Bi','228Ac'],\
-                'TANK':['208Tl', '212Bi'],\
+                'TANK':['208Tl'],\
                 'IBEAM':['208Tl'],\
                 'ROCK_2':['208Tl']}
 
-        d['CHAIN_235U_NA'] = {'LIQUID':['207Tl','211Pb','223Fr','231Th']}
-
-        d['40K_NA'] = {'LIQUID':['40K'],\
-                'PMT':['40K'],\
-                'TANK':['40K'],\
-                'IBEAM':['40K'],\
+        d['40K_NA'] = {'PMT':['40K'],\
                 'PSUP':['40K']}
 
-        d['60Co_NA'] = {'PSUP':['60Co'],\
-                'TANK':['60Co']}
+        d['60Co_NA'] = {'PSUP':['60Co']}
         d['RADIOGENIC'] = {'ROCK_2':['rock_neutrons']}
 
 
@@ -220,16 +172,13 @@ def loadSimulationParameters():
         d['A_Z'] = {'LIQUID':['li 9','n 17']}
         d['FASTNEUTRONS'] = {'ROCK_2':['fast_neutrons']}
 
-    if arguments['--reduced'] and arguments['--lightSim']==0:
-        # Define what components are associated with each physical process
-        # Reduced number of processes for a full simulation
-        # (useful for full coincidence evaluation) 
+        # Define what components are associated with each physical process.
+        # Components included only where processes are non-negligible.
         process = {
         'CHAIN_238U_NA': ['PMT','PSUP','LIQUID','TANK','IBEAM','ROCK_2'],\
         'CHAIN_232Th_NA':['PMT','PSUP','LIQUID','TANK','IBEAM','ROCK_2'],\
-        'CHAIN_235U_NA':['LIQUID'],\
-        '40K_NA':        ['PMT','PSUP','LIQUID','TANK','IBEAM'],\
-        '60Co_NA':       ['TANK','PSUP'],\
+        '40K_NA':        ['PMT','PSUP'],\
+        '60Co_NA':       ['PSUP'],\
         'RADIOGENIC':    ['ROCK_2'],\
         'pn_ibd':        ['LIQUID'],\
         'A_Z':           ['LIQUID'],\
@@ -237,31 +186,63 @@ def loadSimulationParameters():
         'FASTNEUTRONS':  ['ROCK_2']
         }
 
-    if arguments['--reduced'] and arguments['--lightSim']==1:
-        # Define what components are associated with each physical process
-        # Reduced number of processes for a full simulation
-        # (useful for full coincidence evaluation) 
-        process = {
-        'CHAIN_238U_NA':['PMT','LIQUID'],\
-        'CHAIN_232Th_NA':['PMT','LIQUID'],\
-        'CHAIN_235U_NA':['LIQUID'],\
-        '40K_NA':['LIQUID','PMT'],\
-        'RADIOGENIC':['ROCK_2'],\
-        'pn_ibd':['LIQUID'],\
-        'A_Z':['LIQUID'],\
-        'singles':['ALL'],\
-        'FASTNEUTRONS':['ROCK_2']}
+    elif arguments['--lightSimWbLS']:
 
-    elif arguments['--lightSim']:
+        print('NB You selected the lightSim option for WbLS but currently running the full range of decays')
+
+        d['CHAIN_238U_NA'] = {'LIQUID':['234Pa','214Pb','214Bi','210Bi','210Tl'],\
+                             'PMT':['234Pa','214Pb','214Bi','210Bi','210Tl'],\
+                             'TANK':['234Pa','214Pb','214Bi','210Bi','210Tl'],\
+                             'ROCK_2':['234Pa','214Pb','214Bi','210Bi','210Tl'],\
+                             'IBEAM':['234Pa','214Pb','214Bi','210Bi','210Tl'],\
+                             'PSUP':['234Pa','214Pb','214Bi','210Bi','210Tl']}
+        d['CHAIN_232Th_NA'] = {'LIQUID':['228Ac','212Pb','212Bi','208Tl'],\
+                'PMT':['228Ac','212Pb','212Bi','208Tl'],\
+                'TANK':['228Ac','212Pb','212Bi','208Tl'],\
+                'ROCK_2':['228Ac','212Pb','212Bi','208Tl'],\
+                'IBEAM':['228Ac','212Pb','212Bi','208Tl'],\
+                'PSUP':['228Ac','212Pb','212Bi','208Tl']}
+        d['CHAIN_235U_NA'] = {'LIQUID':['231Th','223Fr','211Pb','211Bi','207Tl'],\
+                'TANK':['231Th','223Fr','211Pb','211Bi','207Tl'],\
+                'IBEAM':['231Th','223Fr','211Pb','211Bi','207Tl'],\
+                'PSUP':['231Th','223Fr','211Pb','211Bi','207Tl']}
+
+        d['40K_NA'] = {'LIQUID':['40K'],\
+                'TANK':['40K'],\
+                'IBEAM':['40K'],\
+                'PSUP':['40K'],\
+                'PMT':['40K'],\
+                'ROCK_2':['40K']}
+        d['60Co_NA'] = {'PSUP':['60Co'],\
+                'TANK':['60Co'],\
+                'IBEAM':['60Co']}
+        d['137Cs_NA'] = {'PSUP':['137Cs'],\
+                'TANK':['137Cs'],\
+                'IBEAM':['137Cs']}
+        d['ibd_p'] = {'LIQUID':['IBDPositron']}
+        d['ibd_p_hs'] = {'LIQUID':['IBDPositronHeyshamSig']}
+        d['ibd_p_hb'] = {'LIQUID':['IBDPositronHeyshamBkg']}
+        d['ibd_n'] = {'LIQUID':['IBDNeutron']}
+        d['pn_ibd'] = {'LIQUID':['boulby_geo','big_hartlepool','small_hartlepool','boulby_world','heysham_signal','heysham_background']}
+
+        d['singles'] = {'ALL':['singles']}
+        d['A_Z'] = {'LIQUID':['li 9','n 17']}
+
+        d['FASTNEUTRONS'] = {'ROCK_2':['fast_neutrons']}
+     
+        d['RADIOGENIC'] = {'ROCK_1':['rock_neutrons']}
+        d['RADIOGENIC'] = {'ROCK_2':['rock_neutrons']}
+        d['mono'] = {'LIQUID':['e+','e-','gamma']}
+
         # Define what components are associated with each physical process
-        # Reduced number of processes for a test simulation 
-        # (not for full simulation purposes) 
-        process = {
-        'CHAIN_238U_NA':['PMT','LIQUID'],\
-        'CHAIN_232Th_NA':['PMT','LIQUID'],\
-        'CHAIN_235U_NA':['LIQUID'],\
-        '40K_NA':['LIQUID','PMT'],\
-        'RADIOGENIC':['ROCK_2'],\
+        # (all processes included, some may not trigger a detector response)
+        process = { 
+        'CHAIN_238U_NA':['PMT','PSUP','IBEAM','TANK','ROCK_2','LIQUID'],\
+        'CHAIN_232Th_NA':['PMT','PSUP','IBEAM','TANK','ROCK_2','LIQUID'],\
+        'CHAIN_235U_NA':['TANK','PSUP','LIQUID','IBEAM'],\
+        '40K_NA':['LIQUID','PMT','PSUP', 'IBEAM','TANK','ROCK_2'],\
+        '60Co_NA':['TANK','PSUP','IBEAM'],\
+        '137Cs_NA':['TANK','PSUP','IBEAM'],\
         'pn_ibd':['LIQUID'],\
         'ibd_p':['LIQUID'],\
         'ibd_p_hs':['LIQUID'],\
@@ -269,10 +250,59 @@ def loadSimulationParameters():
         'ibd_n':['LIQUID'],\
         'A_Z':['LIQUID'],\
         'singles':['ALL'],\
+        'mono':['LIQUID'],\
+        'RADIOGENIC':['ROCK_2'],\
         'FASTNEUTRONS':['ROCK_2']}
+        # removed ROCK_1 radiogenic due to strange key error
 
-                
     else:
+
+        print('Running the full range of decays - NB some may never trigger')
+
+        d['CHAIN_238U_NA'] = {'LIQUID':['234Pa','214Pb','214Bi','210Bi','210Tl'],\
+                             'PMT':['234Pa','214Pb','214Bi','210Bi','210Tl'],\
+                             'TANK':['234Pa','214Pb','214Bi','210Bi','210Tl'],\
+                             'ROCK_2':['234Pa','214Pb','214Bi','210Bi','210Tl'],\
+                             'IBEAM':['234Pa','214Pb','214Bi','210Bi','210Tl'],\
+                             'PSUP':['234Pa','214Pb','214Bi','210Bi','210Tl']}
+        d['CHAIN_232Th_NA'] = {'LIQUID':['228Ac','212Pb','212Bi','208Tl'],\
+                'PMT':['228Ac','212Pb','212Bi','208Tl'],\
+                'TANK':['228Ac','212Pb','212Bi','208Tl'],\
+                'ROCK_2':['228Ac','212Pb','212Bi','208Tl'],\
+                'IBEAM':['228Ac','212Pb','212Bi','208Tl'],\
+                'PSUP':['228Ac','212Pb','212Bi','208Tl']}
+        d['CHAIN_235U_NA'] = {'LIQUID':['231Th','223Fr','211Pb','211Bi','207Tl'],\
+                'TANK':['231Th','223Fr','211Pb','211Bi','207Tl'],\
+                'IBEAM':['231Th','223Fr','211Pb','211Bi','207Tl'],\
+                'PSUP':['231Th','223Fr','211Pb','211Bi','207Tl']}
+
+        d['40K_NA'] = {'LIQUID':['40K'],\
+                'TANK':['40K'],\
+                'IBEAM':['40K'],\
+                'PSUP':['40K'],\
+                'PMT':['40K'],\
+                'ROCK_2':['40K']}
+        d['60Co_NA'] = {'PSUP':['60Co'],\
+                'TANK':['60Co'],\
+                'IBEAM':['60Co']}
+        d['137Cs_NA'] = {'PSUP':['137Cs'],\
+                'TANK':['137Cs'],\
+                'IBEAM':['137Cs']}
+        d['ibd_p'] = {'LIQUID':['IBDPositron']}
+        d['ibd_p_hs'] = {'LIQUID':['IBDPositronHeyshamSig']}
+        d['ibd_p_hb'] = {'LIQUID':['IBDPositronHeyshamBkg']}
+        d['ibd_n'] = {'LIQUID':['IBDNeutron']}
+        d['pn_ibd'] = {'LIQUID':['boulby_geo','big_hartlepool','small_hartlepool','boulby_world','heysham_signal','heysham_background']}
+
+        d['singles'] = {'ALL':['singles']}
+        d['A_Z'] = {'LIQUID':['li 9','n 17']}
+
+        d['FASTNEUTRONS'] = {'ROCK_2':['fast_neutrons']}
+     
+        d['RADIOGENIC'] = {'ROCK_1':['rock_neutrons']}
+        d['RADIOGENIC'] = {'ROCK_2':['rock_neutrons']}
+        d['mono'] = {'LIQUID':['e+','e-','gamma']}
+
         # Define what components are associated with each physical process
         # (all processes included, some may not trigger a detector response)
         process = { 
@@ -294,7 +324,8 @@ def loadSimulationParameters():
         'FASTNEUTRONS':['ROCK_2']}
         # removed ROCK_1 radiogenic due to strange key error
     print(d,"\n\n\n\n")
-    print(process)
+
+    ## This part defines the rates for the given detector configuration
     ## First column is the production rate per second of the process, second column is the fractional changes to the event generation.
 
     uip   = float(arguments["--rU238_IP"])
@@ -454,7 +485,6 @@ def loadSimulationParameters():
 'mono_LIQUID_e-':[1,1],\
 'mono_LIQUID_e+':[1,1],\
 'mono_LIQUID_gamma':[1,1]}
-# singles rate for lightSim option with rock neutrons
 # NB veto rates are incorrect
 
     elif arguments['--cylinderSize']==16 and arguments['--rPMT']==6700:

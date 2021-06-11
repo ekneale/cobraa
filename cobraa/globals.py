@@ -86,11 +86,14 @@ def testEnabledCondition(arguments):
     if arguments['--cylinderSize']:
        additionalString    = "_%sm_%spct"%(arguments['--cylinderSize'],arguments['--cylinderPct'])
 
-    if (arguments['--lightSim']):
-        additionalString += "_lightSim"
-
     if (arguments['--rPMT']):
         additionalString += "_rPMT_%smm"%(arguments['--rPMT'])
+
+    if (arguments['--lightSimWater']):
+        additionalString += "_lightSimWater"
+
+    if (arguments['--lightSimWbLS']):
+        additionalString += "_lightSimWbLS"
 
     # additional macro commands
     if (arguments['--detectMedia']):

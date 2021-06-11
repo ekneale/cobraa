@@ -4,12 +4,12 @@ def setStyle():
 
     cobraaStyle = TStyle("cobraa","Style for Cobraa plots")
     tsize = 0.05
-    toffset = 1.4
+    toffset = 1
 
-    cobraaStyle.SetPadTopMargin(0.1)
-    cobraaStyle.SetPadRightMargin(0.1)
-    cobraaStyle.SetPadBottomMargin(0.16)
-    cobraaStyle.SetPadLeftMargin(0.16)
+    cobraaStyle.SetPadTopMargin(0.16)
+    cobraaStyle.SetPadRightMargin(0.16)
+    cobraaStyle.SetPadBottomMargin(0.26)
+    cobraaStyle.SetPadLeftMargin(0.26)
 
 
     cobraaStyle.SetTextSize(tsize)
@@ -27,11 +27,6 @@ def setStyle():
     cobraaStyle.SetHistLineWidth(2)
     cobraaStyle.SetLineStyleString(2,'[12 12]')
 
-
-    cobraaStyle.SetPadTopMargin(0.05)
-    cobraaStyle.SetPadRightMargin(0.05)
-    cobraaStyle.SetPadBottomMargin(0.16)
-    cobraaStyle.SetPadLeftMargin(0.16)
 
     gROOT.SetStyle("cobraa")
 
