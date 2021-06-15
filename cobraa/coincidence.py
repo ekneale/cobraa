@@ -278,8 +278,8 @@ def obtainAccidentalCoincidences(file,_tag,outfile,rate):
             for subev in range(1,evts):
                 for prev_subev in range(evts-1):
                     dt = t[subev]-t[subev-prev_subev]
-#                    if dt>dTcut:
-#                        continue # don't continue to look for previous events once the time cut is exceeded
+                    if dt>0 and dt>dTcut*2:
+                        continue # don't continue to look for previous events once the time cut is exceeded
                     dx = x[subev]-x[subev-prev_subev]
                     dy = y[subev]-y[subev-prev_subev]
                     dz = z[subev]-z[subev-prev_subev]
