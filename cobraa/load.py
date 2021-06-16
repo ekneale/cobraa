@@ -107,8 +107,6 @@ docstring = """
      --fnSys=<_fns>        Fast neutron systematics [Default: 0.27]
      --fnScale=<_fnsc>     Fast neutron scaling [Default: 1.0]
      --QFIT=<_QF>          Switch from bonsai to qfit [Default: 0]
-     --positiveScan        Only vary the delayed cut as positive offset of the prompt cut
-     --negativeScan        Only vary the delayed cut as negative offset of the prompt cut
      --scanMaxValue=<_sm>  Maximal offset value (etiher negative or positive) to scan over [Default: 20]
      --offBin=<_ob>        Binning in offset values [Default: 1]
 
