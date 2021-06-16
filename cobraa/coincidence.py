@@ -290,24 +290,39 @@ def obtainAccidentalCoincidences(file,_tag,outfile,rate):
         
         coincidences = np.count_nonzero((dt>0) & (dt<dTcut) & (dR<dRcut) & (nx>max_nxcut))
         '''  
-        for subev in range(1,evts):
-            for prev_subev in range(1,subev-1):
-                dt = t[subev]-t[subev-prev_subev]
-                if dt< -dTcut*2 or dt>dTcut*2:
-                   if dt>dTcut and dt<dTcut*2:
-                       print("This is why we should look beyond the dt cut: ",dt)
-                   continue # don't continue to look for previous events once a loose time cut is exceeded
-                if dt >0 and dt<dTcut:
-                    dx = x[subev]-x[subev-prev_subev]
-                    dy = y[subev]-y[subev-prev_subev]
-                    dz = z[subev]-z[subev-prev_subev]
-                    dR = sqrt(dx*dx+dy*dy+dz*dz)
-                    if min_nxcut == prompt_nxcut:
+        if min_nxcut == prompt_nxcut:
+            for subev in range(1,evts):
+                for prev_subev in range(1,subev-1):
+                    dt = t[subev]-t[subev-prev_subev]
+                    if dt< -dTcut*2 or dt>dTcut*2:
+                       if dt>dTcut and dt<dTcut*2:
+                           print("This is why we should look beyond the dt cut: ",dt)
+                       continue # don't continue to look for previous events once a loose time cut is exceeded
+                    if dt >0 and dt<dTcut:
+                        dx = x[subev]-x[subev-prev_subev]
+                        dy = y[subev]-y[subev-prev_subev]
+                        dz = z[subev]-z[subev-prev_subev]
+                        dR = sqrt(dx*dx+dy*dy+dz*dz)
                         if dR<dRcut and nx[subev]>max_nxcut:
                             coincidences+=1
                             print("Found coincidence: ",dt,", ",dR,", ",nx[subev])
                             
-                    else:
+        else:
+            for subev in range(0,evts-1):
+                for prev_subev in range(1,evts-subev):
+                    dt = t[subev]-t[subev+prev_subev]
+                    if dt< -dTcut*2 or dt>dTcut*2:
+                       if dt>dTcut and dt<dTcut*2:
+                           print("This is why we should look beyond the dt cut: ",dt)
+                       continue # don't continue to look for previous events once a loose time cut is exceeded
+                    if dt >0 and dt<dTcut:
+                        dx = x[subev]-x[subev-prev_subev]
+                        dy = y[subev]-y[subev-prev_subev]
+                        dz = z[subev]-z[subev-prev_subev]
+                        dR = sqrt(dx*dx+dy*dy+dz*dz)
+                        if dR<dRcut and nx[subev]>max_nxcut:
+                            coincidences+=1
+                            print("Found coincidence: ",dt,", ",dR,", ",nx[subev])
                         if dR<dRcut and nx[subev-prev_subev]>max_nxcut:
                             coincidences+=1
         
