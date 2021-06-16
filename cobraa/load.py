@@ -470,7 +470,7 @@ def loadSimulationParameters():
 '137Cs_PSUP_137Cs_NA': [2.43E+03, 50], \
 'li9_LIQUID_A_Z': [1.705E-06 *pmtVolCorr, 1], \
 'n17_LIQUID_A_Z': [1.713E-06 *pmtVolCorr, 1],\
-'singles_ALL_singles': [1,100],\
+'singles_ALL_singles': [1,1000],\
 'rock_neutrons_ROCK_2_RADIOGENIC': [8.30E+00, 1],\
 'rock_neutrons_ROCK_1_RADIOGENIC': [2.04E+02, 1],\
 'fast_neutrons_ROCK_2_FASTNEUTRONS': [1.18E-02, 0.5],\
@@ -599,7 +599,7 @@ def loadSimulationParameters():
 '137Cs_PSUP_137Cs_NA': [3.56E+03, 50], \
 'li9_LIQUID_A_Z': [4.051E-06*pmtVolCorr , 1], \
 'n17_LIQUID_A_Z': [4.072E-06*pmtVolCorr , 1],\
-'singles_ALL_singles': [1,100],\
+'singles_ALL_singles': [1,1000],\
 'mono_LIQUID_e-':[1,1],\
 'mono_LIQUID_e+':[1,1],\
 'mono_LIQUID_gamma':[1,1],\
@@ -729,7 +729,7 @@ def loadSimulationParameters():
 '137Cs_PSUP_137Cs_NA': [3.56E+03, 50], \
 'li9_LIQUID_A_Z': [4.051E-06*pmtVolCorr , 1], \
 'n17_LIQUID_A_Z': [4.072E-06*pmtVolCorr , 1],\
-'singles_ALL_singles': [1,100],\
+'singles_ALL_singles': [1,1000],\
 'mono_LIQUID_e-':[1,1],\
 'mono_LIQUID_e+':[1,1],\
 'mono_LIQUID_gamma':[1,1],\
