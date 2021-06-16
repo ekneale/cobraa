@@ -444,6 +444,20 @@ for i in `seq {nruns}`; do source {script}; done
 qsub -t 1-40 -V -q ppe.7.day -N job_{_element} -j y -cwd {script}
     """ 
 
+    elif arguments['--cluster']=='warwick':
+        jobheader = f"""#!/bin/sh
+
+#SBATCH --job-name=job_{_element}
+#SBATCH -A None
+#SBATCH --partition=None
+#SBATCH -o {file+outFile}
+#SBATCH -e {file+errFile}
+#SBATCH -D ./
+#SBATCH -v
+
+srun -n{nruns} {script}
+    """
+
     else:
         jobheader = f"""#!/bin/sh
 
