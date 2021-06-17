@@ -325,15 +325,9 @@ def loadSimulationParameters():
     tip    = float(arguments["--rT232_IP"])
     kip    = float(arguments["--rK40_IP"])
     pmtVolCorr = 1.
+    iPMTs = 1.
 
-    if int(arguments['--cylinderSize'])==12:
-        if int(arguments['--cylinderPct'])==10:
-            iPMTs = 1128./2238.
-            pmtVolCorr = 1352385.722/1347679.758
-        elif int(arguments['--cylinderPct'])==15:
-            iPMTs = 1616./2238.
-            pmtVolCorr = 1350316.794/1347679.758
-    elif int(arguments['--cylinderSize'])==16 and int(arguments['--rPMT'])==5700:
+    if int(arguments['--cylinderSize'])==16 and int(arguments['--rPMT'])==5700:
         if int(arguments['--cylinderPct'])==10:
             iPMTs = 1614./3248.
             pmtVolCorr = 3210.15/3203.22
@@ -351,137 +345,8 @@ def loadSimulationParameters():
             print('not currenty correcting for PMT volume')
 
 
-    if arguments['--cylinderSize'] and int(arguments['--cylinderSize'])==12:
-        print('Using rates for 12m cylinder')
-        jobRate = {\
-'IBDPositron_LIQUID_ibd_p': [ 2.968e-05*pmtVolCorr , 1], \
-'IBDPositronHeyshamSig_LIQUID_ibd_p_hs': [1.977e-06*pmtVolCorr , 1], \
-'IBDPositronHeyshamBkg_LIQUID_ibd_p_hb': [3.880e-06 *pmtVolCorr, 1], \
-'IBDNeutron_LIQUID_ibd_n': [ 2.968e-05*pmtVolCorr, 1], \
-'boulby_geo_LIQUID_pn_ibd': [1.02e-06*pmtVolCorr , 1],\
-'big_hartlepool_LIQUID_pn_ibd': [1.697e-05*pmtVolCorr , 1],\
-'small_hartlepool_LIQUID_pn_ibd': [1.271e-05 *pmtVolCorr, 1],\
-'boulby_world_LIQUID_pn_ibd': [5.857e-06 *pmtVolCorr, 1],\
-'heysham_signal_LIQUID_pn_ibd': [1.977e-06 *pmtVolCorr, 1],\
-'heysham_background_LIQUID_pn_ibd': [3.880e-06 *pmtVolCorr, 1],\
-'40K_LIQUID_40K_NA': [5.39*pmtVolCorr , 1], \
-'40K_PMT_40K_NA': [5.08E+03  * kip, 1], \
-'40K_VETO_40K_NA': [1.33 , 1], \
-'40K_IBEAM_40K_NA': [1.02E+04, 500], \
-'40K_PSUP_40K_NA': [1.63E+03 , 1], \
-'40K_TANK_40K_NA': [1.44E+04, 50], \
-'40K_ROCK_2_40K_NA': [1.33E+04, 1000], \
-'234Pa_PMT_CHAIN_238U_NA': [2.49E+03  * uip, 1], \
-'214Pb_PMT_CHAIN_238U_NA': [2.49E+03  * uip, 1], \
-'214Bi_PMT_CHAIN_238U_NA': [2.49E+03  * uip, 1], \
-'210Bi_PMT_CHAIN_238U_NA': [2.49E+03  * uip, 1], \
-'210Tl_PMT_CHAIN_238U_NA': [4.98E-01  * uip, 1], \
-'234Pa_VETO_CHAIN_238U_NA': [3.33E-01, 1], \
-'214Pb_VETO_CHAIN_238U_NA': [3.33E-01, 1], \
-'214Bi_VETO_CHAIN_238U_NA': [3.33E-01, 1], \
-'210Bi_VETO_CHAIN_238U_NA': [3.33E-01, 1], \
-'210Tl_VETO_CHAIN_238U_NA': [3.33E-01*0.0002, 1], \
-'234Pa_IBEAM_CHAIN_238U_NA': [2.28E+04, 1], \
-'214Pb_IBEAM_CHAIN_238U_NA': [2.28E+04, 1], \
-'214Bi_IBEAM_CHAIN_238U_NA': [2.28E+04, 1], \
-'210Bi_IBEAM_CHAIN_238U_NA': [2.28E+04, 1], \
-'210Tl_IBEAM_CHAIN_238U_NA': [2.28E+04*0.0002, 1], \
-'234Pa_PSUP_CHAIN_238U_NA': [3.63E+03, 50], \
-'214Pb_PSUP_CHAIN_238U_NA': [3.63E+03, 50], \
-'214Bi_PSUP_CHAIN_238U_NA': [3.63E+03, 50], \
-'210Bi_PSUP_CHAIN_238U_NA': [3.63E+03, 50], \
-'210Tl_PSUP_CHAIN_238U_NA': [3.63E+03*0.0002, 50], \
-'234Pa_TANK_CHAIN_238U_NA': [3.20E+04, 50], \
-'214Pb_TANK_CHAIN_238U_NA': [3.20E+04, 50], \
-'214Bi_TANK_CHAIN_238U_NA': [3.20E+04, 50], \
-'210Bi_TANK_CHAIN_238U_NA': [3.20E+04, 50], \
-'210Tl_TANK_CHAIN_238U_NA': [3.20E+04*0.0002, 50], \
-'234Pa_ROCK_2_CHAIN_238U_NA': [2.76E+06, 1], \
-'214Pb_ROCK_2_CHAIN_238U_NA': [2.76E+06, 1], \
-'214Bi_ROCK_2_CHAIN_238U_NA': [2.76E+06, 1], \
-'210Bi_ROCK_2_CHAIN_238U_NA': [2.76E+06, 1], \
-'210Tl_ROCK_2_CHAIN_238U_NA': [2.76E+06*0.0002, 1], \
-'234Pa_GD_CHAIN_238U_NA': [1.01E-01*pmtVolCorr , 1], \
-'214Pb_GD_CHAIN_238U_NA': [1.01E-01*pmtVolCorr , 1], \
-'214Bi_GD_CHAIN_238U_NA': [1.01E-01*pmtVolCorr , 1], \
-'210Bi_GD_CHAIN_238U_NA': [1.01E-01*pmtVolCorr , 1], \
-'210Tl_GD_CHAIN_238U_NA': [1.01E-01*0.0002*pmtVolCorr , 1], \
-'228Ac_PMT_CHAIN_232Th_NA': [2.54E+03  * tip, 1], \
-'212Pb_PMT_CHAIN_232Th_NA': [2.54E+03  * tip, 1], \
-'212Bi_PMT_CHAIN_232Th_NA': [1.62E+03  * tip, 1], \
-'208Tl_PMT_CHAIN_232Th_NA': [9.13E+02  * tip, 1], \
-'228Ac_VETO_CHAIN_232Th_NA': [3.32E-02, 1], \
-'212Pb_VETO_CHAIN_232Th_NA': [3.32E-02, 1], \
-'212Bi_VETO_CHAIN_232Th_NA': [3.32E-02*0.64, 1], \
-'208Tl_VETO_CHAIN_232Th_NA': [3.32E-02*0.36, 1], \
-'228Ac_IBEAM_CHAIN_232Th_NA': [3.28E+03, 1], \
-'212Pb_IBEAM_CHAIN_232Th_NA': [3.28E+03, 1], \
-'212Bi_IBEAM_CHAIN_232Th_NA': [3.28E+03*0.64, 1], \
-'208Tl_IBEAM_CHAIN_232Th_NA': [3.28E+03*0.36, 1], \
-'228Ac_PSUP_CHAIN_232Th_NA': [5.22E+02, 50], \
-'212Pb_PSUP_CHAIN_232Th_NA': [5.22E+02, 50], \
-'212Bi_PSUP_CHAIN_232Th_NA': [5.22E+02*0.64, 50], \
-'208Tl_PSUP_CHAIN_232Th_NA': [5.22E+02*0.36, 50], \
-'228Ac_TANK_CHAIN_232Th_NA': [4.61E+03, 50], \
-'212Pb_TANK_CHAIN_232Th_NA': [4.61E+03, 50], \
-'212Bi_TANK_CHAIN_232Th_NA': [4.61E+03*0.64, 50], \
-'208Tl_TANK_CHAIN_232Th_NA': [4.61E+03*0.36, 50], \
-'228Ac_ROCK_2_CHAIN_232Th_NA': [4.27E+05, 1000], \
-'212Pb_ROCK_2_CHAIN_232Th_NA': [4.27E+05, 1000], \
-'212Bi_ROCK_2_CHAIN_232Th_NA': [4.27E+05*0.64, 1000], \
-'208Tl_ROCK_2_CHAIN_232Th_NA': [4.27E+05*0.36, 1000], \
-'228Ac_GD_CHAIN_232Th_NA': [5.04E-02*pmtVolCorr , 1], \
-'212Pb_GD_CHAIN_232Th_NA': [5.04E-02*pmtVolCorr , 1], \
-'212Bi_GD_CHAIN_232Th_NA': [5.04E-02*0.64*pmtVolCorr , 1], \
-'208Tl_GD_CHAIN_232Th_NA': [5.04E-02*0.36*pmtVolCorr , 1], \
-'228Ac_LIQUID_CHAIN_232Th_NA': [1.35E-01*pmtVolCorr , 1], \
-'212Pb_LIQUID_CHAIN_232Th_NA': [1.35E-01*pmtVolCorr , 1], \
-'212Bi_LIQUID_CHAIN_232Th_NA': [1.35E-01*0.64*pmtVolCorr , 1], \
-'208Tl_LIQUID_CHAIN_232Th_NA': [1.35E-01*0.36*pmtVolCorr , 1], \
-'231Th_IBEAM_CHAIN_235U_NA': [1.29e+03, 50], \
-'223Fr_IBEAM_CHAIN_235U_NA': [1.29e+03*0.0138, 50], \
-'211Pb_IBEAM_CHAIN_235U_NA': [1.29e+03, 50], \
-'211Bi_IBEAM_CHAIN_235U_NA': [1.29e+03*0.00270, 50], \
-'207Tl_IBEAM_CHAIN_235U_NA': [1.29e+03, 50], \
-'231Th_PSUP_CHAIN_235U_NA': [2.06E+02, 50], \
-'223Fr_PSUP_CHAIN_235U_NA': [2.06E+02*0.0138, 50], \
-'211Pb_PSUP_CHAIN_235U_NA': [2.06E+02, 50], \
-'211Bi_PSUP_CHAIN_235U_NA': [2.06E+02*0.00270, 50], \
-'207Tl_PSUP_CHAIN_235U_NA': [2.06E+02, 50], \
-'231Th_TANK_CHAIN_235U_NA': [1.82E+03, 50], \
-'223Fr_TANK_CHAIN_235U_NA': [1.82E+03*0.0138, 50], \
-'211Pb_TANK_CHAIN_235U_NA': [1.82E+03, 50], \
-'211Bi_TANK_CHAIN_235U_NA': [1.82E+03*0.00270, 50], \
-'207Tl_TANK_CHAIN_235U_NA': [1.82E+03, 50], \
-'231Th_GD_CHAIN_235U_NA': [4.70E-03*pmtVolCorr , 1], \
-'223Fr_GD_CHAIN_235U_NA': [4.70E-03*0.0138*pmtVolCorr, 1], \
-'211Pb_GD_CHAIN_235U_NA': [4.70E-03*pmtVolCorr , 1], \
-'211Bi_GD_CHAIN_235U_NA': [4.70E-03*0.00270*pmtVolCorr , 1], \
-'207Tl_GD_CHAIN_235U_NA': [4.70E-03*pmtVolCorr , 1], \
-'234Pa_LIQUID_CHAIN_238U_NA': [1.35E+00*pmtVolCorr , 1], \
-'214Pb_LIQUID_CHAIN_238U_NA': [1.35E+00*pmtVolCorr , 1], \
-'214Bi_LIQUID_CHAIN_238U_NA': [1.35E+00*pmtVolCorr , 1], \
-'210Bi_LIQUID_CHAIN_238U_NA': [1.35E+00 *pmtVolCorr, 1], \
-'210Tl_LIQUID_CHAIN_238U_NA': [1.35E+00*0.0002*pmtVolCorr , 1], \
-'60Co_IBEAM_60Co_NA': [1.45e+04, 50], \
-'137Cs_IBEAM_137Cs_NA': [1.52e+04, 50], \
-'60Co_TANK_60Co_NA': [2.03E+04, 50], \
-'137Cs_TANK_137Cs_NA': [2.14E+04, 50], \
-'60Co_PSUP_60Co_NA': [2.30E+03, 50], \
-'137Cs_PSUP_137Cs_NA': [2.43E+03, 50], \
-'li9_LIQUID_A_Z': [1.705E-06 *pmtVolCorr, 1], \
-'n17_LIQUID_A_Z': [1.713E-06 *pmtVolCorr, 1],\
-'singles_ALL_singles': [1,1000],\
-'rock_neutrons_ROCK_2_RADIOGENIC': [8.30E+00, 1],\
-'rock_neutrons_ROCK_1_RADIOGENIC': [2.04E+02, 1],\
-'fast_neutrons_ROCK_2_FASTNEUTRONS': [1.18E-02, 0.5],\
-'mono_LIQUID_e-':[1,1],\
-'mono_LIQUID_e+':[1,1],\
-'mono_LIQUID_gamma':[1,1]}
-# NB veto rates are incorrect
-
-    elif arguments['--cylinderSize']==16 and arguments['--rPMT']==6700:
-        #print('Using rates for 16m cylinder with 6.7m inner PMT radius')
+    if int(arguments['--cylinderSize'])==16 and int(arguments['--rPMT'])==6700:
+        print('Using rates for 16m cylinder with 6.7m inner PMT radius')
         jobRate = {\
 'IBDPositron_LIQUID_ibd_p': [ 4.845e-05*pmtVolCorr , 1], \
 'IBDPositronHeyshamSig_LIQUID_ibd_p_hs': [4.585e-06*pmtVolCorr , 1], \
@@ -494,17 +359,17 @@ def loadSimulationParameters():
 'heysham_signal_LIQUID_pn_ibd': [4.585e-06*pmtVolCorr , 1],\
 'heysham_background_LIQUID_pn_ibd': [1.263e-05*pmtVolCorr , 1],\
 '40K_LIQUID_40K_NA': [1.28*pmtVolCorr , 1], \
-'40K_PMT_40K_NA': [3.58E+04  * kip, 1], \
+'40K_PMT_40K_NA': [3.58E+04 *iPMTs * kip, 1], \
 '40K_VETO_40K_NA': [2.61e+02 * kip, 1], \
 '40K_IBEAM_40K_NA': [1.70E+04, 500], \
 '40K_PSUP_40K_NA': [2.39E+03 , 1], \
 '40K_TANK_40K_NA': [2.55E+04, 50], \
 '40K_ROCK_2_40K_NA': [2.14E+04, 1000], \
-'234Pa_PMT_CHAIN_238U_NA': [3.62E+03  * uip, 1], \
-'214Pb_PMT_CHAIN_238U_NA': [3.62E+03  * uip, 1], \
-'214Bi_PMT_CHAIN_238U_NA': [3.62E+03  * uip, 1], \
-'210Bi_PMT_CHAIN_238U_NA': [3.62E+03  * uip, 1], \
-'210Tl_PMT_CHAIN_238U_NA': [3.62E+03*0.002  * uip, 1], \
+'234Pa_PMT_CHAIN_238U_NA': [3.62E+03 *iPMTs * uip, 1], \
+'214Pb_PMT_CHAIN_238U_NA': [3.62E+03 *iPMTs * uip, 1], \
+'214Bi_PMT_CHAIN_238U_NA': [3.62E+03 *iPMTs * uip, 1], \
+'210Bi_PMT_CHAIN_238U_NA': [3.62E+03 *iPMTs * uip, 1], \
+'210Tl_PMT_CHAIN_238U_NA': [3.62E+03*0.002 *iPMTs * uip, 1], \
 '234Pa_VETO_CHAIN_238U_NA': [8.02E+01, 1], \
 '214Pb_VETO_CHAIN_238U_NA': [8.02E+01, 1], \
 '214Bi_VETO_CHAIN_238U_NA': [8.02E+01, 1], \
@@ -540,10 +405,10 @@ def loadSimulationParameters():
 '214Bi_LIQUID_CHAIN_238U_NA': [3.20*pmtVolCorr , 1], \
 '210Bi_LIQUID_CHAIN_238U_NA': [3.20*pmtVolCorr , 1], \
 '210Tl_LIQUID_CHAIN_238U_NA': [3.20*0.0002*pmtVolCorr , 1], \
-'228Ac_PMT_CHAIN_232Th_NA': [3.17E+03  * tip, 1], \
-'212Pb_PMT_CHAIN_232Th_NA': [3.17E+03  * tip, 1], \
-'212Bi_PMT_CHAIN_232Th_NA': [3.17E+03*0.64  * tip, 1], \
-'208Tl_PMT_CHAIN_232Th_NA': [3.17E+03*0.36  * tip, 1], \
+'228Ac_PMT_CHAIN_232Th_NA': [3.17E+03 *iPMTs * tip, 1], \
+'212Pb_PMT_CHAIN_232Th_NA': [3.17E+03 *iPMTs * tip, 1], \
+'212Bi_PMT_CHAIN_232Th_NA': [3.17E+03*0.64 *iPMTs * tip, 1], \
+'208Tl_PMT_CHAIN_232Th_NA': [3.17E+03*0.36 *iPMTs * tip, 1], \
 '228Ac_VETO_CHAIN_232Th_NA': [7.04E+01, 1], \
 '212Pb_VETO_CHAIN_232Th_NA': [7.04E+01, 1], \
 '212Bi_VETO_CHAIN_232Th_NA': [7.04E+01*0.64, 1], \
@@ -625,17 +490,17 @@ def loadSimulationParameters():
 'heysham_signal_LIQUID_pn_ibd': [4.585e-06*pmtVolCorr , 1],\
 'heysham_background_LIQUID_pn_ibd': [1.263e-05*pmtVolCorr , 1],\
 '40K_LIQUID_40K_NA': [1.28*pmtVolCorr , 1], \
-'40K_PMT_40K_NA': [8.45E+03  * kip, 1], \
+'40K_PMT_40K_NA': [8.45E+03 *iPMTs * kip, 1], \
 '40K_VETO_40K_NA': [2.61e+02 * kip, 1], \
 '40K_IBEAM_40K_NA': [1.70E+04, 500], \
 '40K_PSUP_40K_NA': [2.39E+03 , 1], \
 '40K_TANK_40K_NA': [2.55E+04, 50], \
 '40K_ROCK_2_40K_NA': [2.14E+04, 1000], \
-'234Pa_PMT_CHAIN_238U_NA': [2.60E+03  * uip, 1], \
-'214Pb_PMT_CHAIN_238U_NA': [2.60E+03  * uip, 1], \
-'214Bi_PMT_CHAIN_238U_NA': [2.60E+03  * uip, 1], \
-'210Bi_PMT_CHAIN_238U_NA': [2.60E+03  * uip, 1], \
-'210Tl_PMT_CHAIN_238U_NA': [2.60E+03*0.002  * uip, 1], \
+'234Pa_PMT_CHAIN_238U_NA': [2.60E+03 *iPMTs * uip, 1], \
+'214Pb_PMT_CHAIN_238U_NA': [2.60E+03 *iPMTs * uip, 1], \
+'214Bi_PMT_CHAIN_238U_NA': [2.60E+03 *iPMTs * uip, 1], \
+'210Bi_PMT_CHAIN_238U_NA': [2.60E+03 *iPMTs * uip, 1], \
+'210Tl_PMT_CHAIN_238U_NA': [2.60E+03*0.002 *iPMTs * uip, 1], \
 '234Pa_VETO_CHAIN_238U_NA': [8.02E+01, 1], \
 '214Pb_VETO_CHAIN_238U_NA': [8.02E+01, 1], \
 '214Bi_VETO_CHAIN_238U_NA': [8.02E+01, 1], \
@@ -671,10 +536,10 @@ def loadSimulationParameters():
 '214Bi_LIQUID_CHAIN_238U_NA': [3.20*pmtVolCorr , 1], \
 '210Bi_LIQUID_CHAIN_238U_NA': [3.20*pmtVolCorr , 1], \
 '210Tl_LIQUID_CHAIN_238U_NA': [3.20*0.0002*pmtVolCorr , 1], \
-'228Ac_PMT_CHAIN_232Th_NA': [2.28E+03  * tip, 1], \
-'212Pb_PMT_CHAIN_232Th_NA': [2.28E+03  * tip, 1], \
-'212Bi_PMT_CHAIN_232Th_NA': [2.28E+03*0.64  * tip, 1], \
-'208Tl_PMT_CHAIN_232Th_NA': [2.28E+03*0.36  * tip, 1], \
+'228Ac_PMT_CHAIN_232Th_NA': [2.28E+03 *iPMTs * tip, 1], \
+'212Pb_PMT_CHAIN_232Th_NA': [2.28E+03 *iPMTs * tip, 1], \
+'212Bi_PMT_CHAIN_232Th_NA': [2.28E+03*0.64 *iPMTs * tip, 1], \
+'208Tl_PMT_CHAIN_232Th_NA': [2.28E+03*0.36 *iPMTs * tip, 1], \
 '228Ac_VETO_CHAIN_232Th_NA': [7.04E+01, 1], \
 '212Pb_VETO_CHAIN_232Th_NA': [7.04E+01, 1], \
 '212Bi_VETO_CHAIN_232Th_NA': [7.04E+01*0.64, 1], \
