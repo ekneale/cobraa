@@ -172,12 +172,14 @@ def obtainCorrelatedCoincidences(file,_tag,outfile,rate):
             hist[tag].Fill(fidcut,prompt_nxcut,coincidences)
             errorbin = hist[tag].FindBin(fidcut,prompt_nxcut)
             hist[tag].SetBinError(errorbin, coincidenceErr)
-            # end loop over delayed nx cuts and dT time between triggers
-            # scale to day rate
-            ndays = float(totalEvents/rate/86400.)
-            hist[tag].Scale(1/ndays)
-            outfile.cd()
-            hist[tag].Write()
+            # end loop over prompt nx cuts
+            # end loop over fiducial cuts
+        # end loop over delayed nx cuts and dT time between triggers
+        # scale to day rate
+        ndays = float(totalEvents/rate/86400.)
+        hist[tag].Scale(1/ndays)
+        outfile.cd()
+        hist[tag].Write()
 
     fredfile.Close()
     del data
@@ -227,7 +229,6 @@ def obtainAccidentalCoincidences(file,_tag,outfile,rate):
         hist[tag].SetXTitle('distance from wall [m]')
         hist[tag].SetYTitle('prompt %s cut'%(energyEstimator))
         hist[tag].SetZTitle('efficiency')
-        nocoincidences=0
         for fidcut,prompt_nxcut in product(drange(minFid,rangeFidmax,binwidthFid),drange(minNXprompt,rangeNXpmax,binwidthNX)):
             # if there were no coincidences for the previous values of 
             delayed_nxcut = prompt_nxcut+delayed_nx_offset

@@ -39,7 +39,7 @@ docstring = """
 
     --force                Forcing the recreation of the root_file,bonsai_root_file and log folders
     -v                     Verbose. Allow print out of additional information.
-    --cluster=<_clus>      Specify cluster to use [Default: local]
+    --cluster=<_clus>      Specify cluster to use (options: lassen, sheffield, warwick)  [Default: local]
 
     ## Create macros and job scripts for a user defined detector configuration
 
@@ -127,7 +127,7 @@ def loadSimulationParameters():
     if arguments['--lightSimWater']:
         # Define which component and event type is associated with each process.
         # Removing negligible radioactive decays for Gd-water.
-        # Only decays with rates > 10-3 Hz with fiducial rPMT-0.5m and n9>9 included (with the exception of 210Tl which can decay with coincident beta-neutron).
+        # Only decays with rates > 10-4 Hz with fiducial rPMT-0.5m and n9>9 included.
         '''
         PMT             232Th: 208Tl, 212Bi,228Ac;      238U: 210Tl, 214Bi, 234Pa;       40K 
         PSUP            232Th: 208Tl;                   238U: 210Tl, 214Bi;              40K;    60Co
@@ -136,23 +136,24 @@ def loadSimulationParameters():
         GD-WATER        232Th: 208Tl, 212Bi;            238U: 210Tl, 214Bi, 234Pa;
         ROCK (inner)    232Th: 208Tl;                   238U: 210Tl;                     Radiogenic neutrons
         '''
-        print('Running the lightSim option for water - only decays with singles rates > 10-3 and 210Tl are included')
+        print('Running the lightSim option for water - only decays with singles rates > 10-4 are included')
 
         d['CHAIN_238U_NA'] = {'LIQUID':['210Tl', '214Bi', '234Pa'],\
                 'PMT':[ '210Tl', '214Bi', '234Pa'],\
                 'TANK':['210Tl', '214Bi'],\
-                'IBEAM':['210Tl'],\
-                'ROCK_2':['210Tl'],\
+                'ROCK_2':['210Tl', '214Bi'],\
+                'IBEAM':['210Tl', '214Bi'],\
                 'PSUP':['210Tl', '214Bi']}
 
-        d['CHAIN_232Th_NA'] = {'LIQUID':['208Tl'],\
+        d['CHAIN_232Th_NA'] = {'LIQUID':['208Tl', '212Bi'],\
                 'PSUP':['208Tl'],\
                 'PMT':['208Tl', '212Bi','228Ac'],\
                 'TANK':['208Tl'],\
                 'IBEAM':['208Tl'],\
                 'ROCK_2':['208Tl']}
 
-        d['40K_NA'] = {'PMT':['40K']}
+        d['40K_NA'] = {'PMT':['40K'],\
+                'PSUP':['40K']}
 
         d['60Co_NA'] = {'PSUP':['60Co']}
         d['RADIOGENIC'] = {'ROCK_2':['rock_neutrons']}
@@ -169,7 +170,7 @@ def loadSimulationParameters():
         process = {
         'CHAIN_238U_NA': ['PMT','PSUP','LIQUID','TANK','IBEAM','ROCK_2'],\
         'CHAIN_232Th_NA':['PMT','PSUP','LIQUID','TANK','IBEAM','ROCK_2'],\
-        '40K_NA':        ['PMT'],\
+        '40K_NA':        ['PMT','PSUP'],\
         '60Co_NA':       ['PSUP'],\
         'RADIOGENIC':    ['ROCK_2'],\
         'pn_ibd':        ['LIQUID'],\
@@ -606,6 +607,7 @@ def loadSimulationParameters():
 'rock_neutrons_ROCK_2_RADIOGENIC': [1.34e01,1],\
 'rock_neutrons_ROCK_1_RADIOGENIC': [3.11e02, 1],\
 'fast_neutrons_ROCK_2_FASTNEUTRONS': [1.85e-2, 0.5]}
+# singles rate for lightSim option with rock neutrons
 # NB veto rates are incorrect
 
 
@@ -736,6 +738,6 @@ def loadSimulationParameters():
 'rock_neutrons_ROCK_2_RADIOGENIC': [1.34e01,1],\
 'rock_neutrons_ROCK_1_RADIOGENIC': [3.11e02, 1],\
 'fast_neutrons_ROCK_2_FASTNEUTRONS': [1.85e-2, 0.5]}
-# NB veto rates are incorrect
+
     return d,process,jobRate
 
