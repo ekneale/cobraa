@@ -39,7 +39,7 @@ docstring = """
 
     --force                Forcing the recreation of the root_file,bonsai_root_file and log folders
     -v                     Verbose. Allow print out of additional information.
-    --cluster=<_clus>      Specify cluster to use [Default: local]
+    --cluster=<_clus>      Specify cluster to use (options: lassen, sheffield, warwick)  [Default: local]
 
     ## Create macros and job scripts for a user defined detector configuration
 
