@@ -39,7 +39,7 @@ docstring = """
 
     --force                Forcing the recreation of the root_file,bonsai_root_file and log folders
     -v                     Verbose. Allow print out of additional information.
-    --cluster=<_clus>      Specify cluster to use (options: lassen, sheffield, warwick)  [Default: local]
+    --cluster=<_clus>      Specify cluster to use (options: lassen, sheffield, warwick) [Default: local]
 
     ## Create macros and job scripts for a user defined detector configuration
 
@@ -137,7 +137,7 @@ def loadSimulationParameters():
         GD-WATER        232Th: 208Tl, 212Bi;            238U: 210Tl, 214Bi, 234Pa;
         ROCK (inner)    232Th: 208Tl;                   238U: 210Tl;                     Radiogenic neutrons
         '''
-        print('Running the lightSim option for water - only decays with singles rates > 10-4 are included')
+        print('Running the lightSim option for water - only decays with singles rates > 10-3 and 210Tl are included')
 
         d['CHAIN_238U_NA'] = {'LIQUID':['210Tl', '214Bi', '234Pa'],\
                 'PMT':[ '210Tl', '214Bi', '234Pa'],\
@@ -472,7 +472,6 @@ def loadSimulationParameters():
 'rock_neutrons_ROCK_2_RADIOGENIC': [1.34e01,1],\
 'rock_neutrons_ROCK_1_RADIOGENIC': [3.11e02, 1],\
 'fast_neutrons_ROCK_2_FASTNEUTRONS': [1.85e-2, 0.5]}
-# singles rate for lightSim option with rock neutrons
 # NB veto rates are incorrect
 
 
@@ -603,6 +602,6 @@ def loadSimulationParameters():
 'rock_neutrons_ROCK_2_RADIOGENIC': [1.34e01,1],\
 'rock_neutrons_ROCK_1_RADIOGENIC': [3.11e02, 1],\
 'fast_neutrons_ROCK_2_FASTNEUTRONS': [1.85e-2, 0.5]}
-
+# NB veto rates are incorrect
     return d,process,jobRate
 
