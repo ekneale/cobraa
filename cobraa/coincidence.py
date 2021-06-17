@@ -131,7 +131,7 @@ def obtainCorrelatedCoincidences(file,_tag,outfile,rate):
         hist[tag] = TH2D('hist_%s'%(tag),'Coincidences -  %s '%(tag),binFid,rangeFidmin,rangeFidmax,binNX,rangeNXpmin,rangeNXpmax)
         hist[tag].SetXTitle('distance from wall [m]')
         hist[tag].SetYTitle('prompt %s cut'%(energyEstimator))
-        hist[tag].SetZTitle('efficiency')
+        hist[tag].SetZTitle('coincidences per day')
 
         for fidcut,prompt_nxcut in product(drange(minFid,rangeFidmax,binwidthFid),drange(minNXprompt,rangeNXpmax,binwidthNX)):
 
@@ -233,7 +233,7 @@ def obtainAccidentalCoincidences(file,_tag,outfile,rate):
         hist[tag] = TH2D('hist_%s'%(tag),'Coincidences -  %s '%(tag),binFid,rangeFidmin,rangeFidmax,binNX,rangeNXpmin,rangeNXpmax)
         hist[tag].SetXTitle('distance from wall [m]')
         hist[tag].SetYTitle('prompt %s cut'%(energyEstimator))
-        hist[tag].SetZTitle('coincidence rate')
+        hist[tag].SetZTitle('coincidences per day')
         for fidcut,prompt_nxcut in product(drange(minFid,rangeFidmax,binwidthFid),drange(minNXprompt,rangeNXpmax,binwidthNX)):
             print(delayed_nxcut,", ",fidcut,", ",prompt_nxcut)
             
