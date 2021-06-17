@@ -182,7 +182,7 @@ source {ratDir+'/../../env.sh'} && TMPNAME=$(date +%s%N)  && rat mac/detector_{d
                     os.chmod(script,S_IRWXU)
                     file = f"{dir}/job{additionalString}_{_element}_{_loc}_{_p}.sh".replace(" ","")
                     outfile_jobs = open(file,"w+")
-                    jobheader = jobSubmissionCommands(_element,timeJob,file,outFile,errFile,script,arguments,directory)
+                    jobheader = jobSubmissionCommands(_element,timeJob,file,outFile,errFile,script,arguments)
                     outfile_jobs.writelines(jobheader)
 
                     outfile_jobs.close
@@ -195,7 +195,7 @@ source {ratDir+'/../../env.sh'} && TMPNAME=$(date +%s%N)  && rat mac/detector_{d
                         for i in range(nsetSingles):
                             file = f"{dir}/job{additionalString}_{_element}_{_loc}_{_p}_{i}.sh".replace(" ","")
                             outfile_jobs = open(file,"w+")
-                            jobheader = jobSubmissionCommands(_element,timeJob,file,outFile,errFile,singlesscript,arguments,directory)
+                            jobheader = jobSubmissionCommands(_element,timeJob,file,outFile,errFile,singlesscript,arguments)
                             outfile_jobs.writelines(jobheader)
                     else:
                         script = f"{dir}/script{additionalString}_{_element}_{_loc}_{_p}.sh".replace(" ","")
@@ -206,7 +206,7 @@ source {ratDir+'/../../env.sh'} && TMPNAME=$(date +%s%N)  && rat mac/detector_{d
                         os.chmod(script,S_IRWXU)
                         file = f"{dir}/job{additionalString}_{_element}_{_loc}_{_p}.sh".replace(" ","") 
                         outfile_jobs = open(file,"w+")
-                        jobheader = jobSubmissionCommands(_element,timeJob,file,outFile,errFile,script,arguments,directory)
+                        jobheader = jobSubmissionCommands(_element,timeJob,file,outFile,errFile,script,arguments)
                         outfile_jobs.writelines(jobheader)
 
                         outfile_jobs.close
@@ -401,7 +401,7 @@ def macroGenerator(location,element,process,nruns):
 
 
 # Specify the header for the job submission script
-def jobSubmissionCommands(_element,timeJob,file,outFile,errFile,script,arguments,directory):
+def jobSubmissionCommands(_element,timeJob,file,outFile,errFile,script,arguments):
     jobheader=""
     if arguments['--cluster']=='lassen':
         jobheader = f"""#!/bin/sh
@@ -447,14 +447,11 @@ qsub -t 1-40 -V -q ppe.7.day -N job_{_element} -j y -cwd {script}
         jobheader = f"""#!/bin/sh
 
 #SBATCH --job-name=job_{_element}
-#SBATCH -A epp
-#SBATCH --partition=epp,taskfarm
+#SBATCH -A None
+#SBATCH --partition=None
 #SBATCH -o {file+outFile}
 #SBATCH -e {file+errFile}
-#SBATCH --mem=4G
-#SBATCH --time=12:00:00
-#SBATCH --nodes=1
-#SBATCH -D {directory}
+#SBATCH -D ./
 #SBATCH -v
 
 srun -n{nruns} {script}
