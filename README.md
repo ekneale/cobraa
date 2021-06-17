@@ -142,7 +142,7 @@ Relevant flags are:
     --lightSimWbLS            Runs simulations for only the decays which contribute significantly to accidentals in WbLS (TODO)
     
     --cluster                 Used to specify the job submission script header options (default is to run locally)
-                              Options: lassen, sheffield, edinburgh, glasgow, etc (only lassen and sheffield so far).
+                              Options: lassen, sheffield, edinburgh, warwick so far.
 
     -N                        Sets the number of times to run each script (default is 40)
     
@@ -229,6 +229,10 @@ Relevant flags for the analysis steps define the ranges over which to optimise:
 --binwidthdT
 
 -g                                     set bonsai timing goodness cut (between 0 and 1)
+
+--positiveScan                         only evaluate coincidences/sensitivity for delayed_nxcut>=prompt_nxcut (for Gd-water)
+
+--negativeScan                         only evaluate coincidences/sensitivity for prompt_nxcut>=delayed_nxcut (for WbLS)
 
 ```
 
