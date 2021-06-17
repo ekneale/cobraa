@@ -281,8 +281,6 @@ def obtainAccidentalCoincidences(file,_tag,outfile,rate):
                     for prev_subev in range(1,subev-1):
                         dt = t[subev]-t[subev-prev_subev]
                         if dt< -dTcut*2 or dt>dTcut*2:
-                           if dt>dTcut and dt<dTcut*2:
-                               print("This is why we should look beyond the dt cut: ",dt)
                            continue # don't continue to look for previous events once a loose time cut is exceeded
                         if dt >0 and dt<dTcut:
                             # calculate dR
@@ -299,8 +297,6 @@ def obtainAccidentalCoincidences(file,_tag,outfile,rate):
                     for prev_subev in range(1,evts-subev):
                         dt = t[subev]-t[subev+prev_subev]
                         if dt<0 or dt>dTcut*2:
-                           if dt<0:
-                               print("This is why we should look beyond the dt cut: ",dt)
                            continue # don't continue to look for previous events once a loose time cut is exceeded
                         if dt >0 and dt<dTcut:
                             # calculate dR
