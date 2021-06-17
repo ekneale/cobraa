@@ -127,7 +127,8 @@ def loadSimulationParameters():
     if arguments['--lightSimWater']:
         # Define which component and event type is associated with each process.
         # Removing negligible radioactive decays for Gd-water.
-        # Only decays with rates > 10-4 Hz with fiducial rPMT-0.5m and n9>9 included.
+        # Only decays with rates > 10-3 Hz with fiducial rPMT-0.5m and n9>9 included.
+	# Also includes 210Tl which can decay with a coincident beta-neutron.
         '''
         PMT             232Th: 208Tl, 212Bi,228Ac;      238U: 210Tl, 214Bi, 234Pa;       40K 
         PSUP            232Th: 208Tl;                   238U: 210Tl, 214Bi;              40K;    60Co
@@ -141,19 +142,18 @@ def loadSimulationParameters():
         d['CHAIN_238U_NA'] = {'LIQUID':['210Tl', '214Bi', '234Pa'],\
                 'PMT':[ '210Tl', '214Bi', '234Pa'],\
                 'TANK':['210Tl', '214Bi'],\
-                'ROCK_2':['210Tl', '214Bi'],\
-                'IBEAM':['210Tl', '214Bi'],\
+                'IBEAM':['210Tl'],\
+                'ROCK_2':['210Tl'],\
                 'PSUP':['210Tl', '214Bi']}
 
-        d['CHAIN_232Th_NA'] = {'LIQUID':['208Tl', '212Bi'],\
+        d['CHAIN_232Th_NA'] = {'LIQUID':['208Tl'],\
                 'PSUP':['208Tl'],\
                 'PMT':['208Tl', '212Bi','228Ac'],\
                 'TANK':['208Tl'],\
                 'IBEAM':['208Tl'],\
                 'ROCK_2':['208Tl']}
 
-        d['40K_NA'] = {'PMT':['40K'],\
-                'PSUP':['40K']}
+        d['40K_NA'] = {'PMT':['40K']}
 
         d['60Co_NA'] = {'PSUP':['60Co']}
         d['RADIOGENIC'] = {'ROCK_2':['rock_neutrons']}
@@ -170,7 +170,7 @@ def loadSimulationParameters():
         process = {
         'CHAIN_238U_NA': ['PMT','PSUP','LIQUID','TANK','IBEAM','ROCK_2'],\
         'CHAIN_232Th_NA':['PMT','PSUP','LIQUID','TANK','IBEAM','ROCK_2'],\
-        '40K_NA':        ['PMT','PSUP'],\
+        '40K_NA':        ['PMT'],\
         '60Co_NA':       ['PSUP'],\
         'RADIOGENIC':    ['ROCK_2'],\
         'pn_ibd':        ['LIQUID'],\
