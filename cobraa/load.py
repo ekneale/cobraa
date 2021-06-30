@@ -164,6 +164,7 @@ def loadSimulationParameters():
         d['singles'] = {'ALL':['singles']}
         d['A_Z'] = {'LIQUID':['li 9','n 17']}
         d['FASTNEUTRONS'] = {'ROCK_2':['fast_neutrons']}
+        d['mono'] = {'LIQUID':['e-']}
 
         # Define what components are associated with each physical process.
         # Components included only where processes are non-negligible.
@@ -176,7 +177,8 @@ def loadSimulationParameters():
         'pn_ibd':        ['LIQUID'],\
         'A_Z':           ['LIQUID'],\
         'singles':       ['ALL'],\
-        'FASTNEUTRONS':  ['ROCK_2']
+        'FASTNEUTRONS':  ['ROCK_2'],\
+	'mono':		 ['LIQUID']
         }
 
     elif arguments['--lightSimWbLS']:
@@ -465,10 +467,10 @@ def loadSimulationParameters():
 '137Cs_PSUP_137Cs_NA': [3.56E+03, 50], \
 'li9_LIQUID_A_Z': [4.051E-06*pmtVolCorr , 1], \
 'n17_LIQUID_A_Z': [4.072E-06*pmtVolCorr , 1],\
-'singles_ALL_singles': [1,1000],\
-'mono_LIQUID_e-':[1,1],\
-'mono_LIQUID_e+':[1,1],\
-'mono_LIQUID_gamma':[1,1],\
+'singles_ALL_singles': [1,500],\
+'e-_LIQUID_mono':[1,1],\
+'e+_LIQUID_mono':[1,1],\
+'gamma_LIQUID_mono':[1,1],\
 'rock_neutrons_ROCK_2_RADIOGENIC': [1.34e01,1],\
 'rock_neutrons_ROCK_1_RADIOGENIC': [3.11e02, 1],\
 'fast_neutrons_ROCK_2_FASTNEUTRONS': [1.85e-2, 0.5]}
@@ -596,10 +598,10 @@ def loadSimulationParameters():
 '137Cs_PSUP_137Cs_NA': [3.56E+03, 50], \
 'li9_LIQUID_A_Z': [4.051E-06*pmtVolCorr , 1], \
 'n17_LIQUID_A_Z': [4.072E-06*pmtVolCorr , 1],\
-'singles_ALL_singles': [1,1000],\
-'mono_LIQUID_e-':[1,1],\
-'mono_LIQUID_e+':[1,1],\
-'mono_LIQUID_gamma':[1,1],\
+'singles_ALL_singles': [1,500],\
+'e-_LIQUID_mono':[1,1],\
+'e+_LIQUID_mono':[1,1],\
+'gamma_LIQUID_mono':[1,1],\
 'rock_neutrons_ROCK_2_RADIOGENIC': [1.34e01,1],\
 'rock_neutrons_ROCK_1_RADIOGENIC': [3.11e02, 1],\
 'fast_neutrons_ROCK_2_FASTNEUTRONS': [1.85e-2, 0.5]}
