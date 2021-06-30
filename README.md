@@ -241,6 +241,10 @@ Relevant flags for the analysis steps define the ranges over which to optimise:
 
 To run: ```cobraa --coincidences [detector options]```
 
+Additional option to evaluate individual part of the simulation:
+
+```--evtype [element]		Runs individual signal or background (options are big_hartlepool, small_hartlepool, boulby_geo, singles, fasteneutrons etc).
+
 Iterates over the ```nx_d``` and ```dT``` ranges to produce 2D coincidence maps in ```nx_p``` and ```closestPMT```.
 
 ```closestPMT``` cut applied to both prompt and delayed event
