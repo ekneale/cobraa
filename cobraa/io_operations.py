@@ -425,8 +425,7 @@ executable = {script}
 output     = {file+outFile}
 error      = {file+errFile}
 getenv     = True
-
-queue {nruns} {script}
+queue {nruns}
 
 """
 
