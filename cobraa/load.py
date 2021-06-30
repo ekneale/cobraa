@@ -334,6 +334,10 @@ def loadSimulationParameters():
         elif int(arguments['--cylinderPct'])==15:
             iPMTs = 2552./3248.
             pmtVolCorr = 3206.17/3203.22
+    elif int(arguments['--cylinderSize'])==22 and int(arguments['--rPMT'])==9000:
+        if int(arguments['--cylinderPct'])==15:
+            iPMTs = 4600./4600.
+            pmtVolCorr = 1
     elif int(arguments['--cylinderPct'])==16 and int(arguments['--rPMT'])==6700:
         if int(arguments['--cylinderPct'])==10:
             iPMTs = 1232./2230.
@@ -475,30 +479,30 @@ def loadSimulationParameters():
 # NB veto rates are incorrect
 
     elif int(arguments['--cylinderSize'])==22 and int(arguments['--rPMT'])==9000:
-        print('Using rates for 22 m cylinder with 9 m inner PMT radius and 10% PC (Passive buffer)')
+        print('Using rates for 22 m cylinder with 9 m inner PMT radius and 15% PC (Passive buffer)')
         jobRate = {\
-'IBDPositron_LIQUID_ibd_p': [ 1.263e-04*pmtVolCorr , 1], \
+'IBDPositron_LIQUID_ibd_p': [ 1.262e-04*pmtVolCorr , 1], \
 'IBDPositronHeyshamSig_LIQUID_ibd_p_hs': [1.195e-05*pmtVolCorr , 1], \
-'IBDPositronHeyshamBkg_LIQUID_ibd_p_hb': [3.292e-05*pmtVolCorr, 1], \
-'IBDNeutron_LIQUID_ibd_n': [ 1.263e-04*pmtVolCorr, 1], \
-'big_hartlepool_LIQUID_pn_ibd': [1.263e-04*pmtVolCorr , 1],\
-'small_hartlepool_LIQUID_pn_ibd': [8.760e-05*pmtVolCorr , 1],\
-'boulby_geo_LIQUID_pn_ibd': [9.295e-07*pmtVolCorr , 1],\
-'boulby_world_LIQUID_pn_ibd': [5.808e-06*pmtVolCorr , 1],\
+'IBDPositronHeyshamBkg_LIQUID_ibd_p_hb': [3.290e-05*pmtVolCorr, 1], \
+'IBDNeutron_LIQUID_ibd_n': [ 1.262e-04*pmtVolCorr, 1], \
+'big_hartlepool_LIQUID_pn_ibd': [1.262e-04*pmtVolCorr , 1],\
+'small_hartlepool_LIQUID_pn_ibd': [8.753e-05*pmtVolCorr , 1],\
+'boulby_geo_LIQUID_pn_ibd': [9.288e-07*pmtVolCorr , 1],\
+'boulby_world_LIQUID_pn_ibd': [5.803e-06*pmtVolCorr , 1],\
 'heysham_signal_LIQUID_pn_ibd': [1.195e-05*pmtVolCorr , 1],\
-'heysham_background_LIQUID_pn_ibd': [3.292e-05*pmtVolCorr , 1],\
+'heysham_background_LIQUID_pn_ibd': [3.290e-05*pmtVolCorr , 1],\
 '40K_LIQUID_40K_NA': [34.3*pmtVolCorr , 1], \
-'40K_PMT_40K_NA': [1.11E+04 *iPMTs * kip, 1], \
+'40K_PMT_40K_NA': [1.67E+04 *iPMTs * kip, 1], \
 '40K_VETO_40K_NA': [0 * kip, 1], \
 '40K_IBEAM_40K_NA': [3.04E+04, 500], \
 '40K_PSUP_40K_NA': [4.19E+03 , 1], \
 '40K_TANK_40K_NA': [4.81E+04, 50], \
 '40K_ROCK_2_40K_NA': [3.72E+04, 1000], \
-'234Pa_PMT_CHAIN_238U_NA': [3.41E+03 *iPMTs * uip, 1], \
-'214Pb_PMT_CHAIN_238U_NA': [3.41E+03 *iPMTs * uip, 1], \
-'214Bi_PMT_CHAIN_238U_NA': [3.41E+03 *iPMTs * uip, 1], \
-'210Bi_PMT_CHAIN_238U_NA': [3.41E+03 *iPMTs * uip, 1], \
-'210Tl_PMT_CHAIN_238U_NA': [3.41E+03*0.002 *iPMTs * uip, 1], \
+'234Pa_PMT_CHAIN_238U_NA': [5.13E+03 *iPMTs * uip, 1], \
+'214Pb_PMT_CHAIN_238U_NA': [5.13E+03 *iPMTs * uip, 1], \
+'214Bi_PMT_CHAIN_238U_NA': [5.13E+03 *iPMTs * uip, 1], \
+'210Bi_PMT_CHAIN_238U_NA': [5.13E+03 *iPMTs * uip, 1], \
+'210Tl_PMT_CHAIN_238U_NA': [5.13E+03*0.002 *iPMTs * uip, 1], \
 '234Pa_VETO_CHAIN_238U_NA': [0, 1], \
 '214Pb_VETO_CHAIN_238U_NA': [0, 1], \
 '214Bi_VETO_CHAIN_238U_NA': [0, 1], \
@@ -534,10 +538,10 @@ def loadSimulationParameters():
 '214Bi_LIQUID_CHAIN_238U_NA': [8.35*pmtVolCorr , 1], \
 '210Bi_LIQUID_CHAIN_238U_NA': [8.35*pmtVolCorr , 1], \
 '210Tl_LIQUID_CHAIN_238U_NA': [8.35*0.0002*pmtVolCorr , 1], \
-'228Ac_PMT_CHAIN_232Th_NA': [2.99E+03 *iPMTs * tip, 1], \
-'212Pb_PMT_CHAIN_232Th_NA': [2.99E+03 *iPMTs * tip, 1], \
-'212Bi_PMT_CHAIN_232Th_NA': [2.99E+03*0.64 *iPMTs * tip, 1], \
-'208Tl_PMT_CHAIN_232Th_NA': [2.99E+03*0.36 *iPMTs * tip, 1], \
+'228Ac_PMT_CHAIN_232Th_NA': [4.49E+03 *iPMTs * tip, 1], \
+'212Pb_PMT_CHAIN_232Th_NA': [4.49E+03 *iPMTs * tip, 1], \
+'212Bi_PMT_CHAIN_232Th_NA': [4.49E+03*0.64 *iPMTs * tip, 1], \
+'208Tl_PMT_CHAIN_232Th_NA': [4.49E+03*0.36 *iPMTs * tip, 1], \
 '228Ac_VETO_CHAIN_232Th_NA': [0, 1], \
 '212Pb_VETO_CHAIN_232Th_NA': [0, 1], \
 '212Bi_VETO_CHAIN_232Th_NA': [0*0.64, 1], \
@@ -593,7 +597,7 @@ def loadSimulationParameters():
 '60Co_PSUP_60Co_NA': [5.93E+03, 50], \
 '137Cs_PSUP_137Cs_NA': [6.24E+03, 50], \
 'li9_LIQUID_A_Z': [1.056e-05*pmtVolCorr , 1], \
-'n17_LIQUID_A_Z': [1.062e-5*pmtVolCorr , 1],\
+'n17_LIQUID_A_Z': [1.061e-5*pmtVolCorr , 1],\
 'singles_ALL_singles': [1,1000],\
 'mono_LIQUID_e-':[1,1],\
 'mono_LIQUID_e+':[1,1],\
