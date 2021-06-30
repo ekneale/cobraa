@@ -25,7 +25,7 @@ for _p in proc:
                 singlespersec+=rates['%s_%s_%s'%(_element,_loc,_p)][0]
 
 nruns = int(arguments['-N'])
-nsetSingles = 100
+nsetSingles = 200
 detectorStr = f"Watchman_rightcylinder_{arguments['--cylinderSize']}m_{arguments['--cylinderSize']}m_{arguments['--cylinderPct']}pct_{arguments['--rPMT']}mm"
 
 

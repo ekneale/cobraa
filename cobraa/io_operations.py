@@ -78,7 +78,7 @@ def generateMacros():
                 print("\n\n\n Warning - only %f days of singles events will be simulated!!!!!\n\n\n"%(_events*nsetSingles*nruns/float(singlespersec*86400)))
                 outfile = open(f"mac/evts_singles.mac","w+")
                 outfile.writelines(f"/run/beamOn {_events}")
-            elif 'pn_ibd' in _k or 'A_Z' in _k or 'fast' in _k:
+            elif 'pn_ibd' in _k or 'A_Z' in _k or 'fast' in _k or 'mono' in _k:
                 outfile = open(f"mac/rates_{_k}.mac","w+")
                 outfile.writelines(f"/generator/rate/set {rates[_k][0]}")
                 outfile.close
