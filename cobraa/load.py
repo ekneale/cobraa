@@ -365,6 +365,10 @@ def loadSimulationParameters():
 'boulby_world_LIQUID_pn_ibd': [2.227e-06*pmtVolCorr , 1],\
 'heysham_signal_LIQUID_pn_ibd': [4.585e-06*pmtVolCorr , 1],\
 'heysham_background_LIQUID_pn_ibd': [1.263e-05*pmtVolCorr , 1],\
+'heysham2_signal_LIQUID_pn_ibd': [2.647e-06 , 1],\
+'heysham2_background_LIQUID_pn_ibd': [1.167e-05 , 1],\
+'torness_signal_LIQUID_pn_ibd': [1.697e-06 , 1],\
+'torness_background_LIQUID_pn_ibd': [7.533e-06 , 1],\
 '40K_LIQUID_40K_NA': [1.28*pmtVolCorr , 1], \
 '40K_PMT_40K_NA': [3.58E+04 *iPMTs * kip, 1], \
 '40K_VETO_40K_NA': [2.61e+02 * kip, 1], \
@@ -627,6 +631,10 @@ def loadSimulationParameters():
 'boulby_world_LIQUID_pn_ibd': [2.227e-06*pmtVolCorr , 1],\
 'heysham_signal_LIQUID_pn_ibd': [4.585e-06*pmtVolCorr , 1],\
 'heysham_background_LIQUID_pn_ibd': [1.263e-05*pmtVolCorr , 1],\
+'heysham2_signal_LIQUID_pn_ibd': [2.650e-06 , 1],\
+'heysham2_background_LIQUID_pn_ibd': [1.169e-05 , 1],\
+'torness_signal_LIQUID_pn_ibd': [1.699e-06 , 1],\
+'torness_background_LIQUID_pn_ibd': [7.542e-06 , 1],\
 '40K_LIQUID_40K_NA': [1.28*pmtVolCorr , 1], \
 '40K_PMT_40K_NA': [8.45E+03 *iPMTs * kip, 1], \
 '40K_VETO_40K_NA': [2.61e+02 * kip, 1], \
