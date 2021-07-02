@@ -492,7 +492,7 @@ def loadSimulationParameters():
 'IBDPositronHeyshamSig_LIQUID_ibd_p_hs': [1.22e-05 , 1], \
 'IBDPositronHeyshamBkg_LIQUID_ibd_p_hb': [3.040e-05, 1], \
 'IBDNeutron_LIQUID_ibd_n': [ 1.050e-04, 1], \
-'big_hartlepool_LIQUID_pn_ibd': [1.050e-05, 1],\
+'big_hartlepool_LIQUID_pn_ibd': [1.050e-04, 1],\
 'small_hartlepool_LIQUID_pn_ibd': [7.861e-05, 1],\
 'boulby_geo_LIQUID_pn_ibd': [6.364e-06 , 1],\
 'boulby_world_LIQUID_pn_ibd': [3.624e-05 , 1],\
