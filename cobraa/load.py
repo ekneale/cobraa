@@ -359,16 +359,15 @@ def loadSimulationParameters():
 'IBDPositronHeyshamSig_LIQUID_ibd_p_hs': [4.585e-06*pmtVolCorr , 1], \
 'IBDPositronHeyshamBkg_LIQUID_ibd_p_hb': [1.263e-05 *pmtVolCorr, 1], \
 'IBDNeutron_LIQUID_ibd_n': [ 4.845e-05*pmtVolCorr, 1], \
-'big_hartlepool_LIQUID_pn_ibd': [4.845e-05*pmtVolCorr , 1],\
-'small_hartlepool_LIQUID_pn_ibd': [3.360e-05*pmtVolCorr , 1],\
+'hartlepool_1_LIQUID_pn_ibd': [4.845e-05*pmtVolCorr , 1],\
+'hartlepool_2_LIQUID_pn_ibd': [3.360e-05*pmtVolCorr , 1],\
 'boulby_geo_LIQUID_pn_ibd': [3.565e-07*pmtVolCorr , 1],\
-'boulby_world_LIQUID_pn_ibd': [2.227e-06*pmtVolCorr , 1],\
+'hartlepool_world_LIQUID_pn_ibd': [2.227e-06*pmtVolCorr , 1],\
 'heysham_signal_LIQUID_pn_ibd': [4.585e-06*pmtVolCorr , 1],\
-'heysham_background_LIQUID_pn_ibd': [1.263e-05*pmtVolCorr , 1],\
+'heysham_world_LIQUID_pn_ibd': [9.230e-06 , 1],\
 'heysham2_signal_LIQUID_pn_ibd': [2.647e-06 , 1],\
-'heysham2_background_LIQUID_pn_ibd': [1.167e-05 , 1],\
 'torness_signal_LIQUID_pn_ibd': [1.697e-06 , 1],\
-'torness_background_LIQUID_pn_ibd': [7.533e-06 , 1],\
+'torness_world_LIQUID_pn_ibd': [7.533e-06 , 1],\
 '40K_LIQUID_40K_NA': [1.28*pmtVolCorr , 1], \
 '40K_PMT_40K_NA': [3.58E+04 *iPMTs * kip, 1], \
 '40K_VETO_40K_NA': [2.61e+02 * kip, 1], \
@@ -492,16 +491,15 @@ def loadSimulationParameters():
 'IBDPositronHeyshamSig_LIQUID_ibd_p_hs': [1.22e-05 , 1], \
 'IBDPositronHeyshamBkg_LIQUID_ibd_p_hb': [3.040e-05, 1], \
 'IBDNeutron_LIQUID_ibd_n': [ 1.050e-04, 1], \
-'big_hartlepool_LIQUID_pn_ibd': [1.050e-05, 1],\
-'small_hartlepool_LIQUID_pn_ibd': [7.861e-05, 1],\
+'hartlepool_1_LIQUID_pn_ibd': [1.050e-04, 1],\
+'hartlepool_2_LIQUID_pn_ibd': [7.861e-05, 1],\
 'boulby_geo_LIQUID_pn_ibd': [6.364e-06 , 1],\
-'boulby_world_LIQUID_pn_ibd': [3.624e-05 , 1],\
+'hartlepool_world_LIQUID_pn_ibd': [3.624e-05 , 1],\
 'heysham_signal_LIQUID_pn_ibd': [1.22e-05 , 1],\
-'heysham_background_LIQUID_pn_ibd': [3.040e-05 , 1],\
+'heysham_world_LIQUID_pn_ibd': [2.404e-05 , 1],\
 'heysham2_signal_LIQUID_pn_ibd': [6.894e-06 , 1],\
-'heysham2_background_LIQUID_pn_ibd': [3.040e-05 , 1],\
 'torness_signal_LIQUID_pn_ibd': [4.419e-06 , 1],\
-'torness_background_LIQUID_pn_ibd': [1.962e-06 , 1],\
+'torness_world_LIQUID_pn_ibd': [1.962e-05 , 1],\
 '40K_LIQUID_40K_NA': [34.3 , 1], \
 '40K_PMT_40K_NA': [1.67E+04 * kip, 1], \
 '40K_VETO_40K_NA': [0 * kip, 1], \
@@ -625,16 +623,15 @@ def loadSimulationParameters():
 'IBDPositronHeyshamSig_LIQUID_ibd_p_hs': [4.585e-06*pmtVolCorr , 1], \
 'IBDPositronHeyshamBkg_LIQUID_ibd_p_hb': [1.263e-05 *pmtVolCorr, 1], \
 'IBDNeutron_LIQUID_ibd_n': [ 4.845e-05*pmtVolCorr, 1], \
-'big_hartlepool_LIQUID_pn_ibd': [4.845e-05*pmtVolCorr , 1],\
-'small_hartlepool_LIQUID_pn_ibd': [3.360e-05*pmtVolCorr , 1],\
+'hartlepool_1_LIQUID_pn_ibd': [4.845e-05*pmtVolCorr , 1],\
+'hartlepool_2_LIQUID_pn_ibd': [3.360e-05*pmtVolCorr , 1],\
 'boulby_geo_LIQUID_pn_ibd': [3.565e-07*pmtVolCorr , 1],\
-'boulby_world_LIQUID_pn_ibd': [2.227e-06*pmtVolCorr , 1],\
+'hartlepool_world_LIQUID_pn_ibd': [2.227e-06*pmtVolCorr , 1],\
 'heysham_signal_LIQUID_pn_ibd': [4.585e-06*pmtVolCorr , 1],\
-'heysham_background_LIQUID_pn_ibd': [1.263e-05*pmtVolCorr , 1],\
+'heysham_world_LIQUID_pn_ibd': [9.241e-06 , 1],\
 'heysham2_signal_LIQUID_pn_ibd': [2.650e-06 , 1],\
-'heysham2_background_LIQUID_pn_ibd': [1.169e-05 , 1],\
 'torness_signal_LIQUID_pn_ibd': [1.699e-06 , 1],\
-'torness_background_LIQUID_pn_ibd': [7.542e-06 , 1],\
+'torness_world_LIQUID_pn_ibd': [7.542e-06 , 1],\
 '40K_LIQUID_40K_NA': [1.28*pmtVolCorr , 1], \
 '40K_PMT_40K_NA': [8.45E+03 *iPMTs * kip, 1], \
 '40K_VETO_40K_NA': [2.61e+02 * kip, 1], \
