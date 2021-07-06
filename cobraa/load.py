@@ -164,7 +164,7 @@ def loadSimulationParameters():
         d['RADIOGENIC'] = {'ROCK_2':['rock_neutrons']}
 
 
-        d['pn_ibd'] = {'LIQUID':['boulby_geo','big_hartlepool','small_hartlepool','boulby_world','heysham_signal','heysham_background','heysham2_signal','heysham2_background','torness_signal','torness_background']}
+        d['pn_ibd'] = {'LIQUID':['boulby_geo','big_hartlepool','small_hartlepool','boulby_world','heysham_signal','heysham_background','heysham2_signal','torness_signal','torness_background']}
 
         d['singles'] = {'ALL':['singles']}
         d['A_Z'] = {'LIQUID':['li 9','n 17']}
@@ -223,7 +223,7 @@ def loadSimulationParameters():
         d['ibd_p_hs'] = {'LIQUID':['IBDPositronHeyshamSig']}
         d['ibd_p_hb'] = {'LIQUID':['IBDPositronHeyshamBkg']}
         d['ibd_n'] = {'LIQUID':['IBDNeutron']}
-        d['pn_ibd'] = {'LIQUID':['boulby_geo','big_hartlepool','small_hartlepool','boulby_world','heysham_signal','heysham_background','heysham2_signal','heysham2_background','torness_signal','torness_background']}
+        d['pn_ibd'] = {'LIQUID':['boulby_geo','big_hartlepool','small_hartlepool','boulby_world','heysham_signal','heysham_background','heysham2_signal','torness_signal','torness_background']}
 
         d['singles'] = {'ALL':['singles']}
         d['A_Z'] = {'LIQUID':['li 9','n 17']}
@@ -292,7 +292,7 @@ def loadSimulationParameters():
         d['ibd_p_hs'] = {'LIQUID':['IBDPositronHeyshamSig']}
         d['ibd_p_hb'] = {'LIQUID':['IBDPositronHeyshamBkg']}
         d['ibd_n'] = {'LIQUID':['IBDNeutron']}
-        d['pn_ibd'] = {'LIQUID':['boulby_geo','big_hartlepool','small_hartlepool','boulby_world','heysham_signal','heysham_background','heysham2_signal','heysham2_background','torness_signal','torness_background']}
+        d['pn_ibd'] = {'LIQUID':['boulby_geo','big_hartlepool','small_hartlepool','boulby_world','heysham_signal','heysham_background','heysham2_signal','torness_signal','torness_background']}
 
         d['singles'] = {'ALL':['singles']}
         d['A_Z'] = {'LIQUID':['li 9','n 17']}
@@ -366,7 +366,6 @@ def loadSimulationParameters():
 'heysham_signal_LIQUID_pn_ibd': [4.585e-06*pmtVolCorr , 1],\
 'heysham_background_LIQUID_pn_ibd': [1.263e-05*pmtVolCorr , 1],\
 'heysham2_signal_LIQUID_pn_ibd': [2.647e-06 , 1],\
-'heysham2_background_LIQUID_pn_ibd': [1.167e-05 , 1],\
 'torness_signal_LIQUID_pn_ibd': [1.697e-06 , 1],\
 'torness_background_LIQUID_pn_ibd': [7.533e-06 , 1],\
 '40K_LIQUID_40K_NA': [1.28*pmtVolCorr , 1], \
@@ -499,7 +498,6 @@ def loadSimulationParameters():
 'heysham_signal_LIQUID_pn_ibd': [1.22e-05 , 1],\
 'heysham_background_LIQUID_pn_ibd': [3.040e-05 , 1],\
 'heysham2_signal_LIQUID_pn_ibd': [6.894e-06 , 1],\
-'heysham2_background_LIQUID_pn_ibd': [3.040e-05 , 1],\
 'torness_signal_LIQUID_pn_ibd': [4.419e-06 , 1],\
 'torness_background_LIQUID_pn_ibd': [1.962e-06 , 1],\
 '40K_LIQUID_40K_NA': [34.3 , 1], \
@@ -632,7 +630,6 @@ def loadSimulationParameters():
 'heysham_signal_LIQUID_pn_ibd': [4.585e-06*pmtVolCorr , 1],\
 'heysham_background_LIQUID_pn_ibd': [1.263e-05*pmtVolCorr , 1],\
 'heysham2_signal_LIQUID_pn_ibd': [2.650e-06 , 1],\
-'heysham2_background_LIQUID_pn_ibd': [1.169e-05 , 1],\
 'torness_signal_LIQUID_pn_ibd': [1.699e-06 , 1],\
 'torness_background_LIQUID_pn_ibd': [7.542e-06 , 1],\
 '40K_LIQUID_40K_NA': [1.28*pmtVolCorr , 1], \
