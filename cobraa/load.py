@@ -164,7 +164,7 @@ def loadSimulationParameters():
         d['RADIOGENIC'] = {'ROCK_2':['rock_neutrons']}
 
 
-        d['pn_ibd'] = {'LIQUID':['boulby_geo','big_hartlepool','small_hartlepool','boulby_world','heysham_signal','heysham_background','heysham2_signal','heysham2_background','torness_signal','torness_background']}
+        d['pn_ibd'] = {'LIQUID':['boulby_geo','hartlepool_1','hartlepool_2','hartlepool_world','heysham_signal','heysham_world','heysham2_signal','torness_signal','torness_world']}
 
         d['singles'] = {'ALL':['singles']}
         d['A_Z'] = {'LIQUID':['li 9','n 17']}
@@ -223,7 +223,7 @@ def loadSimulationParameters():
         d['ibd_p_hs'] = {'LIQUID':['IBDPositronHeyshamSig']}
         d['ibd_p_hb'] = {'LIQUID':['IBDPositronHeyshamBkg']}
         d['ibd_n'] = {'LIQUID':['IBDNeutron']}
-        d['pn_ibd'] = {'LIQUID':['boulby_geo','big_hartlepool','small_hartlepool','boulby_world','heysham_signal','heysham_background','heysham2_signal','heysham2_background','torness_signal','torness_background']}
+        d['pn_ibd'] = {'LIQUID':['boulby_geo','hartlepool_1','hartlepool_2','hartlepool_world','heysham_signal','heysham_world','heysham2_signal','torness_signal','torness_world']}
 
         d['singles'] = {'ALL':['singles']}
         d['A_Z'] = {'LIQUID':['li 9','n 17']}
@@ -292,7 +292,7 @@ def loadSimulationParameters():
         d['ibd_p_hs'] = {'LIQUID':['IBDPositronHeyshamSig']}
         d['ibd_p_hb'] = {'LIQUID':['IBDPositronHeyshamBkg']}
         d['ibd_n'] = {'LIQUID':['IBDNeutron']}
-        d['pn_ibd'] = {'LIQUID':['boulby_geo','big_hartlepool','small_hartlepool','boulby_world','heysham_signal','heysham_background','heysham2_signal','heysham2_background','torness_signal','torness_background']}
+        d['pn_ibd'] = {'LIQUID':['boulby_geo','hartlepool_1','hartlepool_2','hartlepool_world','heysham_signal','heysham_world','heysham2_signal','torness_signal','torness_world']}
 
         d['singles'] = {'ALL':['singles']}
         d['A_Z'] = {'LIQUID':['li 9','n 17']}
