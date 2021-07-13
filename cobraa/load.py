@@ -164,7 +164,7 @@ def loadSimulationParameters():
         d['RADIOGENIC'] = {'ROCK_2':['rock_neutrons']}
 
 
-        d['pn_ibd'] = {'LIQUID':['boulby_geo','hartlepool_A1','hartlepool_A2','boulby_world','heysham_full','heysham_2','torness_full']}
+        d['pn_ibd'] = {'LIQUID':['boulby_geo','hartlepool_1','hartlepool_2','boulby_world','heysham_full','heysham_2','torness_full']}
 
         d['singles'] = {'ALL':['singles']}
         d['A_Z'] = {'LIQUID':['li 9','n 17']}
@@ -223,7 +223,7 @@ def loadSimulationParameters():
         d['ibd_p_hs'] = {'LIQUID':['IBDPositronHeyshamSig']}
         d['ibd_p_hb'] = {'LIQUID':['IBDPositronHeyshamBkg']}
         d['ibd_n'] = {'LIQUID':['IBDNeutron']}
-        d['pn_ibd'] = {'LIQUID':['boulby_geo','hartlepool_A1','hartlepool_A2','boulby_world','heysham_full','heysham_2','torness_full']}
+        d['pn_ibd'] = {'LIQUID':['boulby_geo','hartlepool_1','hartlepool_2','boulby_world','heysham_full','heysham_2','torness_full']}
 
         d['singles'] = {'ALL':['singles']}
         d['A_Z'] = {'LIQUID':['li 9','n 17']}
@@ -292,7 +292,7 @@ def loadSimulationParameters():
         d['ibd_p_hs'] = {'LIQUID':['IBDPositronHeyshamSig']}
         d['ibd_p_hb'] = {'LIQUID':['IBDPositronHeyshamBkg']}
         d['ibd_n'] = {'LIQUID':['IBDNeutron']}
-        d['pn_ibd'] = {'LIQUID':['boulby_geo','hartlepool_A1','hartlepool_A2','boulby_world','heysham_full','heysham_2','torness_full']}
+        d['pn_ibd'] = {'LIQUID':['boulby_geo','hartlepool_1','hartlepool_2','boulby_world','heysham_full','heysham_2','torness_full']}
 
         d['singles'] = {'ALL':['singles']}
         d['A_Z'] = {'LIQUID':['li 9','n 17']}
@@ -359,8 +359,8 @@ def loadSimulationParameters():
 'IBDPositronHeyshamSig_LIQUID_ibd_p_hs': [4.585e-06*pmtVolCorr , 1], \
 'IBDPositronHeyshamBkg_LIQUID_ibd_p_hb': [1.263e-05 *pmtVolCorr, 1], \
 'IBDNeutron_LIQUID_ibd_n': [ 4.845e-05*pmtVolCorr, 1], \
-'hartlepool_A1_LIQUID_pn_ibd': [4.845e-05*pmtVolCorr , 1],\
-'hartlepool_A2_LIQUID_pn_ibd': [3.360e-05*pmtVolCorr , 1],\
+'hartlepool_1_LIQUID_pn_ibd': [4.845e-05*pmtVolCorr , 1],\
+'hartlepool_2_LIQUID_pn_ibd': [3.360e-05*pmtVolCorr , 1],\
 'boulby_geo_LIQUID_pn_ibd': [3.565e-07*pmtVolCorr , 1],\
 'boulby_world_LIQUID_pn_ibd': [2.227e-06*pmtVolCorr , 1],\
 'heysham_full_LIQUID_pn_ibd': [4.585e-06*pmtVolCorr , 1],\
@@ -489,8 +489,8 @@ def loadSimulationParameters():
 'IBDPositronHeyshamSig_LIQUID_ibd_p_hs': [1.22e-05 , 1], \
 'IBDPositronHeyshamBkg_LIQUID_ibd_p_hb': [3.040e-05, 1], \
 'IBDNeutron_LIQUID_ibd_n': [ 1.050e-04, 1], \
-'hartlepool_A1_LIQUID_pn_ibd': [1.050e-04, 1],\
-'hartlepool_A2_LIQUID_pn_ibd': [7.861e-05, 1],\
+'hartlepool_1_LIQUID_pn_ibd': [1.050e-04, 1],\
+'hartlepool_2_LIQUID_pn_ibd': [7.861e-05, 1],\
 'boulby_geo_LIQUID_pn_ibd': [6.364e-06 , 1],\
 'boulby_world_LIQUID_pn_ibd': [3.624e-05 , 1],\
 'heysham_full_LIQUID_pn_ibd': [1.22e-05 , 1],\
@@ -619,8 +619,8 @@ def loadSimulationParameters():
 'IBDPositronHeyshamSig_LIQUID_ibd_p_hs': [4.585e-06*pmtVolCorr , 1], \
 'IBDPositronHeyshamBkg_LIQUID_ibd_p_hb': [1.263e-05 *pmtVolCorr, 1], \
 'IBDNeutron_LIQUID_ibd_n': [ 4.845e-05*pmtVolCorr, 1], \
-'hartlepool_A1_LIQUID_pn_ibd': [4.845e-05*pmtVolCorr , 1],\
-'hartlepool_A2_LIQUID_pn_ibd': [3.360e-05*pmtVolCorr , 1],\
+'hartlepool_1_LIQUID_pn_ibd': [4.845e-05*pmtVolCorr , 1],\
+'hartlepool_2_LIQUID_pn_ibd': [3.360e-05*pmtVolCorr , 1],\
 'boulby_geo_LIQUID_pn_ibd': [3.565e-07*pmtVolCorr , 1],\
 'boulby_world_LIQUID_pn_ibd': [2.227e-06*pmtVolCorr , 1],\
 'heysham_full_LIQUID_pn_ibd': [4.585e-06*pmtVolCorr , 1],\
