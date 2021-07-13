@@ -492,7 +492,7 @@ def loadSimulationParameters():
 'hartlepool_1_LIQUID_pn_ibd': [1.050e-04, 1],\
 'hartlepool_2_LIQUID_pn_ibd': [7.861e-05, 1],\
 'boulby_geo_LIQUID_pn_ibd': [6.364e-06 , 1],\
-'boulby_world_LIQUID_pn_ibd': [3.624e-05 , 1],\
+'boulby_world_LIQUID_pn_ibd': [1.962E-05 , 1],\
 'heysham_full_LIQUID_pn_ibd': [1.22e-05 , 1],\
 'heysham_2_LIQUID_pn_ibd': [6.894e-06 , 1],\
 'torness_full_LIQUID_pn_ibd': [4.419e-06 , 1],\
@@ -615,44 +615,44 @@ def loadSimulationParameters():
     else:
         print('Using rates for 16m tank with 5.7m inner PMT radius')
         jobRate = {\
-'IBDPositron_LIQUID_ibd_p': [ 4.845e-05*pmtVolCorr , 1], \
-'IBDPositronHeyshamSig_LIQUID_ibd_p_hs': [4.585e-06*pmtVolCorr , 1], \
-'IBDPositronHeyshamBkg_LIQUID_ibd_p_hb': [1.263e-05 *pmtVolCorr, 1], \
-'IBDNeutron_LIQUID_ibd_n': [ 4.845e-05*pmtVolCorr, 1], \
-'hartlepool_1_LIQUID_pn_ibd': [4.845e-05*pmtVolCorr , 1],\
-'hartlepool_2_LIQUID_pn_ibd': [3.360e-05*pmtVolCorr , 1],\
-'boulby_geo_LIQUID_pn_ibd': [3.565e-07*pmtVolCorr , 1],\
-'boulby_world_LIQUID_pn_ibd': [2.227e-06*pmtVolCorr , 1],\
-'heysham_full_LIQUID_pn_ibd': [4.585e-06*pmtVolCorr , 1],\
-'heysham_2_LIQUID_pn_ibd': [2.650e-06 , 1],\
-'torness_full_LIQUID_pn_ibd': [1.699e-06 , 1],\
-'40K_LIQUID_40K_NA': [1.28*pmtVolCorr , 1], \
-'40K_PMT_40K_NA': [8.45E+03 *iPMTs * kip, 1], \
-'40K_VETO_40K_NA': [2.61e+02 * kip, 1], \
+'IBDPositron_LIQUID_ibd_p': [ 4.039E-05 , 1], \
+'IBDPositronHeyshamSig_LIQUID_ibd_p_hs': [4.692E-06 , 1], \
+'IBDPositronHeyshamBkg_LIQUID_ibd_p_hb': [9.247E-06, 1], \
+'IBDNeutron_LIQUID_ibd_n': [ 4.039E-05, 1], \
+'hartlepool_1_LIQUID_pn_ibd': [4.039E-05 , 1],\
+'hartlepool_2_LIQUID_pn_ibd': [3.024E-05 , 1],\
+'boulby_geo_LIQUID_pn_ibd': [2.448E-06, 1],\
+'boulby_world_LIQUID_pn_ibd': [7.547E-06 , 1],\
+'heysham_full_LIQUID_pn_ibd': [4.692E-06 , 1],\
+'heysham_2_LIQUID_pn_ibd': [2.652E-06, 1],\
+'torness_full_LIQUID_pn_ibd': [1.700E-06, 1],\
+'40K_LIQUID_40K_NA': [12.8 , 1], \
+'40K_PMT_40K_NA': [6.61E+03 * kip, 1], \
+'40K_VETO_40K_NA': [0* kip, 1], \
 '40K_IBEAM_40K_NA': [1.70E+04, 500], \
-'40K_PSUP_40K_NA': [2.39E+03 , 1], \
+'40K_PSUP_40K_NA': [1.76E+03 , 1], \
 '40K_TANK_40K_NA': [2.55E+04, 50], \
 '40K_ROCK_2_40K_NA': [2.14E+04, 1000], \
-'234Pa_PMT_CHAIN_238U_NA': [2.60E+03 *iPMTs * uip, 1], \
-'214Pb_PMT_CHAIN_238U_NA': [2.60E+03 *iPMTs * uip, 1], \
-'214Bi_PMT_CHAIN_238U_NA': [2.60E+03 *iPMTs * uip, 1], \
-'210Bi_PMT_CHAIN_238U_NA': [2.60E+03 *iPMTs * uip, 1], \
-'210Tl_PMT_CHAIN_238U_NA': [2.60E+03*0.002 *iPMTs * uip, 1], \
-'234Pa_VETO_CHAIN_238U_NA': [8.02E+01, 1], \
-'214Pb_VETO_CHAIN_238U_NA': [8.02E+01, 1], \
-'214Bi_VETO_CHAIN_238U_NA': [8.02E+01, 1], \
-'210Bi_VETO_CHAIN_238U_NA': [8.02E+01, 1], \
-'210Tl_VETO_CHAIN_238U_NA': [8.02E+01*0.0002, 1], \
+'234Pa_PMT_CHAIN_238U_NA': [2.03E+03 * uip, 1], \
+'214Pb_PMT_CHAIN_238U_NA': [2.03E+03 * uip, 1], \
+'214Bi_PMT_CHAIN_238U_NA': [2.03E+03 * uip, 1], \
+'210Bi_PMT_CHAIN_238U_NA': [2.03E+03 * uip, 1], \
+'210Tl_PMT_CHAIN_238U_NA': [2.03E+03*0.002 *iPMTs * uip, 1], \
+'234Pa_VETO_CHAIN_238U_NA': [0, 1], \
+'214Pb_VETO_CHAIN_238U_NA': [0, 1], \
+'214Bi_VETO_CHAIN_238U_NA': [0, 1], \
+'210Bi_VETO_CHAIN_238U_NA': [0, 1], \
+'210Tl_VETO_CHAIN_238U_NA': [0*0.0002, 1], \
 '234Pa_IBEAM_CHAIN_238U_NA': [3.78e+04, 1], \
 '214Pb_IBEAM_CHAIN_238U_NA': [3.78E+04, 1], \
 '214Bi_IBEAM_CHAIN_238U_NA': [3.78E+04, 1], \
 '210Bi_IBEAM_CHAIN_238U_NA': [3.78E+04, 1], \
 '210Tl_IBEAM_CHAIN_238U_NA': [3.78E+04*0.0002, 1], \
-'234Pa_PSUP_CHAIN_238U_NA': [5.32E+03, 50], \
-'214Pb_PSUP_CHAIN_238U_NA': [5.32E+03, 50], \
-'214Bi_PSUP_CHAIN_238U_NA': [5.32E+03, 50], \
-'210Bi_PSUP_CHAIN_238U_NA': [5.32E+03, 50], \
-'210Tl_PSUP_CHAIN_238U_NA': [5.32E+03*0.0002, 50], \
+'234Pa_PSUP_CHAIN_238U_NA': [3.92E+03, 50], \
+'214Pb_PSUP_CHAIN_238U_NA': [3.92E+03, 50], \
+'214Bi_PSUP_CHAIN_238U_NA': [3.92E+03, 50], \
+'210Bi_PSUP_CHAIN_238U_NA': [3.92E+03, 50], \
+'210Tl_PSUP_CHAIN_238U_NA': [3.92E+03*0.0002, 50], \
 '234Pa_TANK_CHAIN_238U_NA': [5.68E+04, 50], \
 '214Pb_TANK_CHAIN_238U_NA': [5.68E+04, 50], \
 '214Bi_TANK_CHAIN_238U_NA': [5.68E+04, 50], \
@@ -663,32 +663,32 @@ def loadSimulationParameters():
 '214Bi_ROCK_2_CHAIN_238U_NA': [4.44E+06, 1], \
 '210Bi_ROCK_2_CHAIN_238U_NA': [4.44E+06, 1], \
 '210Tl_ROCK_2_CHAIN_238U_NA': [4.44E+06*0.0002, 1], \
-'234Pa_GD_CHAIN_238U_NA': [3.17e-01 *pmtVolCorr, 1], \
-'214Pb_GD_CHAIN_238U_NA': [3.17e-01 *pmtVolCorr, 1], \
-'214Bi_GD_CHAIN_238U_NA': [3.17e-01 *pmtVolCorr, 1], \
-'210Bi_GD_CHAIN_238U_NA': [3.17e-01 *pmtVolCorr, 1], \
-'210Tl_GD_CHAIN_238U_NA': [3.17e-01*0.0002 *pmtVolCorr, 1], \
-'234Pa_LIQUID_CHAIN_238U_NA': [3.20*pmtVolCorr , 1], \
-'214Pb_LIQUID_CHAIN_238U_NA': [3.20*pmtVolCorr , 1], \
-'214Bi_LIQUID_CHAIN_238U_NA': [3.20*pmtVolCorr , 1], \
-'210Bi_LIQUID_CHAIN_238U_NA': [3.20*pmtVolCorr , 1], \
-'210Tl_LIQUID_CHAIN_238U_NA': [3.20*0.0002*pmtVolCorr , 1], \
-'228Ac_PMT_CHAIN_232Th_NA': [2.28E+03 *iPMTs * tip, 1], \
-'212Pb_PMT_CHAIN_232Th_NA': [2.28E+03 *iPMTs * tip, 1], \
-'212Bi_PMT_CHAIN_232Th_NA': [2.28E+03*0.64 *iPMTs * tip, 1], \
-'208Tl_PMT_CHAIN_232Th_NA': [2.28E+03*0.36 *iPMTs * tip, 1], \
-'228Ac_VETO_CHAIN_232Th_NA': [7.04E+01, 1], \
-'212Pb_VETO_CHAIN_232Th_NA': [7.04E+01, 1], \
-'212Bi_VETO_CHAIN_232Th_NA': [7.04E+01*0.64, 1], \
-'208Tl_VETO_CHAIN_232Th_NA': [7.04E+01*0.36, 1], \
+'234Pa_GD_CHAIN_238U_NA': [3.18e-01 , 1], \
+'214Pb_GD_CHAIN_238U_NA': [3.18e-01 , 1], \
+'214Bi_GD_CHAIN_238U_NA': [3.18e-01 , 1], \
+'210Bi_GD_CHAIN_238U_NA': [3.18e-01 , 1], \
+'210Tl_GD_CHAIN_238U_NA': [3.18e-01*0.0002 , 1], \
+'234Pa_LIQUID_CHAIN_238U_NA': [3.21 , 1], \
+'214Pb_LIQUID_CHAIN_238U_NA': [3.21 , 1], \
+'214Bi_LIQUID_CHAIN_238U_NA': [3.21 , 1], \
+'210Bi_LIQUID_CHAIN_238U_NA': [3.21 , 1], \
+'210Tl_LIQUID_CHAIN_238U_NA': [3.21*0.0002 , 1], \
+'228Ac_PMT_CHAIN_232Th_NA': [1.78E+03 * tip, 1], \
+'212Pb_PMT_CHAIN_232Th_NA': [1.78E+03 * tip, 1], \
+'212Bi_PMT_CHAIN_232Th_NA': [1.78E+03*0.64 * tip, 1], \
+'208Tl_PMT_CHAIN_232Th_NA': [1.78E+03*0.36 * tip, 1], \
+'228Ac_VETO_CHAIN_232Th_NA': [0, 1], \
+'212Pb_VETO_CHAIN_232Th_NA': [0, 1], \
+'212Bi_VETO_CHAIN_232Th_NA': [0*0.64, 1], \
+'208Tl_VETO_CHAIN_232Th_NA': [0*0.36, 1], \
 '228Ac_IBEAM_CHAIN_232Th_NA': [5.45E+03, 1], \
 '212Pb_IBEAM_CHAIN_232Th_NA': [5.45E+03, 1], \
 '212Bi_IBEAM_CHAIN_232Th_NA': [5.45E+03*0.64, 1], \
 '208Tl_IBEAM_CHAIN_232Th_NA': [5.45E+03*0.36, 1], \
-'228Ac_PSUP_CHAIN_232Th_NA': [7.66E+02, 50], \
-'212Pb_PSUP_CHAIN_232Th_NA': [7.66E+02, 50], \
-'212Bi_PSUP_CHAIN_232Th_NA': [7.66E+02*0.64, 50], \
-'208Tl_PSUP_CHAIN_232Th_NA': [7.66E+02*0.36, 50], \
+'228Ac_PSUP_CHAIN_232Th_NA': [5.65E+02, 50], \
+'212Pb_PSUP_CHAIN_232Th_NA': [5.65E+02, 50], \
+'212Bi_PSUP_CHAIN_232Th_NA': [5.65E+02*0.64, 50], \
+'208Tl_PSUP_CHAIN_232Th_NA': [5.65E+02*0.36, 50], \
 '228Ac_TANK_CHAIN_232Th_NA': [8.18E+03, 50], \
 '212Pb_TANK_CHAIN_232Th_NA': [8.18E+03, 50], \
 '212Bi_TANK_CHAIN_232Th_NA': [8.18E+03*0.64, 50], \
@@ -697,49 +697,49 @@ def loadSimulationParameters():
 '212Pb_ROCK_2_CHAIN_232Th_NA': [6.87E+05, 1000], \
 '212Bi_ROCK_2_CHAIN_232Th_NA': [6.87E+05*0.64, 1000], \
 '208Tl_ROCK_2_CHAIN_232Th_NA': [6.87E+05*0.36, 1000], \
-'228Ac_GD_CHAIN_232Th_NA': [1.59E-01*pmtVolCorr , 1], \
-'212Pb_GD_CHAIN_232Th_NA': [1.59E-01*pmtVolCorr , 1], \
-'212Bi_GD_CHAIN_232Th_NA': [1.59E-01*0.64*pmtVolCorr , 1], \
-'208Tl_GD_CHAIN_232Th_NA': [1.59E-01*0.36*pmtVolCorr , 1], \
-'228Ac_LIQUID_CHAIN_232Th_NA': [3.20E-01*pmtVolCorr , 1], \
-'212Pb_LIQUID_CHAIN_232Th_NA': [3.20E-01*pmtVolCorr , 1], \
-'212Bi_LIQUID_CHAIN_232Th_NA': [3.20E-01*0.64*pmtVolCorr , 1], \
-'208Tl_LIQUID_CHAIN_232Th_NA': [3.20E-01*0.36*pmtVolCorr , 1], \
+'228Ac_GD_CHAIN_232Th_NA': [1.59E-01 , 1], \
+'212Pb_GD_CHAIN_232Th_NA': [1.59E-01 , 1], \
+'212Bi_GD_CHAIN_232Th_NA': [1.59E-01*0.64 , 1], \
+'208Tl_GD_CHAIN_232Th_NA': [1.59E-01*0.36 , 1], \
+'228Ac_LIQUID_CHAIN_232Th_NA': [3.21E-01 , 1], \
+'212Pb_LIQUID_CHAIN_232Th_NA': [3.21E-01 , 1], \
+'212Bi_LIQUID_CHAIN_232Th_NA': [3.21E-01*0.64 , 1], \
+'208Tl_LIQUID_CHAIN_232Th_NA': [3.21E-01*0.36 , 1], \
 '231Th_IBEAM_CHAIN_235U_NA': [2.15e+03, 50], \
 '223Fr_IBEAM_CHAIN_235U_NA': [2.15e+03*0.0138, 50], \
 '211Pb_IBEAM_CHAIN_235U_NA': [2.15e+03, 50], \
 '211Bi_IBEAM_CHAIN_235U_NA': [2.15e+03*0.00270, 50], \
 '207Tl_IBEAM_CHAIN_235U_NA': [2.15e+03, 50], \
-'231Th_PSUP_CHAIN_235U_NA': [3.02E+02, 50], \
-'223Fr_PSUP_CHAIN_235U_NA': [3.02E+02*0.0138, 50], \
-'211Pb_PSUP_CHAIN_235U_NA': [3.02E+02, 50], \
-'211Bi_PSUP_CHAIN_235U_NA': [3.02E+02*0.00270, 50], \
-'207Tl_PSUP_CHAIN_235U_NA': [3.02E+02, 50], \
+'231Th_PSUP_CHAIN_235U_NA': [2.23E+02, 50], \
+'223Fr_PSUP_CHAIN_235U_NA': [2.23E+02*0.0138, 50], \
+'211Pb_PSUP_CHAIN_235U_NA': [2.23E+02, 50], \
+'211Bi_PSUP_CHAIN_235U_NA': [2.23E+02*0.00270, 50], \
+'207Tl_PSUP_CHAIN_235U_NA': [2.23E+02, 50], \
 '231Th_TANK_CHAIN_235U_NA': [3.22E+03, 50], \
 '223Fr_TANK_CHAIN_235U_NA': [3.22E+03*0.0138, 50], \
 '211Pb_TANK_CHAIN_235U_NA': [3.22E+03, 50], \
 '211Bi_TANK_CHAIN_235U_NA': [3.22E+03*0.00270, 50], \
 '207Tl_TANK_CHAIN_235U_NA': [3.22E+03, 50], \
-'231Th_LIQUID_CHAIN_235U_NA': [1.49E-01*pmtVolCorr , 1], \
-'223Fr_LIQUID_CHAIN_235U_NA': [1.49E-01*0.0138*pmtVolCorr, 1], \
-'211Pb_LIQUID_CHAIN_235U_NA': [1.49E-01*pmtVolCorr , 1], \
-'211Bi_LIQUID_CHAIN_235U_NA': [1.49E-01*0.00270*pmtVolCorr , 1], \
-'207Tl_LIQUID_CHAIN_235U_NA': [1.49E-01*pmtVolCorr , 1], \
+'231Th_LIQUID_CHAIN_235U_NA': [1.50E-01 , 1], \
+'223Fr_LIQUID_CHAIN_235U_NA': [1.50E-01*0.0138, 1], \
+'211Pb_LIQUID_CHAIN_235U_NA': [1.50E-01 , 1], \
+'211Bi_LIQUID_CHAIN_235U_NA': [1.50E-01*0.00270 , 1], \
+'207Tl_LIQUID_CHAIN_235U_NA': [1.50E-01 , 1], \
 '60Co_IBEAM_60Co_NA': [2.40e+04, 50], \
 '137Cs_IBEAM_137Cs_NA': [2.53e+04, 50], \
 '60Co_TANK_60Co_NA': [3.61E+04, 50], \
 '137Cs_TANK_137Cs_NA': [3.80E+04, 50], \
-'60Co_PSUP_60Co_NA': [3.38E+03, 50], \
-'137Cs_PSUP_137Cs_NA': [3.56E+03, 50], \
-'li9_LIQUID_A_Z': [4.051E-06*pmtVolCorr , 1], \
-'n17_LIQUID_A_Z': [4.072E-06*pmtVolCorr , 1],\
+'60Co_PSUP_60Co_NA': [2.49E+03, 50], \
+'137Cs_PSUP_137Cs_NA': [2.63E+03, 50], \
+'li9_LIQUID_A_Z': [4.060E-06 , 1], \
+'n17_LIQUID_A_Z': [4.080E-06 , 1],\
 'singles_ALL_singles': [1,500],\
 'e-_LIQUID_mono':[1,1],\
 'e+_LIQUID_mono':[1,1],\
 'gamma_LIQUID_mono':[1,1],\
 'rock_neutrons_ROCK_2_RADIOGENIC': [1.34e01,1],\
 'rock_neutrons_ROCK_1_RADIOGENIC': [3.11e02, 1],\
-'fast_neutrons_ROCK_2_FASTNEUTRONS': [1.85e-2, 0.5]}
+'fast_neutrons_ROCK_2_FASTNEUTRONS': [1.849E-02, 0.5]}
 # NB veto rates are incorrect
     return d,process,jobRate
 
