@@ -197,6 +197,19 @@ source {ratDir+'/../../env.sh'} && TMPNAME=$(date +%s%N)  && rat mac/detector_{d
                             outfile_jobs = open(file,"w+")
                             jobheader = jobSubmissionCommands(_element,timeJob,file,outFile,errFile,singlesscript,arguments,directory)
                             outfile_jobs.writelines(jobheader)
+                    if 'mono' in _p:
+                        script = f"{dir}/script{additionalString}_{_element}_{_loc}_{_p}.sh".replace(" ","")
+                        outfile_script = open(script,"w+")
+                        outfile_script.writelines(f"""#!/bin/sh
+    source {ratDir+'/../../env.sh'} && TMPNAME=$(date +%s%N)  && rat mac/detector_{detectorStr}.mac mac/process.mac mac/phys_{_element}.mac mac/geo_{_loc}.mac mac/rates_{_p}_{_loc}_{_element}.mac mac/evts_{_p}_{_loc}_{_element}.mac -o root_files{additionalString}/{_element}_{_loc}_{_p}/run$TMPNAME.root -l log{additionalString}/{_element}_{_loc}_{_p}/run$TMPNAME.log""")
+                        outfile_script.close
+                        os.chmod(script,S_IRWXU)
+                        file = f"{dir}/job{additionalString}_{_element}_{_loc}_{_p}.sh".replace(" ","") 
+                        outfile_jobs = open(file,"w+")
+                        jobheader = jobSubmissionCommands(_element,timeJob,file,outFile,errFile,script,arguments,directory)
+                        outfile_jobs.writelines(jobheader)
+
+                        outfile_jobs.close
                     else:
                         script = f"{dir}/script{additionalString}_{_element}_{_loc}_{_p}.sh".replace(" ","")
                         outfile_script = open(script,"w+")
