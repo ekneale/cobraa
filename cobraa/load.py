@@ -187,37 +187,28 @@ def loadSimulationParameters():
 
         d['CHAIN_238U_NA'] = {'LIQUID':['234Pa','214Pb','214Bi','210Bi','210Tl'],\
                              'PMT':['234Pa','214Pb','214Bi','210Bi','210Tl'],\
-                             'TANK':['234Pa','214Pb','214Bi','210Bi','210Tl'],\
-                             'ROCK_2':['234Pa','214Pb','214Bi','210Bi','210Tl'],\
-                             'IBEAM':['234Pa','214Pb','214Bi','210Bi','210Tl'],\
-                             'PSUP':['234Pa','214Pb','214Bi','210Bi','210Tl']}
-        d['CHAIN_232Th_NA'] = {'LIQUID':['228Ac','212Pb','212Bi','208Tl'],\
-                'PMT':['228Ac','212Pb','212Bi','208Tl'],\
-                'TANK':['228Ac','212Pb','212Bi','208Tl'],\
-                'ROCK_2':['228Ac','212Pb','212Bi','208Tl'],\
-                'IBEAM':['228Ac','212Pb','212Bi','208Tl'],\
-                'PSUP':['228Ac','212Pb','212Bi','208Tl']}
-        d['CHAIN_235U_NA'] = {'LIQUID':['231Th','223Fr','211Pb','211Bi','207Tl'],\
-                'TANK':['231Th','223Fr','211Pb','211Bi','207Tl'],\
-                'IBEAM':['231Th','223Fr','211Pb','211Bi','207Tl'],\
-                'PSUP':['231Th','223Fr','211Pb','211Bi','207Tl']}
+                             'TANK':['214Bi','210Tl'],\
+                             'ROCK_2':['214Bi','210Tl'],\
+                             'IBEAM':['214Bi','210Tl'],\
+                             'PSUP':['234Pa','214Pb','214Bi','210Tl']}
+        d['CHAIN_232Th_NA'] = {'LIQUID':['228Ac','208Tl'],\
+                'PMT':['228Ac','212Bi','208Tl'],\
+                'TANK':['228Ac','212Pb','208Tl'],\
+                'ROCK_2':['212Bi','208Tl'],\
+                'IBEAM':['208Tl'],\
+                'PSUP':['228Ac','212Pb','208Tl']}
+        d['CHAIN_235U_NA'] = {'LIQUID':['211Pb','207Tl'],\
+                'PSUP':['211Pb']}
 
         d['40K_NA'] = {'LIQUID':['40K'],\
                 'TANK':['40K'],\
                 'IBEAM':['40K'],\
                 'PSUP':['40K'],\
-                'PMT':['40K'],\
-                'ROCK_2':['40K']}
+                'PMT':['40K']}
         d['60Co_NA'] = {'PSUP':['60Co'],\
                 'TANK':['60Co'],\
                 'IBEAM':['60Co']}
-        d['137Cs_NA'] = {'PSUP':['137Cs'],\
-                'TANK':['137Cs'],\
-                'IBEAM':['137Cs']}
-        d['ibd_p'] = {'LIQUID':['IBDPositron']}
-        d['ibd_p_hs'] = {'LIQUID':['IBDPositronHeyshamSig']}
-        d['ibd_p_hb'] = {'LIQUID':['IBDPositronHeyshamBkg']}
-        d['ibd_n'] = {'LIQUID':['IBDNeutron']}
+        d['137Cs_NA'] = {'PSUP':['137Cs']}
         d['pn_ibd'] = {'LIQUID':['boulby_geo','big_hartlepool','small_hartlepool','boulby_world','heysham_signal','heysham_background']}
 
         d['singles'] = {'ALL':['singles']}
@@ -225,30 +216,24 @@ def loadSimulationParameters():
 
         d['FASTNEUTRONS'] = {'ROCK_2':['fast_neutrons']}
      
-        d['RADIOGENIC'] = {'ROCK_1':['rock_neutrons']}
         d['RADIOGENIC'] = {'ROCK_2':['rock_neutrons']}
-        d['mono'] = {'LIQUID':['e+','e-','gamma']}
+        d['mono'] = {'LIQUID':['e-']}
 
         # Define what components are associated with each physical process
         # (all processes included, some may not trigger a detector response)
         process = { 
         'CHAIN_238U_NA':['PMT','PSUP','IBEAM','TANK','ROCK_2','LIQUID'],\
         'CHAIN_232Th_NA':['PMT','PSUP','IBEAM','TANK','ROCK_2','LIQUID'],\
-        'CHAIN_235U_NA':['TANK','PSUP','LIQUID','IBEAM'],\
-        '40K_NA':['LIQUID','PMT','PSUP', 'IBEAM','TANK','ROCK_2'],\
+        'CHAIN_235U_NA':['PSUP','LIQUID'],\
+        '40K_NA':['LIQUID','PMT','PSUP', 'IBEAM','TANK'],\
         '60Co_NA':['TANK','PSUP','IBEAM'],\
-        '137Cs_NA':['TANK','PSUP','IBEAM'],\
+        '137Cs_NA':['PSUP'],\
         'pn_ibd':['LIQUID'],\
-        'ibd_p':['LIQUID'],\
-        'ibd_p_hs':['LIQUID'],\
-        'ibd_p_hb':['LIQUID'],\
-        'ibd_n':['LIQUID'],\
         'A_Z':['LIQUID'],\
         'singles':['ALL'],\
         'mono':['LIQUID'],\
         'RADIOGENIC':['ROCK_2'],\
         'FASTNEUTRONS':['ROCK_2']}
-        # removed ROCK_1 radiogenic due to strange key error
 
     else:
 
