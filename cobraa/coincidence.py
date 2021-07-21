@@ -308,7 +308,7 @@ def obtainAccidentalCoincidences(file,_tag,outfile,rate):
                             dR = sqrt(dx*dx+dy*dy+dz*dz)
                             if dR<dRcut and nx[subev-prev_subev]>max_nxcut:
                                 coincidences+=1
-                                print("Found coincidence: ",dt,", ",dR,", ",nx[subev])
+                                print("Found coincidence: ",dt,", ",dR,", ",nx[subev-prev_subev])
             
             print("total = ",coincidences) 
             # calculate statistical error and fill histogram
