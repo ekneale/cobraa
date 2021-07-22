@@ -4,6 +4,7 @@ import numpy as np
 import time
 from itertools import product,combinations
 from numpy import multiply
+from math import fabs
 
 from .load import *
 from .globals import *
@@ -36,10 +37,15 @@ def coincidenceMap():
     outfile = TFile(_str,"UPDATE")
 
     if arguments['--evtype']:
+        evtype = arguments['--evtype']
+        if evtype=="li9":
+            evtype="li 9"
+        if evtype =="n17":
+            evtype= "n 17"
         for _p in proc:
             for _loc in proc[_p]:
                 for _element in d[_p][_loc]:
-                    if _element==arguments['--evtype']:
+                    if _element==evtype:
                         _tag = "%s_%s_%s"%(_element,_loc,_p)
                         _tag = _tag.replace(" ","")
                         _file = "fred_root_files%s/merged_%s_%s_%s.root"%(additionalString,_element,_loc,_p)
@@ -154,7 +160,7 @@ def obtainCorrelatedCoincidences(file,_tag,outfile,rate):
             coincidencetrigger += "&& good_pos_prev>%f"%(posGood)
             coincidencetrigger += "&& inner_hit_prev > 4 && veto_hit_prev <4"
             coincidencetrigger += "&& %s_prev > %f"%(energyEstimator,prompt_nxcut)
-            coincidencetrigger += "&& dt_prev_us > 0 && dt_prev_us < %f"%(dTcut) 
+            coincidencetrigger += "&& dt_prev_us > 1 && dt_prev_us < %f"%(dTcut) 
             coincidencetrigger += "&& drPrevr/1000. < %f"%(dRcut)
 
             # find all coincidences
@@ -280,7 +286,7 @@ def obtainAccidentalCoincidences(file,_tag,outfile,rate):
                 for subev in range(1,evts):
                     for prev_subev in range(1,subev-1):
                         dt = t[subev]-t[subev-prev_subev]
-                        if dt< -dTcut*2 or dt>dTcut*2:
+                        if fabs(dt)>dTcut*2:
                            continue # don't continue to look for previous events once a loose time cut is exceeded
                         if dt >0 and dt<dTcut:
                             # calculate dR
@@ -291,24 +297,23 @@ def obtainAccidentalCoincidences(file,_tag,outfile,rate):
                             if dR<dRcut and nx[subev]>max_nxcut:
                                 coincidences+=1
                                 print("Found coincidence: ",dt,", ",dR,", ",nx[subev])
+                                continue # only one coincdence per event
                                 
             else:
                 for subev in range(0,evts-1):
                     for prev_subev in range(1,evts-subev):
                         dt = t[subev]-t[subev+prev_subev]
-                        if dt<0 or dt>dTcut*2:
+                        if dt<1 or dt>dTcut*2:
                            continue # don't continue to look for previous events once a loose time cut is exceeded
-                        if dt >0 and dt<dTcut:
+                        if dt >1 and dt<dTcut:
                             # calculate dR
                             dx = x[subev]-x[subev-prev_subev]
                             dy = y[subev]-y[subev-prev_subev]
                             dz = z[subev]-z[subev-prev_subev]
                             dR = sqrt(dx*dx+dy*dy+dz*dz)
-                            if dR<dRcut and nx[subev]>max_nxcut:
-                                coincidences+=1
-                                print("Found coincidence: ",dt,", ",dR,", ",nx[subev])
                             if dR<dRcut and nx[subev-prev_subev]>max_nxcut:
                                 coincidences+=1
+                                continue
             
             print("total = ",coincidences) 
             # calculate statistical error and fill histogram
