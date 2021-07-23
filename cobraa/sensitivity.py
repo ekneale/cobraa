@@ -40,35 +40,35 @@ def calculateSensitivity():
 
     for delayed_nxcut,dTcut,dRcut in product(drange(minNXdelayed,rangeNXdmax,binwidthNX),drange(dTmin,rangedTmax,binwidthdT),drange(dRmin,rangedRmax,binwidthdR)):
 
-        hacc["hAcc%d%d"%(delayed_nxcut,dTcut)] = TH2D("hAcc%d%d"%(delayed_nxcut,dTcut),'Accidental coincidence Rate',binFid,rangeFidmin,rangeFidmax,binNX,rangeNXpmin,rangeNXpmax)
-        hacc["hAcc%d%d"%(delayed_nxcut,dTcut)].SetXTitle('distance from wall [m]')
-        hacc["hAcc%d%d"%(delayed_nxcut,dTcut)].SetYTitle('prompt %s cut'%(energyEstimator))
-        hacc["hAcc%d%d"%(delayed_nxcut,dTcut)].SetZTitle('accidental coincidence rate (Hz)')
+        hacc["hAcc%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)] = TH2D("hAcc%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000),'Accidental coincidence Rate',binFid,rangeFidmin,rangeFidmax,binNX,rangeNXpmin,rangeNXpmax)
+        hacc["hAcc%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].SetXTitle('distance from wall [m]')
+        hacc["hAcc%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].SetYTitle('prompt %s cut'%(energyEstimator))
+        hacc["hAcc%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].SetZTitle('accidental coincidence rate (Hz)')
 
-        hibd["hIBD%d%d"%(delayed_nxcut,dTcut)] = TH2D("hIBD%d%d"%(delayed_nxcut,dTcut),'IBD coincidence rate',binFid,rangeFidmin,rangeFidmax,binNX,rangeNXpmin,rangeNXpmax)
-        hibd["hIBD%d%d"%(delayed_nxcut,dTcut)].SetXTitle('distance from wall [m]')
-        hibd["hIBD%d%d"%(delayed_nxcut,dTcut)].SetYTitle('prompt %s cut'%(energyEstimator))
-        hibd["hIBD%d%d"%(delayed_nxcut,dTcut)].SetZTitle('IBD rate (Hz)')
+        hibd["hIBD%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)] = TH2D("hIBD%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000),'IBD coincidence rate',binFid,rangeFidmin,rangeFidmax,binNX,rangeNXpmin,rangeNXpmax)
+        hibd["hIBD%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].SetXTitle('distance from wall [m]')
+        hibd["hIBD%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].SetYTitle('prompt %s cut'%(energyEstimator))
+        hibd["hIBD%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].SetZTitle('IBD rate (Hz)')
 
-        hibdBG["hIBDBG%d%d"%(delayed_nxcut,dTcut)] = TH2D("hIBDBG%d%d"%(delayed_nxcut,dTcut),'IBD BG coincidence rate',binFid,rangeFidmin,rangeFidmax,binNX,rangeNXpmin,rangeNXpmax)
-        hibdBG["hIBDBG%d%d"%(delayed_nxcut,dTcut)].SetXTitle('distance from wall [m]')
-        hibdBG["hIBDBG%d%d"%(delayed_nxcut,dTcut)].SetYTitle('prompt %s cut'%(energyEstimator))
-        hibdBG["hIBDBG%d%d"%(delayed_nxcut,dTcut)].SetZTitle('IBD backgrounds rate (Hz)')
+        hibdBG["hIBDBG%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)] = TH2D("hIBDBG%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000),'IBD BG coincidence rate',binFid,rangeFidmin,rangeFidmax,binNX,rangeNXpmin,rangeNXpmax)
+        hibdBG["hIBDBG%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].SetXTitle('distance from wall [m]')
+        hibdBG["hIBDBG%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].SetYTitle('prompt %s cut'%(energyEstimator))
+        hibdBG["hIBDBG%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].SetZTitle('IBD backgrounds rate (Hz)')
 
-        hrn["hRN%d%d"%(delayed_nxcut,dTcut)] = TH2D("hRN%d%d"%(delayed_nxcut,dTcut),'Radionuclide coincidence rate ',binFid,rangeFidmin,rangeFidmax,binNX,rangeNXpmin,rangeNXpmax)
-        hrn["hRN%d%d"%(delayed_nxcut,dTcut)].SetXTitle('distance from wall [m]')
-        hrn["hRN%d%d"%(delayed_nxcut,dTcut)].SetYTitle('prompt %s cut'%(energyEstimator))
-        hrn["hRN%d%d"%(delayed_nxcut,dTcut)].SetZTitle('Radionuclide rate (Hz)')
+        hrn["hRN%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)] = TH2D("hRN%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000),'Radionuclide coincidence rate ',binFid,rangeFidmin,rangeFidmax,binNX,rangeNXpmin,rangeNXpmax)
+        hrn["hRN%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].SetXTitle('distance from wall [m]')
+        hrn["hRN%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].SetYTitle('prompt %s cut'%(energyEstimator))
+        hrn["hRN%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].SetZTitle('Radionuclide rate (Hz)')
 
-        hfn["hFN%d%d"%(delayed_nxcut,dTcut)] =  TH2D("hFN%d%d"%(delayed_nxcut,dTcut),'Fast neutron coincidence rate ',binFid,rangeFidmin,rangeFidmax,binNX,rangeNXpmin,rangeNXpmax)
-        hfn["hFN%d%d"%(delayed_nxcut,dTcut)].SetXTitle('distance from wall [m]')
-        hfn["hFN%d%d"%(delayed_nxcut,dTcut)].SetYTitle('prompt %s cut'%(energyEstimator))
-        hfn["hFN%d%d"%(delayed_nxcut,dTcut)].SetZTitle('Fast neutron rate (Hz)')
+        hfn["hFN%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)] =  TH2D("hFN%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000),'Fast neutron coincidence rate ',binFid,rangeFidmin,rangeFidmax,binNX,rangeNXpmin,rangeNXpmax)
+        hfn["hFN%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].SetXTitle('distance from wall [m]')
+        hfn["hFN%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].SetYTitle('prompt %s cut'%(energyEstimator))
+        hfn["hFN%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].SetZTitle('Fast neutron rate (Hz)')
       
         for _p in proc:
             for _loc in proc[_p]:
                 for _element in d[_p][_loc]:
-                    _tag = 'hist_%s_%s_%s_%sdelayed%d_%dus_%dmm'%(_element,_loc,_p,energyEstimator,delayed_nxcut,dTcut,dRcut*1000)
+                    _tag = 'hist_%s_%s_%s_delayed%scut%d_%dus_%dmm'%(_element,_loc,_p,energyEstimator,delayed_nxcut,dTcut,dRcut*1000)
                     _tag = _tag.replace(" ","")
                     _str = "%s_%s_%s"%(_element,_loc,_p)
                     _str = _str.replace(" ","")
@@ -86,21 +86,21 @@ def calculateSensitivity():
                         print(_tag)
                         if 'SINGLES' in _tag: 
                             print('identified as accidentals')
-                            hacc["hAcc%d%d"%(delayed_nxcut,dTcut)].Add(hist[_tag],1)
+                            hacc["hAcc%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].Add(hist[_tag],1)
                         if 'pn_ibd' in _tag:
                             print('%s identified as IBD pair events ,'%(_tag))
                             if arguments["--Heysham"]:
                                 if 'heysham_signal' in _tag:
-                                    hibd["hIBD%d%d"%(delayed_nxcut,dTcut)].Add(hist[_tag],1)
+                                    hibd["hIBD%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].Add(hist[_tag],1)
                                 elif 'heysham_background' in _tag:
-                                    hibdBG["hIBDBG%d%d"%(delayed_nxcut,dTcut)].Add(hist[_tag],1)
+                                    hibdBG["hIBDBG%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].Add(hist[_tag],1)
                             else:
                                 if 'big_' in _tag or 'small' in _tag:
-                                    hibd["hIBD%d%d"%(delayed_nxcut,dTcut)].Add(hist[_tag],1)
+                                    hibd["hIBD%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].Add(hist[_tag],1)
                                 elif 'boulby' in _tag:
-                                    hibdBG["hIBDBG%d%d"%(delayed_nxcut,dTcut)].Add(hist[_tag],1)
+                                    hibdBG["hIBDBG%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].Add(hist[_tag],1)
                         if 'FASTNEUTRONS' in _tag:
-                            hfn["hFN%d%d"%(delayed_nxcut,dTcut)].Add(hist[_tag],1)
+                            hfn["hFN%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].Add(hist[_tag],1)
                             print('identified as fast neutrons')
                         if 'A_Z' in _tag:
                             # if veto present, scale by fraction surviving with 1 second dead time
@@ -114,7 +114,7 @@ def calculateSensitivity():
                             #    if 'default' in additionalString:
                             #        hist[_tag].Scale(0.85) currently removing for passive veto
                             print('identified as RN events, ')
-                            hrn["hRN%d%d"%(delayed_nxcut,dTcut)].Add(hist[_tag],1)
+                            hrn["hRN%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].Add(hist[_tag],1)
                         else:
                             print('not added to rates histogram')
                             continue
@@ -130,30 +130,30 @@ def calculateSensitivity():
     line,_line,_line2= ("",),"",""
     _histograms = {}
 
-    for delayed_nxcut,dTcut in product(drange(minNXdelayed,rangeNXdmax,binwidthNX),drange(dTmin,rangedTmax,binwidthdT)):
+    for delayed_nxcut,dTcut,dRcut in product(drange(minNXdelayed,rangeNXdmax,binwidthNX),drange(dTmin,rangedTmax,binwidthdT),drange(dRmin,rangedRmax,binwidthdR)):
         
-        binR = hibd["hIBD%d%d"%(delayed_nxcut,dTcut)].GetNbinsX()
-        binN = hibd["hIBD%d%d"%(delayed_nxcut,dTcut)].GetNbinsY()
+        binR = hibd["hIBD%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].GetNbinsX()
+        binN = hibd["hIBD%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].GetNbinsY()
 
-        _histograms["sOverB%d%d"%(delayed_nxcut,dTcut)]= hibd["hIBD%d%d"%(delayed_nxcut,dTcut)].Clone()
-        _histograms["sOverB%d%d"%(delayed_nxcut,dTcut)].SetZTitle('signal/sqrt(signal+background)')
-        _histograms["sOverB%d%d"%(delayed_nxcut,dTcut)].SetYTitle('%s cut on prompt'%(energyEstimator))
-        _histograms["sOverB%d%d"%(delayed_nxcut,dTcut)].SetTitle('hSoB - %s delayed %2d %dus'%(energyEstimator,delayed_nxcut,dTcut))
-        _histograms["sOverB%d%d"%(delayed_nxcut,dTcut)].SetName('hSoB%d%d'%(delayed_nxcut,dTcut))
-        _histograms["sOverB%d%d"%(delayed_nxcut,dTcut)].Reset()
+        _histograms["sOverB%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)]= hibd["hIBD%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].Clone()
+        _histograms["sOverB%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].SetZTitle('signal/sqrt(signal+background)')
+        _histograms["sOverB%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].SetYTitle('%s cut on prompt'%(energyEstimator))
+        _histograms["sOverB%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].SetTitle('hSoB - %s delayed %2d %dus %dmm'%(energyEstimator,delayed_nxcut,dTcut,dRcut*1000))
+        _histograms["sOverB%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].SetName('hSoB%d%d%d'%(delayed_nxcut,dTcut,dRcut*1000))
+        _histograms["sOverB%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].Reset()
 
-        _histograms["signal%d%d"%(delayed_nxcut,dTcut)]= hibd["hIBD%d%d"%(delayed_nxcut,dTcut)].Clone()
-        _histograms["signal%d%d"%(delayed_nxcut,dTcut)].SetZTitle('evts/day')
-        _histograms["signal%d%d"%(delayed_nxcut,dTcut)].SetYTitle('%s cut on prompt'%(energyEstimator))
-        _histograms["signal%d%d"%(delayed_nxcut,dTcut)].SetTitle('Signal - %s delayed %2d %dus'%(energyEstimator,delayed_nxcut,dTcut))
-        _histograms["signal%d%d"%(delayed_nxcut,dTcut)].SetName('hSignal%d%d'%(delayed_nxcut,dTcut))
-        _histograms["signal%d%d"%(delayed_nxcut,dTcut)].Reset()
-        _histograms["background%d%d"%(delayed_nxcut,dTcut)]= hibd["hIBD%d%d"%(delayed_nxcut,dTcut)].Clone()
-        _histograms["background%d%d"%(delayed_nxcut,dTcut)].SetZTitle('evts/day')
-        _histograms["background%d%d"%(delayed_nxcut,dTcut)].SetYTitle('%s cut on prompt'%(energyEstimator))
-        _histograms["background%d%d"%(delayed_nxcut,dTcut)].SetTitle('total backgrounds - %s delayed %2d %dus'%(energyEstimator,delayed_nxcut,dTcut))
-        _histograms["background%d%d"%(delayed_nxcut,dTcut)].SetName('hBackground%d%d'%(delayed_nxcut,dTcut))
-        _histograms["background%d%d"%(delayed_nxcut,dTcut)].Reset()
+        _histograms["signal%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)]= hibd["hIBD%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].Clone()
+        _histograms["signal%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].SetZTitle('evts/day')
+        _histograms["signal%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].SetYTitle('%s cut on prompt'%(energyEstimator))
+        _histograms["signal%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].SetTitle('Signal - %s delayed %2d %dus %dmm'%(energyEstimator,delayed_nxcut,dTcut,dRcut*1000))
+        _histograms["signal%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].SetName('hSignal%d%d%d'%(delayed_nxcut,dTcut,dRcut*1000))
+        _histograms["signal%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].Reset()
+        _histograms["background%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)]= hibd["hIBD%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].Clone()
+        _histograms["background%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].SetZTitle('evts/day')
+        _histograms["background%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].SetYTitle('%s cut on prompt'%(energyEstimator))
+        _histograms["background%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].SetTitle('total backgrounds - %s delayed %2d %dus %dmm'%(energyEstimator,delayed_nxcut,dTcut,dRcut*1000))
+        _histograms["background%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].SetName('hBackground%d%d%d'%(delayed_nxcut,dTcut,dRcut*1000))
+        _histograms["background%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].Reset()
 
 
 
@@ -164,23 +164,23 @@ def calculateSensitivity():
             for prompt_nxcut in drange(minNXprompt,maxNXprompt+binwidthNX,binwidthNX):
 
                 # get the signal rates
-                cutBin   = hibd["hIBD%d%d"%(delayed_nxcut,dTcut)].FindBin(fidcut,prompt_nxcut)
-                ibdRate  = hibd["hIBD%d%d"%(delayed_nxcut,dTcut)].GetBinContent(cutBin)
+                cutBin   = hibd["hIBD%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].FindBin(fidcut,prompt_nxcut)
+                ibdRate  = hibd["hIBD%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].GetBinContent(cutBin)
                 signal   = ibdRate
-                ibdError = hibd["hIBD%d%d"%(delayed_nxcut,dTcut)].GetBinError(cutBin)
+                ibdError = hibd["hIBD%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].GetBinError(cutBin)
                 signalError = ibdError
 
                 # now get the background rates
                 # first get the individual background contributions
                 # at each cut value
-                accRate  = hacc["hAcc%d%d"%(delayed_nxcut,dTcut)].GetBinContent(cutBin)
-                accError = hacc["hAcc%d%d"%(delayed_nxcut,dTcut)].GetBinError(cutBin)
-                fnRate   = hfn["hFN%d%d"%(delayed_nxcut,dTcut)].GetBinContent(cutBin)
-                fnError = hfn["hFN%d%d"%(delayed_nxcut,dTcut)].GetBinError(cutBin)
-                rnRate   = hrn["hRN%d%d"%(delayed_nxcut,dTcut)].GetBinContent(cutBin)
-                rnError = hrn["hRN%d%d"%(delayed_nxcut,dTcut)].GetBinError(cutBin)
-                ibdBgRate   = hibdBG["hIBDBG%d%d"%(delayed_nxcut,dTcut)].GetBinContent(cutBin)
-                ibdBgError = hibdBG["hIBDBG%d%d"%(delayed_nxcut,dTcut)].GetBinError(cutBin)
+                accRate  = hacc["hAcc%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].GetBinContent(cutBin)
+                accError = hacc["hAcc%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].GetBinError(cutBin)
+                fnRate   = hfn["hFN%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].GetBinContent(cutBin)
+                fnError = hfn["hFN%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].GetBinError(cutBin)
+                rnRate   = hrn["hRN%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].GetBinContent(cutBin)
+                rnError = hrn["hRN%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].GetBinError(cutBin)
+                ibdBgRate   = hibdBG["hIBDBG%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].GetBinContent(cutBin)
+                ibdBgError = hibdBG["hIBDBG%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].GetBinError(cutBin)
 
                 # then get the total background rates
                 background = accRate + rnRate + ibdBgRate +fnRate # background rate
@@ -195,12 +195,12 @@ def calculateSensitivity():
                 # error on s/sqrt(b)
                 sqrt_b_error = 0.5*bgError/background*sqrt(background)
                 sobError = sqrt(pow(signalError/signal,2)+pow(sqrt_b_error/sqrt(background),2))
-                _histograms["sOverB%d%d"%(delayed_nxcut,dTcut)].SetBinContent(cutBin,sob)
-                _histograms["signal%d%d"%(delayed_nxcut,dTcut)].SetBinContent(cutBin,signal)
-                _histograms["background%d%d"%(delayed_nxcut,dTcut)].SetBinContent(cutBin,background)
-                _histograms["sOverB%d%d"%(delayed_nxcut,dTcut)].SetBinError(cutBin,sobError)
-                _histograms["signal%d%d"%(delayed_nxcut,dTcut)].SetBinError(cutBin,signalError)
-                _histograms["background%d%d"%(delayed_nxcut,dTcut)].SetBinError(cutBin,bgError)
+                _histograms["sOverB%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].SetBinContent(cutBin,sob)
+                _histograms["signal%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].SetBinContent(cutBin,signal)
+                _histograms["background%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].SetBinContent(cutBin,background)
+                _histograms["sOverB%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].SetBinError(cutBin,sobError)
+                _histograms["signal%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].SetBinError(cutBin,signalError)
+                _histograms["background%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].SetBinError(cutBin,bgError)
 
                 # find the maximum s/sqrt(b) for each value of delayed nxcut
                 if sob >maxSoB:
@@ -224,6 +224,7 @@ def calculateSensitivity():
                     optNXdelayed  = delayed_nxcut
                     optFidcut = fidcut
                     optdT = dTcut
+                    optdR = dRcut
                     optAcc = accRate
                     optRN = rnRate
                     optFN = fnRate
@@ -255,7 +256,7 @@ def calculateSensitivity():
         T3SIGMA = 1e999
     
     # write the optimal values to the results_coincidence* file
-    result = "%s %4.1f %3d %3d %d %4.3f +/-%4.5f %4.3f +/-%4.3f %4.7f %4.3f %4.7f %4.7f  %4.3f +/-%4.5f %4.3f +/-%4.5f %4.1f " %(additionalString,optFidcut,optNXprompt,optNXdelayed,optdT,optSignal,optSigErr,optBg,optBgErr,optAcc,optRN,optFN,optIBDbg,optSoB,optSoBErr,optSoB30days,optSoB30daysErr,T3SIGMA)
+    result = "%s: \nOptimal cuts: %4.1f %3d %3d %dus %1.2fmm \nsig:%4.3f +/-%1.2e, bg:%4.3f +/-%1.2e, acc:%1.2e, rn:%1.2e, fn:%1.2e, ibdbg:%1.2e  \nsob:%4.3f +/-%1.2e sob30day:%4.3f +/-%1.2e dwell:%4.1f " %(additionalString,optFidcut,optNXprompt,optNXdelayed,optdT,optdR,optSignal,optSigErr,optBg,optBgErr,optAcc,optRN,optFN,optIBDbg,optSoB,optSoBErr,optSoB30days,optSoB30daysErr,T3SIGMA)
     resultsfile = "results_coincidence%s.txt"%(additionalString)
     with open(resultsfile,'a') as file:
         file.write(result+'\n')
@@ -264,14 +265,14 @@ def calculateSensitivity():
     print('\n\nWriting histograms to file',analysisfile)
     f_root = TFile(analysisfile,"recreate")
     for delayed_nxcut in drange(minNXdelayed,maxNXdelayed+binwidthNX,binwidthNX):
-        _histograms["sOverB%d%d"%(delayed_nxcut,dTcut)].Write()
-        _histograms["signal%d%d"%(delayed_nxcut,dTcut)].Write()
-        _histograms["background%d%d"%(delayed_nxcut,dTcut)].Write()
-        hacc["hAcc%d%d"%(delayed_nxcut,dTcut)].Write()
-        hfn["hFN%d%d"%(delayed_nxcut,dTcut)].Write()
-        hrn["hRN%d%d"%(delayed_nxcut,dTcut)].Write()
-        hibd["hIBD%d%d"%(delayed_nxcut,dTcut)].Write()
-        hibdBG["hIBDBG%d%d"%(delayed_nxcut,dTcut)].Write()
+        _histograms["sOverB%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].Write()
+        _histograms["signal%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].Write()
+        _histograms["background%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].Write()
+        hacc["hAcc%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].Write()
+        hfn["hFN%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].Write()
+        hrn["hRN%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].Write()
+        hibd["hIBD%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].Write()
+        hibdBG["hIBDBG%d%d%d"%(delayed_nxcut,dTcut,dRcut*1000)].Write()
 
     f_root.Close()
 

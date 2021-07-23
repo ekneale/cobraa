@@ -130,7 +130,7 @@ def obtainCorrelatedCoincidences(file,_tag,outfile,rate):
     # now we can evaluate the event coincidence
     # and scale down to the day rate
     for delayed_nxcut,dTcut,dRcut in product(drange(minNXdelayed,rangeNXdmax,binwidthNX),drange(dTmin,rangedTmax,binwidthdT),drange(dRmin,rangedRmax,binwidthdR)):
-        tag = _tag+'_delayed%s_%d_%dus_%dmm'%(energyEstimator,delayed_nxcut,dTcut,dRcut*1000)
+        tag = _tag+'_delayed%scut%d_%dus_%dmm'%(energyEstimator,delayed_nxcut,dTcut,dRcut*1000)
         histname = "hist_%s"%(tag)
 #        if not gDirectory.FindObject(histname):
         print("Making new histogram for ",tag)
