@@ -76,6 +76,7 @@ def generateMacros():
         else:
             if 'singles' in _k:
                 print("\n\n\n Warning - only %f days of singles events will be simulated!!!!!\n\n\n"%(_events*nsetSingles*nruns/float(singlespersec*86400)))
+                print("Singles rate = %.4e per day\n\n\n"%(singlespersec*86400))
                 outfile = open(f"mac/evts_singles.mac","w+")
                 outfile.writelines(f"/run/beamOn {_events}")
             elif 'pn_ibd' in _k or 'A_Z' in _k or 'fast' in _k or 'mono' in _k:
@@ -197,19 +198,6 @@ source {ratDir+'/../../env.sh'} && TMPNAME=$(date +%s%N)  && rat mac/detector_{d
                             outfile_jobs = open(file,"w+")
                             jobheader = jobSubmissionCommands(_element,timeJob,file,outFile,errFile,singlesscript,arguments,directory)
                             outfile_jobs.writelines(jobheader)
-                    if 'mono' in _p:
-                        script = f"{dir}/script{additionalString}_{_element}_{_loc}_{_p}.sh".replace(" ","")
-                        outfile_script = open(script,"w+")
-                        outfile_script.writelines(f"""#!/bin/sh
-    source {ratDir+'/../../env.sh'} && TMPNAME=$(date +%s%N)  && rat mac/detector_{detectorStr}.mac mac/process.mac mac/phys_{_element}.mac mac/geo_{_loc}.mac mac/rates_{_p}_{_loc}_{_element}.mac mac/evts_{_p}_{_loc}_{_element}.mac -o root_files{additionalString}/{_element}_{_loc}_{_p}/run$TMPNAME.root -l log{additionalString}/{_element}_{_loc}_{_p}/run$TMPNAME.log""")
-                        outfile_script.close
-                        os.chmod(script,S_IRWXU)
-                        file = f"{dir}/job{additionalString}_{_element}_{_loc}_{_p}.sh".replace(" ","") 
-                        outfile_jobs = open(file,"w+")
-                        jobheader = jobSubmissionCommands(_element,timeJob,file,outFile,errFile,script,arguments,directory)
-                        outfile_jobs.writelines(jobheader)
-
-                        outfile_jobs.close
                     else:
                         script = f"{dir}/script{additionalString}_{_element}_{_loc}_{_p}.sh".replace(" ","")
                         outfile_script = open(script,"w+")
