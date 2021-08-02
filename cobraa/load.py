@@ -611,6 +611,134 @@ def loadSimulationParameters():
 'rock_neutrons_ROCK_1_RADIOGENIC': [5.15e02, 1],\
 'fast_neutrons_ROCK_2_FASTNEUTRONS': [3.22e-2, 0.5]}
 
+    elif int(arguments['--cylinderSize'])==28 and int(arguments['--rPMT'])==12000:
+        print('Using rates for 28 m cylinder with 12 m inner PMT radius and 20% PC (Passive buffer)')
+        jobRate = {\
+'IBDPositron_LIQUID_ibd_p': [ 2.164e-04 , 1], \
+'IBDPositronHeyshamSig_LIQUID_ibd_p_hs': [2.514e-05 , 1], \
+'IBDPositronHeyshamBkg_LIQUID_ibd_p_hb': [4.955e-05, 1], \
+'IBDNeutron_LIQUID_ibd_n': [ 2.164e-04, 1], \
+'hartlepool_1_LIQUID_pn_ibd': [2.164e-04, 1],\
+'hartlepool_2_LIQUID_pn_ibd': [1.620e-05, 1],\
+'boulby_geo_LIQUID_pn_ibd': [1.312e-05 , 1],\
+'boulby_world_LIQUID_pn_ibd': [4.044E-05 , 1],\
+'heysham_full_LIQUID_pn_ibd': [2.514e-05 , 1],\
+'heysham_2_LIQUID_pn_ibd': [1.421e-05 , 1],\
+'torness_full_LIQUID_pn_ibd': [9.108e-06 , 1],\
+'40K_LIQUID_40K_NA': [68.8 , 1], \
+'40K_PMT_40K_NA': [3.88E+04 * kip, 1], \
+'40K_VETO_40K_NA': [0 * kip, 1], \
+'40K_IBEAM_40K_NA': [4.76E+04, 500], \
+'40K_PSUP_40K_NA': [7.29E+03 , 1], \
+'40K_TANK_40K_NA': [7.79E+04, 50], \
+'40K_ROCK_2_40K_NA': [5.72E+04, 1000], \
+'234Pa_PMT_CHAIN_238U_NA': [1.19E+04 * uip, 1], \
+'214Pb_PMT_CHAIN_238U_NA': [1.19E+04 * uip, 1], \
+'214Bi_PMT_CHAIN_238U_NA': [1.19E+04 * uip, 1], \
+'210Bi_PMT_CHAIN_238U_NA': [1.19E+04 * uip, 1], \
+'210Tl_PMT_CHAIN_238U_NA': [1.19E+04*0.002 * uip, 1], \
+'234Pa_VETO_CHAIN_238U_NA': [0, 1], \
+'214Pb_VETO_CHAIN_238U_NA': [0, 1], \
+'214Bi_VETO_CHAIN_238U_NA': [0, 1], \
+'210Bi_VETO_CHAIN_238U_NA': [0, 1], \
+'210Tl_VETO_CHAIN_238U_NA': [0*0.0002, 1], \
+'234Pa_IBEAM_CHAIN_238U_NA': [1.06E+05, 1], \
+'214Pb_IBEAM_CHAIN_238U_NA': [1.06E+05, 1], \
+'214Bi_IBEAM_CHAIN_238U_NA': [1.06E+05, 1], \
+'210Bi_IBEAM_CHAIN_238U_NA': [1.06E+05, 1], \
+'210Tl_IBEAM_CHAIN_238U_NA': [1.06E+05*0.0002, 1], \
+'234Pa_PSUP_CHAIN_238U_NA': [1.62E+04, 50], \
+'214Pb_PSUP_CHAIN_238U_NA': [1.62E+04, 50], \
+'214Bi_PSUP_CHAIN_238U_NA': [1.62E+04, 50], \
+'210Bi_PSUP_CHAIN_238U_NA': [1.62E+04, 50], \
+'210Tl_PSUP_CHAIN_238U_NA': [1.62E+04*0.0002, 50], \
+'234Pa_TANK_CHAIN_238U_NA': [1.73E+05, 50], \
+'214Pb_TANK_CHAIN_238U_NA': [1.73E+05, 50], \
+'214Bi_TANK_CHAIN_238U_NA': [1.73E+05, 50], \
+'210Bi_TANK_CHAIN_238U_NA': [1.73E+05, 50], \
+'210Tl_TANK_CHAIN_238U_NA': [1.73E+05*0.0002, 50], \
+'234Pa_ROCK_2_CHAIN_238U_NA': [1.19E+07, 1], \
+'214Pb_ROCK_2_CHAIN_238U_NA': [1.19E+07, 1], \
+'214Bi_ROCK_2_CHAIN_238U_NA': [1.19E+07, 1], \
+'210Bi_ROCK_2_CHAIN_238U_NA': [1.19E+07, 1], \
+'210Tl_ROCK_2_CHAIN_238U_NA': [1.19E+07*0.0002, 1], \
+'234Pa_GD_CHAIN_238U_NA': [1.70 , 1], \
+'214Pb_GD_CHAIN_238U_NA': [1.70 , 1], \
+'214Bi_GD_CHAIN_238U_NA': [1.70 , 1], \
+'210Bi_GD_CHAIN_238U_NA': [1.70 , 1], \
+'210Tl_GD_CHAIN_238U_NA': [1.70*0.0002 , 1], \
+'234Pa_LIQUID_CHAIN_238U_NA': [17.2 , 1], \
+'214Pb_LIQUID_CHAIN_238U_NA': [17.2 , 1], \
+'214Bi_LIQUID_CHAIN_238U_NA': [17.2 , 1], \
+'210Bi_LIQUID_CHAIN_238U_NA': [17.2 , 1], \
+'210Tl_LIQUID_CHAIN_238U_NA': [17.2*0.0002 , 1], \
+'228Ac_PMT_CHAIN_232Th_NA': [1.05E+04 * tip, 1], \
+'212Pb_PMT_CHAIN_232Th_NA': [1.05E+04 * tip, 1], \
+'212Bi_PMT_CHAIN_232Th_NA': [1.05E+04*0.64 * tip, 1], \
+'208Tl_PMT_CHAIN_232Th_NA': [1.05E+04*0.36 * tip, 1], \
+'228Ac_VETO_CHAIN_232Th_NA': [0, 1], \
+'212Pb_VETO_CHAIN_232Th_NA': [0, 1], \
+'212Bi_VETO_CHAIN_232Th_NA': [0*0.64, 1], \
+'208Tl_VETO_CHAIN_232Th_NA': [0*0.36, 1], \
+'228Ac_IBEAM_CHAIN_232Th_NA': [1.53E+04, 1], \
+'212Pb_IBEAM_CHAIN_232Th_NA': [1.53E+04, 1], \
+'212Bi_IBEAM_CHAIN_232Th_NA': [1.53E+04*0.64, 1], \
+'208Tl_IBEAM_CHAIN_232Th_NA': [1.53E+04*0.36, 1], \
+'228Ac_PSUP_CHAIN_232Th_NA': [2.34E+03, 50], \
+'212Pb_PSUP_CHAIN_232Th_NA': [2.34E+03, 50], \
+'212Bi_PSUP_CHAIN_232Th_NA': [2.34E+03*0.64, 50], \
+'208Tl_PSUP_CHAIN_232Th_NA': [2.34E+03*0.36, 50], \
+'228Ac_TANK_CHAIN_232Th_NA': [2.50E+04, 50], \
+'212Pb_TANK_CHAIN_232Th_NA': [2.50E+04, 50], \
+'212Bi_TANK_CHAIN_232Th_NA': [2.50E+04*0.64, 50], \
+'208Tl_TANK_CHAIN_232Th_NA': [2.50E+04*0.36, 50], \
+'228Ac_ROCK_2_CHAIN_232Th_NA': [1.84E+06, 1000], \
+'212Pb_ROCK_2_CHAIN_232Th_NA': [1.84E+06, 1000], \
+'212Bi_ROCK_2_CHAIN_232Th_NA': [1.84E+06*0.64, 1000], \
+'208Tl_ROCK_2_CHAIN_232Th_NA': [1.84E+06*0.36, 1000], \
+'228Ac_GD_CHAIN_232Th_NA': [8.52E-01 , 1], \
+'212Pb_GD_CHAIN_232Th_NA': [8.52E-01 , 1], \
+'212Bi_GD_CHAIN_232Th_NA': [8.52E-01*0.64 , 1], \
+'208Tl_GD_CHAIN_232Th_NA': [8.52E-01*0.36 , 1], \
+'228Ac_LIQUID_CHAIN_232Th_NA': [1.72 , 1], \
+'212Pb_LIQUID_CHAIN_232Th_NA': [1.72 , 1], \
+'212Bi_LIQUID_CHAIN_232Th_NA': [1.72*0.64 , 1], \
+'208Tl_LIQUID_CHAIN_232Th_NA': [1.72*0.36 , 1], \
+'231Th_IBEAM_CHAIN_235U_NA': [6.01e+03, 50], \
+'223Fr_IBEAM_CHAIN_235U_NA': [6.01e+03*0.0138, 50], \
+'211Pb_IBEAM_CHAIN_235U_NA': [6.01e+03, 50], \
+'211Bi_IBEAM_CHAIN_235U_NA': [6.01e+03*0.00270, 50], \
+'207Tl_IBEAM_CHAIN_235U_NA': [6.01e+03, 50], \
+'231Th_PSUP_CHAIN_235U_NA': [9.22E+02, 50], \
+'223Fr_PSUP_CHAIN_235U_NA': [9.22E+02*0.0138, 50], \
+'211Pb_PSUP_CHAIN_235U_NA': [9.22E+02, 50], \
+'211Bi_PSUP_CHAIN_235U_NA': [9.22E+02*0.00270, 50], \
+'207Tl_PSUP_CHAIN_235U_NA': [9.22E+02, 50], \
+'231Th_TANK_CHAIN_235U_NA': [9.85E+03, 50], \
+'223Fr_TANK_CHAIN_235U_NA': [9.85E+03*0.0138, 50], \
+'211Pb_TANK_CHAIN_235U_NA': [9.85E+03, 50], \
+'211Bi_TANK_CHAIN_235U_NA': [9.85E+03*0.00270, 50], \
+'207Tl_TANK_CHAIN_235U_NA': [9.85E+03, 50], \
+'231Th_LIQUID_CHAIN_235U_NA': [8.02E-01 , 1], \
+'223Fr_LIQUID_CHAIN_235U_NA': [8.02E-01*0.0138, 1], \
+'211Pb_LIQUID_CHAIN_235U_NA': [8.02E-01 , 1], \
+'211Bi_LIQUID_CHAIN_235U_NA': [8.02E-01*0.00270 , 1], \
+'207Tl_LIQUID_CHAIN_235U_NA': [8.02E-01 , 1], \
+'60Co_IBEAM_60Co_NA': [6.73e+04, 50], \
+'137Cs_IBEAM_137Cs_NA': [7.09e+04, 50], \
+'60Co_TANK_60Co_NA': [1.10E+05, 50], \
+'137Cs_TANK_137Cs_NA': [1.16E+05, 50], \
+'60Co_PSUP_60Co_NA': [1.03E+04, 50], \
+'137Cs_PSUP_137Cs_NA': [1.09E+04, 50], \
+'li9_LIQUID_A_Z': [2.175e-05 , 1], \
+'n17_LIQUID_A_Z': [2.186e-5 , 1],\
+'singles_ALL_singles': [1,1000],\
+'mono_LIQUID_e-':[1,1],\
+'mono_LIQUID_e+':[1,1],\
+'mono_LIQUID_gamma':[1,1],\
+'rock_neutrons_ROCK_2_RADIOGENIC': [2.32e01,1],\
+'rock_neutrons_ROCK_1_RADIOGENIC': [5.15e02, 1],\
+'fast_neutrons_ROCK_2_FASTNEUTRONS': [4.962e-2, 0.5]}
 
     else:
         print('Using rates for 16m tank with 5.7m inner PMT radius')
