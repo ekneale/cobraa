@@ -11,7 +11,7 @@ from numpy import power,absolute,logical_and,column_stack,zeros,empty,append,\
 sqrt,absolute,recarray
 
 
-from math import pow,exp,log10,pi
+from math import pow,exp,log10,pi,isinf
 
 try:
     from rootpy.plotting import Canvas,Hist,Hist2D,Graph
@@ -70,21 +70,30 @@ docstring = """
     --rK40_IP=<_rkip>      Relative K40 Inner PMTs level [Default: 1.0]
 
     --lightSimWater        Option to run only decays for which singles rate >10-4 Hz (fiducial = rPMT-0.5;n9>9)
-    --lightSimWbLS         Option to run only decays for which singles rate >10-4 Hz (fiducial = rPMT-0.5;n100>??)
+    --lightSimWbLS         Option to run only decays for which singles rate >10-4 Hz (fiducial = rPMT-0.5;n100>9)
     -e=<runBeamEntry>      Number of events to be simulated per macro [Default: 25000]
-    --watchmakers          Option to run the simulation/analysis of individual event types
+    --singles              Option to run the simulation of individual radioactive backgrounds
 
     ## Perform efficiency and sensitivity evaluation (after simulation and reconstruction).
 
     -M                     Merge result files from trial ntuples. Step one.
     --mergeRATFiles        Merge raw ratds files (off by default)
-    --coincidences         Map the efficiencies of events which pass the cuts (analysis step 1)
+    --coincidences         Map the efficiencies of coincidences which pass the cuts (analysis step 1)
+    --core                 Use the combined reconstruction (option to pass with -m, -j and --coincidences)
     --evtype=<_ev>         Set process to evaluate for coincidences
     --sensitivity          Calculate the rates for final optimisation of signal significance (analysis step 2)
     --triggers             Get the number of triggers for singles processes
     --backgrounds          Plot backgrounds as a function of distance from rPMT
     --positiveScan         Only look at nx delayed above nx prompt
     --negativeScan         only look at nx delayed below nx prompt
+    --singlesrate          calculate singles rate per sec
+
+    # specify the sensitivity metric to use (default uses Gaussian statistics)
+    --poisson              calculate significance and anomaly dwell time using poisson (gaussian-distributed bg)
+    --poissonpoisson       calculate significance and anomaly dwell time using poisson (poisson-distributed bg)
+    --knoll                calculate dwell time to 3 sigma detection at 95% confidence (gaussian sig and bg)
+    --2sigma               calculate dwell time to 2 sigma detection at 90% confidence (gaussian sig and bg)
+    --optimiseSoB          optimise signal over background rather than dwell time (useful in stats-limited regime)
 
     ## Define the cuts/ranges over which to optimise
 
@@ -97,15 +106,24 @@ docstring = """
     --binwidthNX=<_binNX>        Bin width for scan over nX cut range [Default: 1]
     --binwidthFid=<_binFid>      Bin width for scan over closest PMT cut range [Default: 0.1]
     --binwidthdT=<binT>          Bin width for scan over dT cut [Default: 10]
-    --binwidthdR=<binR>          Bin width for scan over dR cut [Default: 0.1]
-    --dTmin=<_dTmin>             Minimum value for dt cut [Default: 100]
-    --dTmax=<_dTmax>             Maximum value for dt cut [Default: 100]
-    --dRmin=<_dRmin>             Minimum value for dR cut [Default: 2.0]
-    --dRmax=<_dRmax>             Maximum value for dR cut [Default: 2.0]
-    -g=<goodness>                Bonsai position goodness parameter [Default: 0.1]
+    --binwidthG=<binG>           Bin width for scan over goodness cut g [Default: 0.1]
+    --dTmin=<_dTmin>             Minimum value for dt cut [Default: 130]
+    --dTmax=<_dTmax>             Maximum value for dt cut [Default: 160]
+    --gmin=<_gmin>               Minimum value for g cut [Default: 0.1]
+    --gmax=<_gmax>               Maximum value for g cut [Default: 0.3]
+    --minEpmax=<_minEpmax>       Minimum value for maximum value of Ep [Default: 20.]
+    --maxEpmax=<_maxEpmax>       Maximum value for maximum value of Ep [Default: 35.]
+    --binwidthEpmax=<_binEp>     Bin width for scan over maximum value Ep [Default: 5.]
     -G=<Goodness>                Bonsai direction goodness parameter [Default: 0.1]
     --se=<_se>                   Default signal efficiency [Default: 1.00]
+
+    ## Define alternative signals
+    --Hartlepool1                Uses 1-core Hartlepool (reactor 1, operating at higher power)
+    --Hartlepool2                Uses 1-core Hartlepool signal (reactor 2, operating at higher power)
     --Heysham                    Uses Heysham reactor spectrum in place of Hartlepool
+    --Heysham2                   2-core Heysham signal
+    --HeyshamTorness             Heysham 2-core + Torness signal
+    --Torness                    Torness signal
     """
 
 try:
@@ -126,7 +144,7 @@ def loadSimulationParameters():
    
     if arguments['--lightSimWater']:
         # Define which component and event type is associated with each process.
-        # Removing negligible radioactive decays for Gd-water.
+        # Removing negligible radioactive decays for Gd-water in 16m detector.
         # Only decays with rates > 10-3 Hz with fiducial rPMT-0.5m and n9>9 included.
 	# Also includes 210Tl which can decay with a coincident beta-neutron.
         '''
@@ -159,7 +177,7 @@ def loadSimulationParameters():
         d['RADIOGENIC'] = {'ROCK_2':['rock_neutrons']}
 
 
-        d['pn_ibd'] = {'LIQUID':['boulby_geo','big_hartlepool','small_hartlepool','boulby_world','heysham_signal','heysham_background']}
+        d['pn_ibd'] = {'LIQUID':['boulby_geo','hartlepool_1','hartlepool_2','boulby_world','heysham_full','heysham_2','torness_full']}
 
         d['singles'] = {'ALL':['singles']}
         d['A_Z'] = {'LIQUID':['li 9','n 17']}
@@ -177,14 +195,16 @@ def loadSimulationParameters():
         'pn_ibd':        ['LIQUID'],\
         'A_Z':           ['LIQUID'],\
         'singles':       ['ALL'],\
+        'mono':          ['LIQUID'],\
         'FASTNEUTRONS':  ['ROCK_2'],\
-	'mono':		 ['LIQUID']
         }
 
     elif arguments['--lightSimWbLS']:
 
-        print('NB You selected the lightSim option for WbLS but currently running the full range of decays')
-
+        # Define which component and event type is associated with each process.
+        # Removing negligible radioactive decays for Gd-WbLS in 16m detector.
+        # Only decays with rates > 10-3 Hz with fiducial rPMT-0.5m and n100>9 included.
+	# Also includes 210Tl which can decay with a coincident beta-neutron.
         d['CHAIN_238U_NA'] = {'LIQUID':['234Pa','214Pb','214Bi','210Bi','210Tl'],\
                              'PMT':['234Pa','214Pb','214Bi','210Bi','210Tl'],\
                              'TANK':['214Bi','210Tl'],\
@@ -209,19 +229,19 @@ def loadSimulationParameters():
                 'TANK':['60Co'],\
                 'IBEAM':['60Co']}
         d['137Cs_NA'] = {'PSUP':['137Cs']}
-        d['pn_ibd'] = {'LIQUID':['boulby_geo','big_hartlepool','small_hartlepool','boulby_world','heysham_signal','heysham_background']}
+        d['pn_ibd'] = {'LIQUID':['boulby_geo','hartlepool_1','hartlepool_2','boulby_world','heysham_full','heysham_2','torness_full']}
 
         d['singles'] = {'ALL':['singles']}
         d['A_Z'] = {'LIQUID':['li 9','n 17']}
 
         d['FASTNEUTRONS'] = {'ROCK_2':['fast_neutrons']}
-     
+
         d['RADIOGENIC'] = {'ROCK_2':['rock_neutrons']}
         d['mono'] = {'LIQUID':['e-']}
 
         # Define what components are associated with each physical process
-        # (all processes included, some may not trigger a detector response)
-        process = { 
+        # Components included only where processes are non-negligible.
+        process = {
         'CHAIN_238U_NA':['PMT','PSUP','IBEAM','TANK','ROCK_2','LIQUID'],\
         'CHAIN_232Th_NA':['PMT','PSUP','IBEAM','TANK','ROCK_2','LIQUID'],\
         'CHAIN_235U_NA':['PSUP','LIQUID'],\
@@ -268,11 +288,7 @@ def loadSimulationParameters():
         d['137Cs_NA'] = {'PSUP':['137Cs'],\
                 'TANK':['137Cs'],\
                 'IBEAM':['137Cs']}
-        d['ibd_p'] = {'LIQUID':['IBDPositron']}
-        d['ibd_p_hs'] = {'LIQUID':['IBDPositronHeyshamSig']}
-        d['ibd_p_hb'] = {'LIQUID':['IBDPositronHeyshamBkg']}
-        d['ibd_n'] = {'LIQUID':['IBDNeutron']}
-        d['pn_ibd'] = {'LIQUID':['boulby_geo','big_hartlepool','small_hartlepool','boulby_world','heysham_signal','heysham_background']}
+        d['pn_ibd'] = {'LIQUID':['boulby_geo','hartlepool_1','hartlepool_2','boulby_world','heysham_full','heysham_2','torness_full']}
 
         d['singles'] = {'ALL':['singles']}
         d['A_Z'] = {'LIQUID':['li 9','n 17']}
@@ -293,16 +309,11 @@ def loadSimulationParameters():
         '60Co_NA':['TANK','PSUP','IBEAM'],\
         '137Cs_NA':['TANK','PSUP','IBEAM'],\
         'pn_ibd':['LIQUID'],\
-        'ibd_p':['LIQUID'],\
-        'ibd_p_hs':['LIQUID'],\
-        'ibd_p_hb':['LIQUID'],\
-        'ibd_n':['LIQUID'],\
         'A_Z':['LIQUID'],\
         'singles':['ALL'],\
         'mono':['LIQUID'],\
         'RADIOGENIC':['ROCK_2'],\
         'FASTNEUTRONS':['ROCK_2']}
-        # removed ROCK_1 radiogenic due to strange key error
     print(d,"\n\n\n\n")
 
     ## This part defines the rates for the given detector configuration
@@ -314,7 +325,7 @@ def loadSimulationParameters():
     pmtVolCorr = 1.
     iPMTs = 1.
 
-    if int(arguments['--cylinderSize'])==16 and int(arguments['--rPMT'])==5700:
+    if int(arguments['--cylinderSize'])==16 and int(arguments['--rPMT'])==6700:
         if int(arguments['--cylinderPct'])==10:
             iPMTs = 1614./3248.
             pmtVolCorr = 3210.15/3203.22
@@ -324,31 +335,27 @@ def loadSimulationParameters():
     elif int(arguments['--cylinderSize'])==22 and int(arguments['--rPMT'])==9000:
         if int(arguments['--cylinderPct'])==15:
             iPMTs = 4600./4600.
-            pmtVolCorr = 1
-    elif int(arguments['--cylinderPct'])==16 and int(arguments['--rPMT'])==6700:
+            pmtVolCorr = 1.
+            print('not currently correcting for pmt volume')
+    elif int(arguments['--cylinderPct'])==16 and int(arguments['--rPMT'])==5700:
         if int(arguments['--cylinderPct'])==10:
             iPMTs = 1232./2230.
             pmtVolCorr = 3211.77/3207.11
-            print('not currently correcting for PMT volume')
         elif int(arguments['--cylinderPct'])==15:
-            iPMTs = 1808./2230.
+            iPMTs = 1824./2230.
             pmtVolCorr = 3209.33/3207.11
-            print('not currenty correcting for PMT volume')
 
 
     if int(arguments['--cylinderSize'])==16 and int(arguments['--rPMT'])==6700:
-        print('Using rates for 16m cylinder with 6.7m inner PMT radius')
+        print('Using rates for 16m cylinder with 6.7m inner PMT radius\n NB These rates are not up-to-date!!!!!!')
         jobRate = {\
-'IBDPositron_LIQUID_ibd_p': [ 4.845e-05*pmtVolCorr , 1], \
-'IBDPositronHeyshamSig_LIQUID_ibd_p_hs': [4.585e-06*pmtVolCorr , 1], \
-'IBDPositronHeyshamBkg_LIQUID_ibd_p_hb': [1.263e-05 *pmtVolCorr, 1], \
-'IBDNeutron_LIQUID_ibd_n': [ 4.845e-05*pmtVolCorr, 1], \
-'big_hartlepool_LIQUID_pn_ibd': [4.845e-05*pmtVolCorr , 1],\
-'small_hartlepool_LIQUID_pn_ibd': [3.360e-05*pmtVolCorr , 1],\
+'hartlepool_1_LIQUID_pn_ibd': [4.845e-05*pmtVolCorr , 1],\
+'hartlepool_2_LIQUID_pn_ibd': [3.360e-05*pmtVolCorr , 1],\
 'boulby_geo_LIQUID_pn_ibd': [3.565e-07*pmtVolCorr , 1],\
 'boulby_world_LIQUID_pn_ibd': [2.227e-06*pmtVolCorr , 1],\
-'heysham_signal_LIQUID_pn_ibd': [4.585e-06*pmtVolCorr , 1],\
-'heysham_background_LIQUID_pn_ibd': [1.263e-05*pmtVolCorr , 1],\
+'heysham_full_LIQUID_pn_ibd': [4.720e-06*pmtVolCorr , 1],\
+'heysham_2_LIQUID_pn_ibd': [1.263e-05*pmtVolCorr , 1],\
+'torness_full_LIQUID_pn_ibd': [1.697e-06*pmtVolCorr , 1],\
 '40K_LIQUID_40K_NA': [1.28*pmtVolCorr , 1], \
 '40K_PMT_40K_NA': [3.58E+04 *iPMTs * kip, 1], \
 '40K_VETO_40K_NA': [2.61e+02 * kip, 1], \
@@ -454,8 +461,8 @@ def loadSimulationParameters():
 '137Cs_TANK_137Cs_NA': [3.80E+04, 50], \
 '60Co_PSUP_60Co_NA': [3.38E+03, 50], \
 '137Cs_PSUP_137Cs_NA': [3.56E+03, 50], \
-'li9_LIQUID_A_Z': [4.051E-06*pmtVolCorr , 1], \
-'n17_LIQUID_A_Z': [4.072E-06*pmtVolCorr , 1],\
+'li9_LIQUID_A_Z': [1.25E-05*pmtVolCorr , 1], \
+'n17_LIQUID_A_Z': [7.62E-06*pmtVolCorr , 1],\
 'singles_ALL_singles': [1,500],\
 'e-_LIQUID_mono':[1,1],\
 'e+_LIQUID_mono':[1,1],\
@@ -468,16 +475,13 @@ def loadSimulationParameters():
     elif int(arguments['--cylinderSize'])==22 and int(arguments['--rPMT'])==9000:
         print('Using rates for 22 m cylinder with 9 m inner PMT radius and 15% PC (Passive buffer)')
         jobRate = {\
-'IBDPositron_LIQUID_ibd_p': [ 1.262e-04*pmtVolCorr , 1], \
-'IBDPositronHeyshamSig_LIQUID_ibd_p_hs': [1.195e-05*pmtVolCorr , 1], \
-'IBDPositronHeyshamBkg_LIQUID_ibd_p_hb': [3.290e-05*pmtVolCorr, 1], \
-'IBDNeutron_LIQUID_ibd_n': [ 1.262e-04*pmtVolCorr, 1], \
-'big_hartlepool_LIQUID_pn_ibd': [1.262e-04*pmtVolCorr , 1],\
-'small_hartlepool_LIQUID_pn_ibd': [8.753e-05*pmtVolCorr , 1],\
-'boulby_geo_LIQUID_pn_ibd': [9.288e-07*pmtVolCorr , 1],\
-'boulby_world_LIQUID_pn_ibd': [5.803e-06*pmtVolCorr , 1],\
-'heysham_signal_LIQUID_pn_ibd': [1.195e-05*pmtVolCorr , 1],\
-'heysham_background_LIQUID_pn_ibd': [3.290e-05*pmtVolCorr , 1],\
+'hartlepool_2_LIQUID_pn_ibd': [1.052e-04*pmtVolCorr , 1],\
+'hartlepool_1_LIQUID_pn_ibd': [7.889e-05*pmtVolCorr , 1],\
+'boulby_geo_LIQUID_pn_ibd': [6.368e-06*pmtVolCorr , 1],\
+'boulby_world_LIQUID_pn_ibd': [2.146e-05*pmtVolCorr , 1],\
+'heysham_full_LIQUID_pn_ibd': [1.231e-05*pmtVolCorr , 1],\
+'heysham_2_LIQUID_pn_ibd': [7.005e-06*pmtVolCorr , 1],\
+'torness_full_LIQUID_pn_ibd': [4.422e-06*pmtVolCorr , 1],\
 '40K_LIQUID_40K_NA': [34.3*pmtVolCorr , 1], \
 '40K_PMT_40K_NA': [1.67E+04 *iPMTs * kip, 1], \
 '40K_VETO_40K_NA': [0 * kip, 1], \
@@ -583,8 +587,8 @@ def loadSimulationParameters():
 '137Cs_TANK_137Cs_NA': [7.18E+04, 50], \
 '60Co_PSUP_60Co_NA': [5.93E+03, 50], \
 '137Cs_PSUP_137Cs_NA': [6.24E+03, 50], \
-'li9_LIQUID_A_Z': [1.056e-05*pmtVolCorr , 1], \
-'n17_LIQUID_A_Z': [1.061e-5*pmtVolCorr , 1],\
+'li9_LIQUID_A_Z': [3.24e-5*pmtVolCorr , 1], \
+'n17_LIQUID_A_Z': [1.98e-5*pmtVolCorr , 1],\
 'singles_ALL_singles': [1,1000],\
 'mono_LIQUID_e-':[1,1],\
 'mono_LIQUID_e+':[1,1],\
@@ -592,21 +596,18 @@ def loadSimulationParameters():
 'rock_neutrons_ROCK_2_RADIOGENIC': [2.32e01,1],\
 'rock_neutrons_ROCK_1_RADIOGENIC': [5.15e02, 1],\
 'fast_neutrons_ROCK_2_FASTNEUTRONS': [3.22e-2, 0.5]}
-
+#'boulby_world_LIQUID_pn_ibd': [3.655e-05*pmtVolCorr , 1],\
 
     else:
         print('Using rates for 16m tank with 5.7m inner PMT radius')
         jobRate = {\
-'IBDPositron_LIQUID_ibd_p': [ 4.845e-05*pmtVolCorr , 1], \
-'IBDPositronHeyshamSig_LIQUID_ibd_p_hs': [4.585e-06*pmtVolCorr , 1], \
-'IBDPositronHeyshamBkg_LIQUID_ibd_p_hb': [1.263e-05 *pmtVolCorr, 1], \
-'IBDNeutron_LIQUID_ibd_n': [ 4.845e-05*pmtVolCorr, 1], \
-'big_hartlepool_LIQUID_pn_ibd': [4.845e-05*pmtVolCorr , 1],\
-'small_hartlepool_LIQUID_pn_ibd': [3.360e-05*pmtVolCorr , 1],\
-'boulby_geo_LIQUID_pn_ibd': [3.565e-07*pmtVolCorr , 1],\
-'boulby_world_LIQUID_pn_ibd': [2.227e-06*pmtVolCorr , 1],\
-'heysham_signal_LIQUID_pn_ibd': [4.585e-06*pmtVolCorr , 1],\
-'heysham_background_LIQUID_pn_ibd': [1.263e-05*pmtVolCorr , 1],\
+'hartlepool_2_LIQUID_pn_ibd': [4.046e-05*pmtVolCorr , 1],\
+'hartlepool_1_LIQUID_pn_ibd': [3.033e-05*pmtVolCorr , 1],\
+'boulby_geo_LIQUID_pn_ibd': [2.448e-06*pmtVolCorr , 1],\
+'boulby_world_LIQUID_pn_ibd': [8.248e-06*pmtVolCorr , 1],\
+'heysham_full_LIQUID_pn_ibd': [4.732e-06*pmtVolCorr , 1],\
+'heysham_2_LIQUID_pn_ibd': [2.693e-06*pmtVolCorr , 1],\
+'torness_full_LIQUID_pn_ibd': [1.700e-06*pmtVolCorr,1],\
 '40K_LIQUID_40K_NA': [1.28*pmtVolCorr , 1], \
 '40K_PMT_40K_NA': [8.45E+03 *iPMTs * kip, 1], \
 '40K_VETO_40K_NA': [2.61e+02 * kip, 1], \
@@ -712,8 +713,8 @@ def loadSimulationParameters():
 '137Cs_TANK_137Cs_NA': [3.80E+04, 50], \
 '60Co_PSUP_60Co_NA': [3.38E+03, 50], \
 '137Cs_PSUP_137Cs_NA': [3.56E+03, 50], \
-'li9_LIQUID_A_Z': [4.051E-06*pmtVolCorr , 1], \
-'n17_LIQUID_A_Z': [4.072E-06*pmtVolCorr , 1],\
+'li9_LIQUID_A_Z': [1.25E-05*pmtVolCorr , 1], \
+'n17_LIQUID_A_Z': [7.62E-06*pmtVolCorr , 1],\
 'singles_ALL_singles': [1,500],\
 'e-_LIQUID_mono':[1,1],\
 'e+_LIQUID_mono':[1,1],\
@@ -722,5 +723,6 @@ def loadSimulationParameters():
 'rock_neutrons_ROCK_1_RADIOGENIC': [3.11e02, 1],\
 'fast_neutrons_ROCK_2_FASTNEUTRONS': [1.85e-2, 0.5]}
 # NB veto rates are incorrect
+#'boulby_world_LIQUID_pn_ibd': [1.405e-05*pmtVolCorr , 1],\
     return d,process,jobRate
 

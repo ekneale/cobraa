@@ -66,7 +66,11 @@ def generateMacros():
     # expected total event rates in the detector (before detector effects)
     for _k in rates:
         _events = int(float(arguments['-e'])*rates[_k][1])
-        if arguments['--watchmakers']:
+        if 'singles' in _k:
+            print("\n\n\n Warning - only %d days of singles events will be simulated!!!!!\n\n\n"%(_events*nsetSingles*nruns/float(singlespersec*86400)))
+            outfile = open(f"mac/evts_singles.mac","w+")
+            outfile.writelines(f"/run/beamOn {singlespersec}")
+        elif 'pn_ibd' in _k or 'A_Z' in _k or 'fast' in _k:
             outfile = open(f"mac/rates_{_k}.mac","w+")
             outfile.writelines(f"/generator/rate/set {rates[_k][0]}")
             outfile.close
@@ -99,7 +103,7 @@ def generateJobs():
     for _p in proc:
         for _loc in proc[_p]:
             for _element in d[_p][_loc]:
-                if arguments['--watchmakers']:
+                if arguments['--singles']:
                     dir = "root_files%s/%s_%s_%s"%(additionalString,_element,_loc,_p)
                     dir = dir.replace(" ","")
                     if arguments['--force']:
@@ -107,7 +111,10 @@ def generateJobs():
                         testCreateDirectory(dir)
                     else:
                         testCreateDirectoryIfNotExist(dir)
-                    dir = "fred_root_files%s/%s_%s_%s"%(additionalString,_element,_loc,_p)
+                    if arguments['--core']:
+                        dir = "core_root_files%s/%s_%s_%s"%(additionalString,_element,_loc,_p)
+                    else:
+                        dir = "fred_root_files%s/%s_%s_%s"%(additionalString,_element,_loc,_p)
                     dir = dir.replace(" ","")
                     if arguments['--force']:
                         print('Using force to recreate dir:',dir)
@@ -132,7 +139,10 @@ def generateJobs():
                             testCreateDirectory(dir)
                         else:
                             testCreateDirectoryIfNotExist(dir)
-                        dir = "fred_root_files%s/%s_%s_%s"%(additionalString,_element,_loc,_p)
+                        if arguments['--core']:
+                            dir = "core_root_files%s/%s_%s_%s"%(additionalString,_element,_loc,_p)
+                        else:
+                            dir = "fred_root_files%s/%s_%s_%s"%(additionalString,_element,_loc,_p)
                         dir = dir.replace(" ","")
                         if arguments['--force']:
                             print('Using force to recreate dir:',dir)
@@ -173,7 +183,7 @@ source {ratDir+'/../../env.sh'} && TMPNAME=$(date +%s%N)  && rat mac/detector_{d
         for _loc in proc[_p]:
             for _element in d[_p][_loc]:
                 _element = _element.replace(" ","")
-                if arguments['--watchmakers']:
+                if arguments['--singles']:
                     script = f"{dir}/script{additionalString}_{_element}_{_loc}_{_p}.sh".replace(" ","")
                     outfile_script = open(script,"w+")
                     outfile_script.writelines(f"""#!/bin/sh
@@ -261,10 +271,16 @@ def mergeRootFiles():
                     os.system(f'hadd -f -k -v 0 {outfile} {files}')
                 #otherwise merge the bonsai root files
                 else:
-                    filedir = "fred_root_files%s/%s_%s_%s/"%(additionalString,_element,_loc,_p)
+                    if arguments['--core]']:
+                        filedir = "core_root_files%s/%s_%s_%s/"%(additionalString,_element,_loc,_p)
+                    else:
+                        filedir = "fred_root_files%s/%s_%s_%s/"%(additionalString,_element,_loc,_p)
                     if os.path.exists(filedir):
                         if len(os.listdir(filedir))>0:
-                           os.system(f'hadd -f -k -v 0 fred_{outfile} fred_{files}')
+                            if arguments['--core]']:
+                                os.system(f'hadd -f -k -v 0 core_{outfile} core_{files}')
+                            else:
+                                os.system(f'hadd -f -k -v 0 fred_{outfile} fred_{files}')
 
 
 def macroGenerator(location,element,process,nruns):

@@ -17,6 +17,7 @@ def drange(start, stop, step):
         rii+=step
 
 d,proc,rates = loadSimulationParameters()
+
 singlespersec = 0
 for _p in proc:
     for _loc in proc[_p]:
@@ -25,9 +26,11 @@ for _p in proc:
                 singlespersec+=rates['%s_%s_%s'%(_element,_loc,_p)][0]
 
 nruns = int(arguments['-N'])
-nsetSingles = 100
+nsetSingles = 200
 detectorStr = f"Watchman_rightcylinder_{arguments['--cylinderSize']}m_{arguments['--cylinderSize']}m_{arguments['--cylinderPct']}pct_{arguments['--rPMT']}mm"
 
+# Reactor on/off ratio based on typical AGR-1 schedule
+RonOff = (4*2)/52.
 
 # detector dimensions
 
@@ -42,8 +45,7 @@ else:
     pmtRadius      = 6700.
     pmtHeight      = 6700.
 
-### cut paramaters
-posGood = float(arguments['-g'])
+### cut parameters/variables
 dirGood = float(arguments['-G'])
 energyEstimator = arguments['--energyEst']
 
@@ -57,14 +59,19 @@ binwidthNX    = float(arguments["--binwidthNX"])
 rangeNXpmin,rangeNXpmax = minNXprompt-binwidthNX/2.,maxNXprompt+binwidthNX/2.
 rangeNXdmin,rangeNXdmax = minNXdelayed-binwidthNX/2.,maxNXdelayed+binwidthNX/2.
 binNX = int((rangeNXpmax-rangeNXpmin)/binwidthNX)
+minEpmax     = float(arguments["--minEpmax"])
+maxEpmax     = float(arguments["--maxEpmax"])
+binwidthEpmax = float(arguments["--binwidthEpmax"])
+rangeEpmin,rangeEpmax = minEpmax-binwidthEpmax/2.,maxEpmax+binwidthEpmax/2.
+
 
 # coincidence
 binwidthdT = float(arguments["--binwidthdT"])
-binwidthdR = float(arguments["--binwidthdR"])
+binwidthG = float(arguments["--binwidthG"])
 dTmin,dTmax = float(arguments["--dTmin"]),float(arguments["--dTmax"])
-dRmin,dRmax = float(arguments["--dRmin"]),float(arguments["--dRmax"])
+gmin,gmax = float(arguments["--gmin"]),float(arguments["--gmax"])
 rangedTmin,rangedTmax = dTmin-binwidthdT/2.,dTmax+binwidthdT/2.
-rangedRmin,rangedRmax = dRmin-binwidthdR/2.,dRmax+binwidthdR/2.
+rangeGmin,rangeGmax = gmin-binwidthG/2.,gmax+binwidthG/2.
 
 
 # fiducial volume
