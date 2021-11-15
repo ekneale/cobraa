@@ -119,11 +119,16 @@ docstring = """
 
     ## Define alternative signals
     --Hartlepool1                Uses 1-core Hartlepool (reactor 1, operating at higher power)
-    --Hartlepool2                Uses 1-core Hartlepool signal (reactor 2, operating at higher power)
+    --Hartlepool2                Uses 1-core Hartlepool signal (reactor 2, operating at lower power)
     --Heysham                    Uses Heysham reactor spectrum in place of Hartlepool
     --Heysham2                   2-core Heysham signal
     --HeyshamTorness             Heysham 2-core + Torness signal
     --Torness                    Torness signal
+    --Gravelines                 Gravelines signal (all 6 cores)
+    --HinkleyC                   Hinkley Point C signal (both cores)
+    --Sizewell                   Sizewell signal (all cores)
+    --GSH                        Gravelines, Hinkley Point C and Sizewell signal
+    --SH                         Sizewell + Hinkley Point C signal
     """
 
 try:
@@ -177,7 +182,7 @@ def loadSimulationParameters():
         d['RADIOGENIC'] = {'ROCK_2':['rock_neutrons']}
 
 
-        d['pn_ibd'] = {'LIQUID':['boulby_geo','hartlepool_1','hartlepool_2','boulby_world','heysham_full','heysham_2','torness_full']}
+        d['pn_ibd'] = {'LIQUID':['boulby_geo','hartlepool_1','hartlepool_2','boulby_worldbg','heysham_full','heysham_2','torness_full','gravelines_full','hinkley_C','sizewell_B']}
 
         d['singles'] = {'ALL':['singles']}
         d['A_Z'] = {'LIQUID':['li 9','n 17']}
@@ -229,7 +234,7 @@ def loadSimulationParameters():
                 'TANK':['60Co'],\
                 'IBEAM':['60Co']}
         d['137Cs_NA'] = {'PSUP':['137Cs']}
-        d['pn_ibd'] = {'LIQUID':['boulby_geo','hartlepool_1','hartlepool_2','boulby_world','heysham_full','heysham_2','torness_full']}
+        d['pn_ibd'] = {'LIQUID':['boulby_geo','hartlepool_1','hartlepool_2','boulby_worldbg','heysham_full','heysham_2','torness_full','gravelines_full','hinkley_C','sizewell_B']}
 
         d['singles'] = {'ALL':['singles']}
         d['A_Z'] = {'LIQUID':['li 9','n 17']}
@@ -288,7 +293,7 @@ def loadSimulationParameters():
         d['137Cs_NA'] = {'PSUP':['137Cs'],\
                 'TANK':['137Cs'],\
                 'IBEAM':['137Cs']}
-        d['pn_ibd'] = {'LIQUID':['boulby_geo','hartlepool_1','hartlepool_2','boulby_world','heysham_full','heysham_2','torness_full']}
+        d['pn_ibd'] = {'LIQUID':['boulby_geo','hartlepool_1','hartlepool_2','boulby_worldbg','heysham_full','heysham_2','torness_full','gravelines_full','hinkley_C','sizewell_B']}
 
         d['singles'] = {'ALL':['singles']}
         d['A_Z'] = {'LIQUID':['li 9','n 17']}
@@ -475,13 +480,17 @@ def loadSimulationParameters():
     elif int(arguments['--cylinderSize'])==22 and int(arguments['--rPMT'])==9000:
         print('Using rates for 22 m cylinder with 9 m inner PMT radius and 15% PC (Passive buffer)')
         jobRate = {\
-'hartlepool_2_LIQUID_pn_ibd': [1.052e-04*pmtVolCorr , 1],\
-'hartlepool_1_LIQUID_pn_ibd': [7.889e-05*pmtVolCorr , 1],\
+'hartlepool_1_LIQUID_pn_ibd': [1.052e-04*pmtVolCorr , 1],\
+'hartlepool_2_LIQUID_pn_ibd': [7.889e-05*pmtVolCorr , 1],\
 'boulby_geo_LIQUID_pn_ibd': [6.368e-06*pmtVolCorr , 1],\
 'boulby_world_LIQUID_pn_ibd': [2.146e-05*pmtVolCorr , 1],\
 'heysham_full_LIQUID_pn_ibd': [1.231e-05*pmtVolCorr , 1],\
 'heysham_2_LIQUID_pn_ibd': [7.005e-06*pmtVolCorr , 1],\
 'torness_full_LIQUID_pn_ibd': [4.422e-06*pmtVolCorr , 1],\
+'boulby_worldbg_LIQUID_pn_ibd': [1.491e-05*pmtVolCorr , 1],\
+'gravelines_full_LIQUID_pn_ibd': [2.6e-06*pmtVolCorr , 1],\
+'hinkley_C_LIQUID_pn_ibd': [2.565e-06*pmtVolCorr , 1],\
+'sizewell_B_LIQUID_pn_ibd': [1.331e-06*pmtVolCorr , 1],\
 '40K_LIQUID_40K_NA': [34.3*pmtVolCorr , 1], \
 '40K_PMT_40K_NA': [1.67E+04 *iPMTs * kip, 1], \
 '40K_VETO_40K_NA': [0 * kip, 1], \
@@ -601,13 +610,17 @@ def loadSimulationParameters():
     else:
         print('Using rates for 16m tank with 5.7m inner PMT radius')
         jobRate = {\
-'hartlepool_2_LIQUID_pn_ibd': [4.046e-05*pmtVolCorr , 1],\
-'hartlepool_1_LIQUID_pn_ibd': [3.033e-05*pmtVolCorr , 1],\
+'hartlepool_1_LIQUID_pn_ibd': [4.046e-05*pmtVolCorr , 1],\
+'hartlepool_2_LIQUID_pn_ibd': [3.033e-05*pmtVolCorr , 1],\
 'boulby_geo_LIQUID_pn_ibd': [2.448e-06*pmtVolCorr , 1],\
 'boulby_world_LIQUID_pn_ibd': [8.248e-06*pmtVolCorr , 1],\
 'heysham_full_LIQUID_pn_ibd': [4.732e-06*pmtVolCorr , 1],\
 'heysham_2_LIQUID_pn_ibd': [2.693e-06*pmtVolCorr , 1],\
 'torness_full_LIQUID_pn_ibd': [1.700e-06*pmtVolCorr,1],\
+'boulby_worldbg_LIQUID_pn_ibd': [5.732e-06*pmtVolCorr , 1],\
+'gravelines_full_LIQUID_pn_ibd': [9.995e-07*pmtVolCorr , 1],\
+'hinkley_C_LIQUID_pn_ibd': [9.859e-07*pmtVolCorr , 1],\
+'sizewell_B_LIQUID_pn_ibd': [5.117e-07*pmtVolCorr , 1],\
 '40K_LIQUID_40K_NA': [1.28*pmtVolCorr , 1], \
 '40K_PMT_40K_NA': [8.45E+03 *iPMTs * kip, 1], \
 '40K_VETO_40K_NA': [2.61e+02 * kip, 1], \

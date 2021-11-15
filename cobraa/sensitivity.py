@@ -106,44 +106,71 @@ def calculateSensitivity():
                             #print('%s identified as IBD pair events\n\n'%(_tag))
                             if 'geo' in _tag:
                                 hgeo["hGeo%d%d%d%d"%(delayed_nxcut,dTcut,maxEp,gcut*10)].Add(hist[_tag],1)
+                            if arguments["--GSH"]:
+                                if 'gravelines' in _tag or 'sizewell' in _tag or 'hinkley' in _tag:
+                                    hibd["hIBD%d%d%d%d"%(delayed_nxcut,dTcut,maxEp,gcut*10)].Add(hist[_tag],1)
+                                if 'boulby_worldbg' in _tag:
+                                    hibdBG["hIBDBG%d%d%d%d"%(delayed_nxcut,dTcut,maxEp,gcut*10)].Add(hist[_tag],1)
+                            if arguments["--SH"]:
+                                if 'sizewell' in _tag or 'hinkley' in _tag:
+                                    hibd["hIBD%d%d%d%d"%(delayed_nxcut,dTcut,maxEp,gcut*10)].Add(hist[_tag],1)
+                                if 'boulby_worldbg' in _tag or 'gravelines' in _tag:
+                                    hibdBG["hIBDBG%d%d%d%d"%(delayed_nxcut,dTcut,maxEp,gcut*10)].Add(hist[_tag],1)
+                            if arguments["--Gravelines"]:
+                                if 'gravelines' in _tag:
+                                    print('Adding %s to ibd signal'%(_tag))
+                                    hibd["hIBD%d%d%d%d"%(delayed_nxcut,dTcut,maxEp,gcut*10)].Add(hist[_tag],1)
+                                if 'boulby_worldbg' in _tag or 'sizewell' in _tag or 'hinkley' in _tag:
+                                    print('Adding %s to ibd bg'%(_tag))
+                                    hibdBG["hIBDBG%d%d%d%d"%(delayed_nxcut,dTcut,maxEp,gcut*10)].Add(hist[_tag],1)
+                            if arguments["--HinkleyC"]:
+                                if 'hinkley' in _tag:
+                                    hibd["hIBD%d%d%d%d"%(delayed_nxcut,dTcut,maxEp,gcut*10)].Add(hist[_tag],1)
+                                if 'boulby_worldbg' in _tag or 'sizewell' in _tag or 'gravelines' in _tag:
+                                    hibdBG["hIBDBG%d%d%d%d"%(delayed_nxcut,dTcut,maxEp,gcut*10)].Add(hist[_tag],1)
+                            if arguments["--Sizewell"]:
+                                if 'sizewell' in _tag:
+                                    hibd["hIBD%d%d%d%d"%(delayed_nxcut,dTcut,maxEp,gcut*10)].Add(hist[_tag],1)
+                                if 'boulby_worldbg' in _tag or 'hinkley' in _tag or 'gravelines' in _tag:
+                                    hibdBG["hIBDBG%d%d%d%d"%(delayed_nxcut,dTcut,maxEp,gcut*10)].Add(hist[_tag],1)
                             if arguments["--Heysham"]:
                                 if 'heysham_full' in _tag:
                                     hibd["hIBD%d%d%d%d"%(delayed_nxcut,dTcut,maxEp,gcut*10)].Add(hist[_tag],1)
-                                if 'boulby_world' in _tag or 'torness_full' in _tag:
+                                if 'boulby_worldbg' in _tag or 'torness_full' in _tag or 'gravelines' in _tag or 'sizewell' in _tag or 'hinkley' in _tag:
                                     hibdBG["hIBDBG%d%d%d%d"%(delayed_nxcut,dTcut,maxEp,gcut*10)].Add(hist[_tag],1)
 
                             elif arguments["--HeyshamTorness"]:
                                 if 'heysham_2' in _tag or 'torness_full' in _tag:
                                     hibd["hIBD%d%d%d%d"%(delayed_nxcut,dTcut,maxEp,gcut*10)].Add(hist[_tag],1)
-                                if 'boulby_world' in _tag:
+                                if 'boulby_worldbg' in _tag or 'gravelines' in _tag or 'sizewell' in _tag or 'hinkley' in _tag:
                                     hibdBG["hIBDBG%d%d%d%d"%(delayed_nxcut,dTcut,maxEp,gcut*10)].Add(hist[_tag],1)
                                     
                             elif arguments["--Heysham2"]:
                                 if 'heysham_2' in _tag:
                                     hibd["hIBD%d%d%d%d"%(delayed_nxcut,dTcut,maxEp,gcut*10)].Add(hist[_tag],1)
-                                if 'boulby_world' in _tag or 'torness_full' in _tag:
+                                if 'boulby_worldbg' in _tag or 'torness_full' in _tag or 'gravelines' in _tag or 'sizewell' in _tag or 'hinkley' in _tag:
                                     hibdBG["hIBDBG%d%d%d%d"%(delayed_nxcut,dTcut,maxEp,gcut*10)].Add(hist[_tag],1)
 
                             elif arguments["--Torness"]:
                                 if 'torness_' in _tag:
                                     hibd["hIBD%d%d%d%d"%(delayed_nxcut,dTcut,maxEp,gcut*10)].Add(hist[_tag],1)
-                                if 'boulby_world' in _tag or 'heysham_2' in _tag:
+                                if 'boulby_worldbg' in _tag or 'heysham_2' in _tag or 'gravelines' in _tag or 'sizewell' in _tag or 'hinkley' in _tag:
                                     hibdBG["hIBDBG%d%d%d%d"%(delayed_nxcut,dTcut,maxEp,gcut*10)].Add(hist[_tag],1)
 
                             elif arguments['--Hartlepool1']:
                                 if 'hartlepool_1' in _tag:
                                     hibd["hIBD%d%d%d%d"%(delayed_nxcut,dTcut,maxEp,gcut*10)].Add(hist[_tag],1)
-                                if 'boulby_world' in _tag or 'hartlepool_2' in _tag or 'heysham_full' in _tag or 'torness_full' in _tag:
+                                if 'boulby_worldbg' in _tag or 'hartlepool_2' in _tag or 'heysham_full' in _tag or 'torness_full' in _tag or 'gravelines' in _tag or 'sizewell' in _tag or 'hinkley' in _tag:
                                     hibdBG["hIBDBG%d%d%d%d"%(delayed_nxcut,dTcut,maxEp,gcut*10)].Add(hist[_tag],1)
                             elif arguments['--Hartlepool2']:
                                 if 'hartlepool_2' in _tag:
                                     hibd["hIBD%d%d%d%d"%(delayed_nxcut,dTcut,maxEp,gcut*10)].Add(hist[_tag],1)
-                                if 'boulby_world' in _tag or 'hartlepool_1' in _tag or 'heysham_full' in _tag or 'torness_full' in _tag:
+                                if 'boulby_worldbg' in _tag or 'hartlepool_1' in _tag or 'heysham_full' in _tag or 'torness_full' in _tag or 'gravelines' in _tag or 'sizewell' in _tag or 'hinkley' in _tag:
                                     hibdBG["hIBDBG%d%d%d%d"%(delayed_nxcut,dTcut,maxEp,gcut*10)].Add(hist[_tag],1)
                             else:
                                 if 'hartlepool_1' in _tag or 'hartlepool_2' in _tag:
                                     hibd["hIBD%d%d%d%d"%(delayed_nxcut,dTcut,maxEp,gcut*10)].Add(hist[_tag],1)
-                                elif 'boulby_world' in _tag or 'heysham_full' in _tag or 'torness_full' in _tag:
+                                elif 'boulby_worldbg' in _tag or 'heysham_full' in _tag or 'torness_full' in _tag or 'gravelines' in _tag or 'sizewell' in _tag or 'hinkley' in _tag:
                                     hibdBG["hIBDBG%d%d%d%d"%(delayed_nxcut,dTcut,maxEp,gcut*10)].Add(hist[_tag],1)
 
                         elif 'FASTNEUTRONS' in _tag:
