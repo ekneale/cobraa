@@ -67,6 +67,9 @@ def coincidenceMap():
                         rate = rates[_tag][0]
                         if 'pn_ibd' in _tag or 'A_Z' in _tag or 'FAST' in _tag or 'singles' in _tag:
                             print(_tag," from ",_file)
+                        if arguments["--core"]:
+                            obtainCoincidencesCoRe(_file,_tag,outfile,rate)
+                        else:
                             obtainCoincidences(_file,_tag,outfile,rate)
                             print('')
     else:
