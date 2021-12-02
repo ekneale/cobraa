@@ -93,7 +93,7 @@ def coincidenceMap():
 def obtainCoincidences(file,_tag,outfile,rate):
 
     # Performs the coincidence evaluation on the 
-    # FRED root files
+    # FRED or CoRe root files
     # called by coincidenceMap()
     start_time = time.time()
     recofile = TFile(file)
