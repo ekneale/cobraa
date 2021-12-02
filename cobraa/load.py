@@ -49,6 +49,21 @@ docstring = """
     --energyEst=<_EE>      Default energy estimator (n9,n100,n400,nX) [Default: n9]
     -N=<_N>                Number of runs to simulate [Default: 40]
 
+    ## Perform efficiency and sensitivity evaluation (after simulation and reconstruction).
+
+    -M                     Merge result files from trial ntuples. Step one.
+    --mergeRATFiles        Merge raw ratds files (off by default)
+    --coincidences         Map the efficiencies of coincidences which pass the cuts (analysis step 1)
+    --core                 Use the combined reconstruction (option to pass with -m, -j and --coincidences)
+    --evtype=<_ev>         Set process to evaluate for coincidences
+    --sensitivity          Calculate the rates for final optimisation of signal significance (analysis step 2)
+    --triggers             Get the number of triggers for singles processes
+    --backgrounds          Plot backgrounds as a function of distance from rPMT
+    --positiveScan         Only look at nx delayed above nx prompt
+    --negativeScan         only look at nx delayed below nx prompt
+    --singlesrate          calculate singles rate per sec
+
+    ############# Detector options ##############
     ## Define detector geometry and other features
 
     --muMetal=<_MM>        Implement muMetal [Default: 0]
@@ -74,27 +89,8 @@ docstring = """
     -e=<runBeamEntry>      Number of events to be simulated per macro [Default: 25000]
     --singles              Option to run the simulation of individual radioactive backgrounds
 
-    ## Perform efficiency and sensitivity evaluation (after simulation and reconstruction).
-
-    -M                     Merge result files from trial ntuples. Step one.
-    --mergeRATFiles        Merge raw ratds files (off by default)
-    --coincidences         Map the efficiencies of coincidences which pass the cuts (analysis step 1)
-    --core                 Use the combined reconstruction (option to pass with -m, -j and --coincidences)
-    --evtype=<_ev>         Set process to evaluate for coincidences
-    --sensitivity          Calculate the rates for final optimisation of signal significance (analysis step 2)
-    --triggers             Get the number of triggers for singles processes
-    --backgrounds          Plot backgrounds as a function of distance from rPMT
-    --positiveScan         Only look at nx delayed above nx prompt
-    --negativeScan         only look at nx delayed below nx prompt
-    --singlesrate          calculate singles rate per sec
-
-    # specify the sensitivity metric to use (default uses Gaussian statistics)
-    --poisson              calculate significance and anomaly dwell time using poisson (gaussian-distributed bg)
-    --poissonpoisson       calculate significance and anomaly dwell time using poisson (poisson-distributed bg)
-    --knoll                calculate dwell time to 3 sigma detection at 95% confidence (gaussian sig and bg)
-    --2sigma               calculate dwell time to 2 sigma detection at 90% confidence (gaussian sig and bg)
-    --optimiseSoB          optimise signal over background rather than dwell time (useful in stats-limited regime)
-
+    
+    ########### Optimisation options ###############
     ## Define the cuts/ranges over which to optimise
 
     --minNXprompt=<_minNXp>      Minimum threshold number of direct hits [Default: 9.]
@@ -106,9 +102,12 @@ docstring = """
     --binwidthNX=<_binNX>        Bin width for scan over nX cut range [Default: 1]
     --binwidthFid=<_binFid>      Bin width for scan over closest PMT cut range [Default: 0.1]
     --binwidthdT=<binT>          Bin width for scan over dT cut [Default: 10]
+    --binwidthdR=<binR>          Bin width for scan over dR cut [Default: 0.1]
     --binwidthG=<binG>           Bin width for scan over goodness cut g [Default: 0.1]
     --dTmin=<_dTmin>             Minimum value for dt cut [Default: 130]
     --dTmax=<_dTmax>             Maximum value for dt cut [Default: 160]
+    --dRmin=<_dRmin>             Mimumum value for dR cut [Default: 1.8]
+    --dRmax=<_dRmax>             Maximum value for dR cut [Default: 2.2]
     --gmin=<_gmin>               Minimum value for g cut [Default: 0.1]
     --gmax=<_gmax>               Maximum value for g cut [Default: 0.3]
     --minEpmax=<_minEpmax>       Minimum value for maximum value of Ep [Default: 20.]
@@ -117,6 +116,7 @@ docstring = """
     -G=<Goodness>                Bonsai direction goodness parameter [Default: 0.1]
     --se=<_se>                   Default signal efficiency [Default: 1.00]
 
+    ###### Signal options #######
     ## Define alternative signals
     --Hartlepool1                Uses 1-core Hartlepool (reactor 1, operating at higher power)
     --Hartlepool2                Uses 1-core Hartlepool signal (reactor 2, operating at lower power)
@@ -129,7 +129,16 @@ docstring = """
     --Sizewell                   Sizewell signal (all cores)
     --GSH                        Gravelines, Hinkley Point C and Sizewell signal
     --SH                         Sizewell + Hinkley Point C signal
-    """
+
+    # ################### Sensitivity metric options #########################
+    # specify the sensitivity metric to use (default uses Gaussian statistics)
+
+    --poisson              calculate significance and anomaly dwell time using poisson (gaussian-distributed bg)
+    --poissonpoisson       calculate significance and anomaly dwell time using poisson (poisson-distributed bg)
+    --knoll                calculate dwell time to 3 sigma detection at 95% confidence (gaussian sig and bg)
+    --2sigma               calculate dwell time to 2 sigma detection at 90% confidence (gaussian sig and bg)
+    --optimiseSoB          optimise signal over background rather than dwell time (useful in stats-limited regime)
+"""
 
 try:
     import docopt
