@@ -67,10 +67,13 @@ rangeEpmin,rangeEpmax = minEpmax-binwidthEpmax/2.,maxEpmax+binwidthEpmax/2.
 
 # coincidence
 binwidthdT = float(arguments["--binwidthdT"])
+binwidthdR = float(arguments["--binwidthdR"])
 binwidthG = float(arguments["--binwidthG"])
 dTmin,dTmax = float(arguments["--dTmin"]),float(arguments["--dTmax"])
+dRmin,dRmax = float(arguments["--dRmin"]),float(arguments["--dRmax"])
 gmin,gmax = float(arguments["--gmin"]),float(arguments["--gmax"])
 rangedTmin,rangedTmax = dTmin-binwidthdT/2.,dTmax+binwidthdT/2.
+rangedRmin,rangedRmax = dRmin-binwidthdR/2.,dRmax+binwidthdR/2.
 rangeGmin,rangeGmax = gmin-binwidthG/2.,gmax+binwidthG/2.
 
 
