@@ -67,10 +67,10 @@ def generateMacros():
     for _k in rates:
         _events = int(float(arguments['-e'])*rates[_k][1])
         if 'singles' in _k:
-            print("\n\n\n Warning - only %d days of singles events will be simulated!!!!!\n\n\n"%(_events*nsetSingles*nruns/float(singlespersec*86400)))
+            print("\n\n\n Warning - only %f days of singles events will be simulated!!!!!\n\n\n"%(_events*nsetSingles*nruns/float(singlespersec*86400)))
             outfile = open(f"mac/evts_singles.mac","w+")
-            outfile.writelines(f"/run/beamOn {singlespersec}")
-        elif 'pn_ibd' in _k or 'A_Z' in _k or 'fast' in _k:
+            outfile.writelines(f"/run/beamOn {_events}")
+        elif 'pn_ibd' in _k or 'A_Z' in _k or 'fast' in _k or 'mono' in _k:
             outfile = open(f"mac/rates_{_k}.mac","w+")
             outfile.writelines(f"/generator/rate/set {rates[_k][0]}")
             outfile.close
@@ -78,21 +78,9 @@ def generateMacros():
             outfile.writelines(f"/run/beamOn {int(_events)}")
             outfile.close
         else:
-            if 'singles' in _k:
-                print("\n\n\n Warning - only %f days of singles events will be simulated!!!!!\n\n\n"%(_events*nsetSingles*nruns/float(singlespersec*86400)))
-                outfile = open(f"mac/evts_singles.mac","w+")
-                outfile.writelines(f"/run/beamOn {_events}")
-            elif 'pn_ibd' in _k or 'A_Z' in _k or 'fast' in _k or 'mono' in _k:
-                outfile = open(f"mac/rates_{_k}.mac","w+")
-                outfile.writelines(f"/generator/rate/set {rates[_k][0]}")
-                outfile.close
-                outfile = open(f"mac/evts_{_k}.mac","w+")
-                outfile.writelines(f"/run/beamOn {int(_events)}")
-                outfile.close
-            else:
-                outfile = open(f"mac/rates_{_k}.mac","w+")
-                outfile.writelines(f"/generator/rate/set {rates[_k][0]}")
-                outfile.close
+            outfile = open(f"mac/rates_{_k}.mac","w+")
+            outfile.writelines(f"/generator/rate/set {rates[_k][0]}")
+            outfile.close
 
 
 
