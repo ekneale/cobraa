@@ -113,6 +113,11 @@ def calculateSensitivity():
                                 elif 'boulby_worldbg' in _tag:
                                     print('Adding %s to ibd bg'%(_tag))
                                     hibdBG["hIBDBG%d%d%d%d"%(delayed_nxcut,dTcut,maxEp,gcut*10)].Add(hist[_tag],1)
+                            elif arguments["--GH"]:
+                                if 'gravelines' in _tag or 'hinkley' in _tag:
+                                    hibd["hIBD%d%d%d%d"%(delayed_nxcut,dTcut,maxEp,gcut*10)].Add(hist[_tag],1)
+                                elif 'boulby_worldbg' in _tag or 'sizewell' in _tag:
+                                    hibdBG["hIBDBG%d%d%d%d"%(delayed_nxcut,dTcut,maxEp,gcut*10)].Add(hist[_tag],1)
                             elif arguments["--SH"]:
                                 if 'sizewell' in _tag or 'hinkley' in _tag:
                                     hibd["hIBD%d%d%d%d"%(delayed_nxcut,dTcut,maxEp,gcut*10)].Add(hist[_tag],1)
@@ -136,9 +141,12 @@ def calculateSensitivity():
                                 elif 'boulby_worldbg' in _tag or 'hinkley' in _tag or 'gravelines' in _tag:
                                     hibdBG["hIBDBG%d%d%d%d"%(delayed_nxcut,dTcut,maxEp,gcut*10)].Add(hist[_tag],1)
                             elif arguments["--Heysham"]:
+                                print('Calculating dwell time for Heysham signal (all cores)')
                                 if 'heysham_full' in _tag:
+                                    print('Adding %s to ibd signal'%(_tag))
                                     hibd["hIBD%d%d%d%d"%(delayed_nxcut,dTcut,maxEp,gcut*10)].Add(hist[_tag],1)
                                 elif 'boulby_worldbg' in _tag or 'torness_full' in _tag or 'gravelines' in _tag or 'sizewell' in _tag or 'hinkley' in _tag:
+                                    print('Adding %s to ibd bg'%(_tag))
                                     hibdBG["hIBDBG%d%d%d%d"%(delayed_nxcut,dTcut,maxEp,gcut*10)].Add(hist[_tag],1)
 
                             elif arguments["--HeyshamTorness"]:
@@ -148,15 +156,20 @@ def calculateSensitivity():
                                     hibdBG["hIBDBG%d%d%d%d"%(delayed_nxcut,dTcut,maxEp,gcut*10)].Add(hist[_tag],1)
                                     
                             elif arguments["--Heysham2"]:
+                                print('Calculating dwell time for Heysham 2 signal')
                                 if 'heysham_2' in _tag:
+                                    print('Adding %s to ibd signal'%(_tag))
                                     hibd["hIBD%d%d%d%d"%(delayed_nxcut,dTcut,maxEp,gcut*10)].Add(hist[_tag],1)
                                 elif 'boulby_worldbg' in _tag or 'torness_full' in _tag or 'gravelines' in _tag or 'sizewell' in _tag or 'hinkley' in _tag:
+                                    print('Adding %s to ibd bg'%(_tag))
                                     hibdBG["hIBDBG%d%d%d%d"%(delayed_nxcut,dTcut,maxEp,gcut*10)].Add(hist[_tag],1)
 
                             elif arguments["--Torness"]:
                                 if 'torness_' in _tag:
+                                    print('Adding %s to ibd signal'%(_tag))
                                     hibd["hIBD%d%d%d%d"%(delayed_nxcut,dTcut,maxEp,gcut*10)].Add(hist[_tag],1)
                                 elif 'boulby_worldbg' in _tag or 'heysham_2' in _tag or 'gravelines' in _tag or 'sizewell' in _tag or 'hinkley' in _tag:
+                                    print('Adding %s to ibd bg'%(_tag))
                                     hibdBG["hIBDBG%d%d%d%d"%(delayed_nxcut,dTcut,maxEp,gcut*10)].Add(hist[_tag],1)
 
                             elif arguments['--Hartlepool1']:
@@ -281,12 +294,19 @@ def calculateSensitivity():
 		# calculate the signal over background and/or dwell time metric
                 if arguments['--poissonpoisson']:
 		    # poisson significance with poisson systematic uncertainty on backgrounds
-                    sob = sqrt(2*((signal+background)*log((signal+background)*(background+ totSysError**2)/(background**2+(signal+background)*totSysError**2))-background**2/totSysError**2 * log(1 + (totSysError**2*signal/(background*(background + totSysError**2))))))
+                    try:
+                        sob = sqrt(2*((signal+background)*log((signal+background)*(background+ totSysError**2)/(background**2+(signal+background)*totSysError**2))-background**2/totSysError**2 * log(1 + (totSysError**2*signal/(background*(background + totSysError**2))))))
+                    except:
+                        continue
                 elif arguments['--poisson']:
 		    # poisson significance with gaussian systematic uncertainty on backgrounds
-                    B_hat = 0.5*(background-pow(totSysError,2)+sqrt(pow(background,2)-2*totSysError*pow(totSysError,2)+4*(signal+background)*pow(totSysError,2)+pow(totSysError,4)))
-                    sob = Z = sqrt(-2*((signal+background)*log(B_hat/(signal+background))-pow(background-B_hat,2)/(2*pow(totSysError,2))-B_hat+signal+background))
-                #    t3sig = poissonTime(signal,background,totSysError)
+                    try:
+                        B_hat = 0.5*(background-pow(totSysError,2)+sqrt(pow(background,2)-2*totSysError*pow(totSysError,2)+4*(signal+background)*pow(totSysError,2)+pow(totSysError,4)))
+                        sob = sqrt(-2*((signal+background)*log(B_hat/(signal+background))-pow(background-B_hat,2)/(2*pow(totSysError,2))-B_hat+signal+background))
+                    except:
+                        continue
+                    #t3sig = poissonTime(signal,background,totSysError)
+                    
                 elif arguments['--knoll']:
 		    # time to 3 sigma positive detection at 95% confidence level
                     if arguments['--2sigma']:
@@ -298,10 +318,17 @@ def calculateSensitivity():
 
                     t3sig=(2+RonOff)*toff
                     sob=-1
+                elif arguments['--measurement']:
+                    sysError = signal*0.06
+                    sob = signal/sqrt(signal+sysError**2 + background+totSysError**2)
+                    t3sig = 9*(signal + background) / ( signal**2 - 9*(sysError**2 + totSysError**2))
                 else:
 		    # gaussian significance
                     sob = signal/sqrt(background+totSysError**2)
-                    t3sig = 9.*background/(signal**2-9.*totSysError**2)
+                    if arguments['--2sigma']:
+                        t3sig = 4.*background/(signal**2-4.*totSysError**2)
+                    else:
+                        t3sig = 9.*background/(signal**2-9.*totSysError**2)
                 try:
 		    # TODO get correct error for all metrics
                     sobError = sqrt(pow(signalError/signal,2)+pow(sqrt_s_plus_b_error/sqrt(signal+background),2))*sob
@@ -315,7 +342,9 @@ def calculateSensitivity():
                 _histograms["signal%d%d%d%d"%(delayed_nxcut,dTcut,maxEp,gcut*10)].SetBinError(cutBin,signalError)
                 _histograms["background%d%d%d%d"%(delayed_nxcut,dTcut,maxEp,gcut*10)].SetBinError(cutBin,bgError)
 
-                if arguments['--optimiseSoB']:
+                if arguments['--optimiseSoB'] or arguments['--poisson'] or arguments['--poissonpoisson']:
+                    # removing the option to optimise on dwell time for poisson stats due to
+                    # multiple failures of fit -> lengthy analysis process.
                     # find the maximum significance for each combination of NXd, maxEp, g cut
                     if sob >maxSoB:
                         maxt3sig = t3sig
@@ -427,11 +456,17 @@ def calculateSensitivity():
     print("24-month significance: ",optSignal*720/sqrt(optBg*720+(optTotSysErr*720)**2))
     print("30-month significance: ",optSignal*900/sqrt(optBg*900+(optTotSysErr*900)**2))
     
-    # calculate dwell time for 3 sigma significance, where sigma = s/sqrt(b)
+    # calculate dwell time
     if optSignal >0:
         if arguments['--poisson']:
+            print('Finding dwell time for signal ',optSignal)
+            # poisson with gaussian uncertainties
             T3SIGMA = poissonTime(optSignal,optBg,optTotSysErr)
+        elif arguments['--poissonpoisson']:
+            # poisson with poisson uncertainties
+            T3SIGMA = poissonpoissonTime(optSignal,optBg,optTotSysErr)
         else:
+            # gaussian or knoll
             T3SIGMA = optt3sig #9.*optBg/(optSignal**2-9.*optTotSysErr**2)
     else:
         T3SIGMA = 1e999

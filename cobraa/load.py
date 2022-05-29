@@ -129,6 +129,7 @@ docstring = """
     --Sizewell                   Sizewell signal (all cores)
     --GSH                        Gravelines, Hinkley Point C and Sizewell signal
     --SH                         Sizewell + Hinkley Point C signal
+    --GH                         Gravelines + HInkley Point C signal
 
     # ################### Sensitivity metric options #########################
     # specify the sensitivity metric to use (default uses Gaussian statistics)
@@ -136,7 +137,8 @@ docstring = """
     --poisson              calculate significance and anomaly dwell time using poisson (gaussian-distributed bg)
     --poissonpoisson       calculate significance and anomaly dwell time using poisson (poisson-distributed bg)
     --knoll                calculate dwell time to 3 sigma detection at 95% confidence (gaussian sig and bg)
-    --2sigma               calculate dwell time to 2 sigma detection at 90% confidence (gaussian sig and bg)
+    --measurement          calculate dwell time to 3 sigma reactor measurement
+    --2sigma               calculate dwell time to 2 sigma detection (gaussian) at 90% confidence (knoll)
     --optimiseSoB          optimise signal over background rather than dwell time (useful in stats-limited regime)
 """
 
@@ -347,10 +349,10 @@ def loadSimulationParameters():
             iPMTs = 2552./3248.
             pmtVolCorr = 3206.17/3203.22
     elif int(arguments['--cylinderSize'])==22 and int(arguments['--rPMT'])==9000:
+        print('not currently correcting for pmt volume or number - use 15% only')
         if int(arguments['--cylinderPct'])==15:
             iPMTs = 4600./4600.
             pmtVolCorr = 1.
-            print('not currently correcting for pmt volume')
     elif int(arguments['--cylinderPct'])==16 and int(arguments['--rPMT'])==5700:
         if int(arguments['--cylinderPct'])==10:
             iPMTs = 1232./2230.

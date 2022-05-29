@@ -24,7 +24,7 @@ for _p in proc:
         for _element in d[_p][_loc]:
             if 'NA' in _p or 'RADIOGENIC' in _p:
                 singlespersec+=rates['%s_%s_%s'%(_element,_loc,_p)][0]
-
+print('singles rate:', singlespersec)
 nruns = int(arguments['-N'])
 nsetSingles = 200
 detectorStr = f"Watchman_rightcylinder_{arguments['--cylinderSize']}m_{arguments['--cylinderSize']}m_{arguments['--cylinderPct']}pct_{arguments['--rPMT']}mm"
