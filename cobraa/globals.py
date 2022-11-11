@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from .load import *
 from .style import setStyle
 
@@ -27,23 +28,10 @@ for _p in proc:
 print('singles rate:', singlespersec)
 nruns = int(arguments['-N'])
 nsetSingles = 200
-detectorStr = f"Watchman_rightcylinder_{arguments['--cylinderSize']}m_{arguments['--cylinderSize']}m_{arguments['--cylinderPct']}pct_{arguments['--rPMT']}mm"
+detectorStr = f"{arguments['--geofile']}"
 
 # Reactor on/off ratio based on typical AGR-1 schedule
 RonOff = (4*2)/52.
-
-# detector dimensions
-
-if arguments["--cylinderSize"]=='12':
-    detectorRadius = 6000.
-    detectorHeight = 6000.
-    pmtRadius      = 5465.
-    pmtHeight      = 5465.
-else:
-    detectorRadius = 8000.
-    detectorHeight = 8000.
-    pmtRadius      = 6700.
-    pmtHeight      = 6700.
 
 ### cut parameters/variables
 dirGood = float(arguments['-G'])
@@ -93,11 +81,7 @@ def testEnabledCondition(arguments):
     additionalMacOpt      = ""
 
     # file naming
-    if arguments['--cylinderSize']:
-       additionalString    = "_%sm_%spct"%(arguments['--cylinderSize'],arguments['--cylinderPct'])
-
-    if (arguments['--rPMT']):
-        additionalString += "_rPMT_%smm"%(arguments['--rPMT'])
+    additionalString += "_%s"%(arguments['--geofile'])
 
     if (arguments['--lightSimWater']):
         additionalString += "_lightSimWater"
