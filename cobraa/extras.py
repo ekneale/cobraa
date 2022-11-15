@@ -51,7 +51,7 @@ def triggers():
                         totalEvents += runSummary.nEvents
                     data = fredfile.Get('data')
                     triggers = data.GetEntries()
-                    singles = data.Draw("","n9>10 && closestPMT>0.5")
+                    singles = data.Draw("","n9>0")
                     triggerrate = triggers/totalEvents*rates[_tag][0]
                     singlesrate = singles/totalEvents*rates[_tag][0]
                     rate = rates[_tag][0]
@@ -136,7 +136,7 @@ def backgrounds():
                 print("opening ",_tag,"from ",_file)
 
                 for fidcut in drange(minFid,rangeFidmax,binwidthFid):
-                    nevts = data.Draw("","n9>9 && closestPMT/1000.>%f && veto_hit<4 && inner_hit>10"%(fidcut),"goff")
+                    nevts = data.Draw("","n9>0 && closestPMT/1000.>%f"%(fidcut),"goff")
                     rate = nevts/totalEvents*rates[_tag][0]
                     if 'PMT' in _tag:
                         hPMT.Fill(fidcut,rate)
@@ -146,16 +146,16 @@ def backgrounds():
                         hTANK.Fill(fidcut,rate)
                     elif 'LIQUID' in _tag and 'NA' in _tag:
                         hLIQUID.Fill(fidcut,rate)
-#                    elif 'FASTNEUTRONS' in _tag:
-#                        hFN.Fill(fidcut,rate)
+                    elif 'FASTNEUTRONS' in _tag:
+                        hFN.Fill(fidcut,rate)
                     elif 'IBEAM' in _tag:
                         hIBEAM.Fill(fidcut,rate)
                     elif 'ROCK'in _tag and 'NA' in _tag:
                         hROCK.Fill(fidcut,rate)
                     elif 'RADIOGENICS' in _tag:
                         hROCK.Fill(fidcut,rate)
-#                    elif 'A_Z' in _tag:
-#                        hRN.Fill(fidcut,rate)
+                    elif 'A_Z' in _tag:
+                        hRN.Fill(fidcut,rate)
 #                    elif 'pn_ibd' in _tag:
 #                        hIBD.Fill(fidcut,rate)
     

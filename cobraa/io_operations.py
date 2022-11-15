@@ -81,6 +81,9 @@ def generateMacros():
             outfile = open(f"mac/rates_{_k}.mac","w+")
             outfile.writelines(f"/generator/rate/set {rates[_k][0]}")
             outfile.close
+            outfile = open(f"mac/evts_{_k}.mac","w+")
+            outfile.writelines(f"/run/beamOn {int(_events)}")
+            outfile.close
 
 
 

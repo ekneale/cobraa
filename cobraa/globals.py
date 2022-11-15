@@ -92,7 +92,6 @@ def testEnabledCondition(arguments):
     # additional macro commands
     if (arguments['--detectMedia']):
         additionalMacOpt +="/rat/db/set GEO[detector_veto1] material \"%s\"\n"%(arguments['--detectMedia'])
-        additionalMacOpt += "/rat/db/set GEO[detector_veto2] material \"%s\"\n"%(arguments['--detectMedia'])
         additionalMacOpt += "/rat/db/set GEO[detector_target_gb] material \"%s\"\n"%(arguments['--detectMedia'])
         additionalMacOpt += "/rat/db/set GEO[detector_target_fv] material \"%s\"\n"%(arguments['--detectMedia'])
         additionalString += "_detectorMedia_%s" %(arguments['--detectMedia'])
