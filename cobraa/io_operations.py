@@ -262,7 +262,7 @@ def mergeRootFiles():
                     os.system(f'hadd -f -k -v 0 {outfile} {files}')
                 #otherwise merge the bonsai root files
                 else:
-                    if arguments['--core]']:
+                    if arguments['--core']:
                         filedir = "core_root_files%s/%s_%s_%s/"%(additionalString,_element,_loc,_p)
                     else:
                         filedir = "fred_root_files%s/%s_%s_%s/"%(additionalString,_element,_loc,_p)
