@@ -66,7 +66,7 @@ docstring = """
     ############# Detector options ##############
     ## Define detector geometry and other features
 
-    --geofile=<_geo>       Name of detector geofile [Default: button_frame] # don't include the .geo at the end
+    --geofile=<_geo>       Name of detector geofile [Default: button_30] # don't include the .geo at the end
     --muMetal=<_MM>        Implement muMetal [Default: 0]
     --lightCone=<_LC>      Implement lightConcentrators [Default: 0]
     --depth=<depthD>       Depth of detector (for fast neutron spectra) [Default: 2805.]
