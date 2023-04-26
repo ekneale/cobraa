@@ -196,7 +196,7 @@ def loadSimulationParameters():
 #        d['pn_ibd'] = {'LIQUID':['boulby_geo','hartlepool_1','hartlepool_2','boulby_worldbg','heysham_full','heysham_2','torness_full','gravelines_full','hinkley_C','sizewell_B']}
 
         d['singles'] = {'ALL':['singles']}
-        d['A_Z'] = {'LIQUID':['li 9','n 17','h 8']}
+        d['A_Z'] = {'LIQUID':['li 9','n 17','he 8']}
         d['FASTNEUTRONS'] = {'ROCK_2':['fast_neutrons']}
         d['mono'] = {'LIQUID':['e-']}
 
